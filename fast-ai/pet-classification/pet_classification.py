@@ -1,13 +1,13 @@
 
 from bentoml import BentoService, api, env, artifacts
 from bentoml.artifact import FastaiModelArtifact
-from bentoml.handlers import ImageHandler
+from bentoml.handlers import FastaiImageHandler
 
-@env(conda_environment=['fastai'])
-@artifacts([FastaiModelArtifact('learner')])
+@env(conda_pip_dependencies=['fastai'])
+@artifacts([FastaiModelArtifact('pet_classifer')])
 class PetClassification(BentoService):
     
-    @api(ImageHandler, fastai_model=True)
+    @api(FastaiImageHandler)
     def predict(self, image):
-        result = self.artifacts.learner.predict(image)
+        result = self.artifacts.pet_classifer.predict(image)
         return str(result)
