@@ -11,6 +11,8 @@ with BentoML.
 
 * [![Google Colab Badge](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bentoml/gallery/blob/master/fastai/pet-classification/notebook.ipynb) - [Pet classification](https://github.com/bentoml/gallery/blob/master/fastai/pet-classification/notebook.ipynb)
 
+* [![Google Colab Badge](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bentoml/gallery/blob/master/fastai/tabular-csv/notebook.ipynb] - [Tabular-CSV](https://github.com/bentoml/gallery/blob/master/fastai/tabular-csv/notebook.ipynb)
+
 ### Scikit-Learn
 
 ### PyTorch
