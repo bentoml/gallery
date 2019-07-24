@@ -17,7 +17,7 @@ with BentoML.
 
 ### PyTorch
 
-* [![Google Colab Badge](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bentoml/gallery/blob/master/pytorch/cifar10_image_classification/notebook.ipynb]) - [CIFAR-10 image classification](https://github.com/bentoml/gallery/blob/master/pytorch/cifar10_image_classification/notebook.ipynb)
+* [![Google Colab Badge](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bentoml/gallery/blob/master/pytorch/cifar10_image_classification/notebook.ipynb) - [CIFAR-10 image classification](https://github.com/bentoml/gallery/blob/master/pytorch/cifar10_image_classification/notebook.ipynb)
 
 ### XG Boost
 
