@@ -9,20 +9,27 @@ with BentoML.
 
 ### FastAI
 
-* [![Google Colab Badge](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bentoml/gallery/blob/master/fast-ai/pet-classification/notebook.ipynb) - [Pet classification](https://github.com/bentoml/gallery/blob/master/fast-ai/pet-classification/notebook.ipynb)
+* Pet Classification - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/fast-ai/pet-classification/notebook.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/fast-ai/pet-classification/notebook.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/fastai/pet-classification/notebook.ipynb)
 
-* [![Google Colab Badge](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bentoml/gallery/blob/master/fast-ai/tabular-csv/notebook.ipynb]) - [Tabular-CSV](https://github.com/bentoml/gallery/blob/master/fast-ai/tabular-csv/notebook.ipynb)
+* Tabular CSV - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/fast-ai/tabular-csv/notebook.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/fast-ai/tabular-csv/notebook.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/fast-ai/tabular-csv/notebook.ipynb)
+
+
 
 ### Scikit-Learn
 
 ### PyTorch
 
-* [![Google Colab Badge](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bentoml/gallery/blob/master/pytorch/cifar10_image_classification/notebook.ipynb) - [CIFAR-10 image classification](https://github.com/bentoml/gallery/blob/master/pytorch/cifar10_image_classification/notebook.ipynb)
+* CIFAR-10 Image Classification - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/pytorch/cifar10_image_classification/notebook.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/pytorch/cifar10_image_classification/notebook.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/pytorch/cifar10_image_classification/notebook.ipynb)
 
-### XG Boost
+
+### XgBoost
+
+* League of Legend win Prediction - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/xgboost/league-of-legend-win-prediction/notebook.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/xgboost/league-of-legend-win-prediction/notebook.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/xgboost/league-of-legend-win-prediction/notebook.ipynb)
 
 ### Tensorflow
 
 ### Keras
 
 ### H2o
+
+* Loan default Prediction - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/h2o/loan-prediction/notebook.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/h2o/loan-prediction/notebook.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/h2o/loan-prediction/notebook.ipynb)
