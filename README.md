@@ -29,6 +29,7 @@ with BentoML.
 ### Tensorflow
 
 ### Keras
+* Toxic Comment Classifier - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/keras/toxi-comment-classifier/notebook.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/keras/toxic-comment-classifier/notebook.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/keras/toxic-comment-classifier/notebook.ipynb)
 
 ### H2o
 
