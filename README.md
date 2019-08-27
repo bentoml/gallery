@@ -17,6 +17,9 @@ with BentoML.
 
 ### Scikit-Learn
 
+* Loan Prediction - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/scikit-learn/loan-prediction/notebook.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/scikit-learn/loan-prediction/notebook.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/scikit-learn/loan-prediction/notebook.ipynb)
+
+
 ### PyTorch
 
 * CIFAR-10 Image Classification - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/pytorch/cifar10_image_classification/notebook.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/pytorch/cifar10_image_classification/notebook.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/pytorch/cifar10_image_classification/notebook.ipynb)
