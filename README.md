@@ -1,6 +1,6 @@
 # BentoML gallery
 
-This is collection of machine learnign demo projects that use
+This is collection of machine learning projects demonstrating how to use
 [BentoML](https://github.com/bentoml/BentoML) to ship trained machine learning models
 for model serving in production.
 
@@ -45,7 +45,7 @@ for model serving in production.
 * Prostate Cancer Prediction - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/h2o/prostate-cancer-classification/h2o-prostate-cancer-classification.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/h2o/prostate-cancer-classification/h2o-prostate-cancer-classification.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/h2o/prostate-cancer-classification/h2o-prostate-cancer-classification.ipynb)
 
 
-### Contributing
+## Contributing
 
 Have questions or feedback? Post a [new github issue](https://github.com/bentoml/BentoML/issues/new/choose)
 or join our Slack chat room: [![join BentoML
