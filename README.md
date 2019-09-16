@@ -17,7 +17,8 @@ for model serving in production.
 
 ### Scikit-Learn
 
-* Loan Prediction - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/scikit-learn/loan-prediction/notebook.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/scikit-learn/loan-prediction/notebook.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/scikit-learn/loan-prediction/notebook.ipynb)
+* Sentiment Classification - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/scikit-learn/sentiment-classification/sklearn-sentiment-classification.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/scikit-learn/sentiment-classification/sklearn-sentiment-classification.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/scikit-learn/sentiment-classification/sklearn-sentiment-classification.ipynb)
+* Loan Prediction - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/scikit-learn/loan-prediction/sklearn-load-prediction.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/scikit-learn/loan-prediction/sklearn-load-prediction.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/scikit-learn/loan-prediction/sklearn-load-prediction.ipynb)
 
 
 ### PyTorch
