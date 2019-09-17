@@ -58,6 +58,6 @@ To make sure you have a pleasant experience, please read the [code of conduct](h
 It outlines core values and beliefs and will make working together a happier experience.
 
 If you have built an interesting project using BentoML and wants to add
-it to the list, feel free to share and chat with us in our [slack channle](http://bit.ly/2N5IpbB).
+it to the list, feel free to share and chat with us in our [slack channel](http://bit.ly/2N5IpbB).
 
 Happy hacking!
