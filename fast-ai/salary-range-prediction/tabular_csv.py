@@ -4,7 +4,7 @@ from bentoml.artifact import FastaiModelArtifact
 from bentoml.handlers import DataframeHandler
 
 
-@env(conda_environment=['fastai'])
+@env(pip_dependencies=['fastai'])
 @artifacts([FastaiModelArtifact('model')])
 class TabularModel(BentoService):
     

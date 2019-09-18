@@ -3,7 +3,7 @@ from bentoml import BentoService, api, env, artifacts
 from bentoml.artifact import FastaiModelArtifact
 from bentoml.handlers import FastaiImageHandler
 
-@env(conda_pip_dependencies=['fastai'])
+@env(pip_dependencies=['fastai'])
 @artifacts([FastaiModelArtifact('pet_classifer')])
 class PetClassification(BentoService):
     
