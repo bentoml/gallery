@@ -1,3 +1,4 @@
+
 import xgboost as xgb
 
 import bentoml
@@ -6,7 +7,7 @@ from bentoml.handlers import DataframeHandler
 
 @bentoml.artifacts([XgboostModelArtifact('model')])
 @bentoml.env(pip_dependencies=['xgboost'])
-class TitanicModel(bentoml.BentoService):
+class TitanicSurvivalPredictionService(bentoml.BentoService):
     
     @bentoml.api(DataframeHandler)
     def predict(self, df):
