@@ -3,13 +3,13 @@ import bentoml
 from bentoml.artifact import PickleArtifact
 from bentoml.handlers import DataframeHandler
 
-@bentoml.artifacts([PickleArtifact('sentiment_lr')])
+@bentoml.artifacts([PickleArtifact('model')])
 @bentoml.env(pip_dependencies=["scikit-learn", "pandas"])
-class SentimentLRModel(bentoml.BentoService):
+class SentimentAnalysisService(bentoml.BentoService):
 
     @bentoml.api(DataframeHandler, typ='series')
     def predict(self, series):
         """
         predict expects pandas.Series as input
         """        
-        return self.artifacts.sentiment_lr.predict(series)
+        return self.artifacts.model.predict(series)
