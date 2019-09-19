@@ -12,7 +12,7 @@ from bentoml.handlers import ImageHandler
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
-@bentoml.env(conda_dependencies=['torch', 'numpy', 'torchvision', 'scikit-learn'])
+@bentoml.env(pip_dependencies=['torch', 'numpy', 'torchvision', 'scikit-learn'])
 @bentoml.artifacts([PytorchModelArtifact('net')])
 class ImageClassifier(bentoml.BentoService):
     @bentoml.api(ImageHandler)
