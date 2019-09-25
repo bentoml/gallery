@@ -1,9 +1,9 @@
 import pandas as pd
 import bentoml
-from bentoml.artifact import PickleArtifact
+from bentoml.artifact import SklearnModelArtifact
 from bentoml.handlers import DataframeHandler
 
-@bentoml.artifacts([PickleArtifact('model')])
+@bentoml.artifacts([SklearnModelArtifact('model')])
 @bentoml.env(pip_dependencies=["scikit-learn", "pandas"])
 class SentimentAnalysisService(bentoml.BentoService):
 
