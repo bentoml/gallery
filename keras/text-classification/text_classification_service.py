@@ -12,7 +12,7 @@ max_features = 1000
     KerasModelArtifact('model'),
     PickleArtifact('word_index')
 ])
-@env(pip_dependencies=['tensorflow', 'numpy', 'pandas'])
+@env(pip_dependencies=['tensorflow==1.14.0', 'numpy', 'pandas'])
 class TextClassificationService(BentoService):
    
     def word_to_index(self, word):
