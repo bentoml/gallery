@@ -10,7 +10,8 @@ class TabularModel(BentoService):
     
     @api(DataframeHandler)
     def predict(self, df):
-        result = []
-        for index, row in df.iterrows():            
-            result.append(self.artifacts.model.predict(row))
-        return str(result)
+        results = []
+        for _, row in df.iterrows():       
+            prediction = self.artifacts.model.predict(row)
+            results.append(prediction[0].obj)
+        return results
