@@ -9,7 +9,7 @@ import numpy as np
 list_of_classes = ["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
 max_text_length = 400
 
-@env(pip_dependencies=['keras', 'pandas', 'numpy'])
+@env(pip_dependencies=['tensorflow==1.14.0', 'keras', 'pandas', 'numpy'])
 @artifacts([PickleArtifact('x_tokenizer'), PickleArtifact('model')])
 class ToxicCommentClassification(BentoService):
     
