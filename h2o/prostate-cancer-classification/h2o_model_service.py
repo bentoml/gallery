@@ -5,7 +5,7 @@ from bentoml.artifact import H2oModelArtifact
 from bentoml.handlers import DataframeHandler
 
 @bentoml.artifacts([H2oModelArtifact('model')])
-@bentoml.env(pip_dependencies=['h2o'])
+@bentoml.env(pip_dependencies=['pandas'], conda_channels=['h2oai'], conda_dependencies=['h2o'])
 class H2oModelService(bentoml.BentoService):
 
     @bentoml.api(DataframeHandler)
