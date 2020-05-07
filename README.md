@@ -56,7 +56,7 @@ for model serving in production.
 
 ### FastText
 
-* Text Classification - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/fasttext/text-classification/text_classification.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/fasttext/text-classification/text-classification.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/fasttext/text-classification/text-classification.ipynb)
+* Text Classification - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/fasttext/text-classification/text-classification.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/fasttext/text-classification/text-classification.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/fasttext/text-classification/text-classification.ipynb)
 
 
 ## Contributing
