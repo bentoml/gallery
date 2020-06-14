@@ -13,8 +13,13 @@ class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
 class KerasFashionMnistService(BentoService):
         
     @api(ImageHandler, pilmode='L')
-    def predict(self, img):
-        img = Image.fromarray(img).resize((28, 28))
-        img = np.array(img.getdata()).reshape((1,28,28,1))
-        class_idx = self.artifacts.classifier.predict_classes(img)[0]
-        return class_names[class_idx]
+    def predict(self, imgs):
+        inputs = []
+        for img in imgs:
+            img = Image.fromarray(img).resize((28, 28))
+            img /= 255.0
+            img = np.array(img.getdata()).reshape((28,28,1))
+            inputs.append(img)
+        inputs = np.stack(inputs)
+        class_idxs = self.artifacts.classifier.predict_classes(inputs)
+        return [class_names[class_idx] for class_idx in class_idxs]
