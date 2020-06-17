@@ -3,13 +3,13 @@ import xgboost as xgb
 
 import bentoml
 from bentoml.artifact import XgboostModelArtifact
-from bentoml.handlers import DataframeHandler
+from bentoml.adapters import DataframeInput
 
+@bentoml.env(auto_pip_dependencies=True)
 @bentoml.artifacts([XgboostModelArtifact('model')])
-@bentoml.env(pip_dependencies=['xgboost'])
-class TitanicSurvivalPredictionService(bentoml.BentoService):
+class TitanicSurvivalPredictionXgBoost(bentoml.BentoService):
     
-    @bentoml.api(DataframeHandler)
+    @bentoml.api(input=DataframeInput())
     def predict(self, df):
         data = xgb.DMatrix(data=df[['Pclass', 'Age', 'Fare', 'SibSp', 'Parch']])
         return self.artifacts.model.predict(data)
