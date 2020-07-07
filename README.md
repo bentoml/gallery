@@ -16,6 +16,7 @@ for model serving in production.
 ### Scikit-Learn
 
 * Sentiment Analysis - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/scikit-learn/sentiment-analysis/sklearn-sentiment-analysis.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/scikit-learn/sentiment-analysis/sklearn-sentiment-analysis.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/scikit-learn/sentiment-analysis/sklearn-sentiment-analysis.ipynb)
+* Iris Classifier with Custom WebUI - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/scikit-learn/iris-classifier/iris-classifier.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/scikit-learn/iris-classifier/iris-classifier.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/scikit-learn/iris-classifier/iris-classifier.ipynb)
 
 
 ### PyTorch
