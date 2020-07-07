@@ -66,6 +66,11 @@ for model serving in production.
 * ResNet50 Image Recognition (ONNX model zoo) - [Googel Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb)
 
 
+### End-to-end workflow with AWS SageMaker
+
+* Movie Review with TensorFlow 2.0 and BERT -[Google Colab]((https://colab.research.google.com/github/bentoml/gallery/blob/master/end-to-end-sagemaker-deployment/Bento-MovieReview-Deployment-July-06.ipynb) |[nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/Bento-MovieReview-Deployment-July-06.ipynb) |[source](https://github.com/bentoml/gallery/blob/master/Bento-MovieReview-Deployment-July-06.ipynb)
+
+
 ## Contributing
 
 Have questions or feedback? Post a [new github issue](https://github.com/bentoml/BentoML/issues/new/choose)
