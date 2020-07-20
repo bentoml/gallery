@@ -4,7 +4,8 @@ from tensorflow import keras
 from tensorflow.keras.preprocessing import sequence, text
 from bentoml import api, env, BentoService, artifacts
 from bentoml.artifact import KerasModelArtifact, PickleArtifact
-from bentoml.handlers import JsonHandler
+from bentoml.adapters import JsonInput
+
 
 max_features = 1000
 
@@ -25,7 +26,7 @@ class KerasTextClassificationService(BentoService):
         sequence = text.text_to_word_sequence(text_str)
         return list(map(self.word_to_index, sequence))
     
-    @api(JsonHandler)
+    @api(input=JsonInput())
     def predict(self, parsed_json):
         if type(parsed_json) == list:
             input_data = list(map(self.preprocessing, parsed_json))
