@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 from bentoml import api, artifacts, env, BentoService
 from bentoml.artifact import KerasModelArtifact
-from bentoml.handlers import ImageHandler
+from bentoml.adapters import ImageInput
 
 class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
@@ -12,7 +12,7 @@ class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
 @artifacts([KerasModelArtifact('classifier')])
 class KerasFashionMnistService(BentoService):
         
-    @api(ImageHandler, pilmode='L')
+    @api(input=ImageInput(pilmode='L'))
     def predict(self, imgs):
         inputs = []
         for img in imgs:
