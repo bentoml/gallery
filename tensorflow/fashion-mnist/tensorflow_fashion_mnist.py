@@ -22,4 +22,4 @@ class FashionMnistTensorflow(bentoml.BentoService):
     def predict(self, inputs):
         outputs = self.artifacts.model.predict_image(inputs)
         output_classes = tf.math.argmax(outputs, axis=1)
-        return FASHION_MNIST_CLASSES[output_classes[0]]
+        return [FASHION_MNIST_CLASSES[c] for c in output_classes]
