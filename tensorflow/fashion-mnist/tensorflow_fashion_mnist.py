@@ -1,13 +1,9 @@
 
 import bentoml
 import tensorflow as tf
-import numpy as np
-from PIL import Image
 
-from bentoml.artifact import (
-    TensorflowSavedModelArtifact,
-)
-from bentoml.handlers import TensorflowTensorHandler
+from bentoml.artifact import TensorflowSavedModelArtifact
+from bentoml.adapters import TfTensorInput
 
 
 FASHION_MNIST_CLASSES = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
@@ -18,7 +14,7 @@ FASHION_MNIST_CLASSES = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
 @bentoml.artifacts([TensorflowSavedModelArtifact('model')])
 class FashionMnistTensorflow(bentoml.BentoService):
 
-    @bentoml.api(TensorflowTensorHandler)
+    @bentoml.api(input=TfTensorInput())
     def predict(self, inputs):
         outputs = self.artifacts.model.predict_image(inputs)
         output_classes = tf.math.argmax(outputs, axis=1)
