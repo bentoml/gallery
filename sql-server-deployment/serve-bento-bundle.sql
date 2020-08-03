@@ -59,18 +59,20 @@ saved_path=r"C:\Program Files\Microsoft SQL Server\MSSQL15.NEWSERVER\bento_bundl
 irismodel = bentoml.load(saved_path)
 species_pred = irismodel.predict(iris_data[["Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"]])
 iris_data["PredictedSpecies"] = species_pred
-OutputDataSet = iris_data[["id","SpeciesId","PredictedSpecies"]] 
+OutputDataSet = iris_data[["id", "SpeciesId", "PredictedSpecies"]] 
 print(OutputDataSet)
 '
-        , @input_data_1 = N'select id, "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "SpeciesId" from iris_data'
+        , @input_data_1 = N'select id, "Sepal.Length", "Sepal.Width",
+            "Petal.Length", "Petal.Width",
+            "SpeciesId" from iris_data'
         , @input_data_1_name = N'iris_data'
         , @params = N'@svm_model varbinary(max)'
         , @nb_model = @svm_model
-    WITH RESULT SETS((
-                "id" INT
-              , "SpeciesId" INT
-              , "SpeciesId.Predicted" INT
-                ));
+WITH RESULT SETS((
+              "id" INT
+            , "SpeciesId" INT
+            , "SpeciesId.Predicted" INT
+            ));
 END;
 GO
 
