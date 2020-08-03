@@ -69,7 +69,7 @@ for model serving in production.
 
 ### End-to-end workflow with AWS SageMaker
 
-* Movie Review with TensorFlow 2.0 and BERT - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/end-to-end-sagemaker-deployment/MovieReview-sagemaker-deployment.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/end-to-end-sagemaker-deployment/MovieReview-sagemaker-deployment.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/end-to-end-sagemaker-deployment/MovieReview-sagemaker-deployment.ipynbb)
+* Movie Review with TensorFlow 2.0 and BERT - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynbb)
 
 
 ## Contributing
