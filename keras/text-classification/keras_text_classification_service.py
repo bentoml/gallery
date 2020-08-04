@@ -27,15 +27,11 @@ class KerasTextClassificationService(BentoService):
         return list(map(self.word_to_index, sequence))
     
     @api(input=JsonInput())
-    def predict(self, parsed_json):
-        if type(parsed_json) == list:
-            input_data = list(map(self.preprocessing, parsed_json))
-        else: # expecting type(parsed_json) == dict:
-            input_data = [self.preprocessing(parsed_json['text'])]
-
-        input_data = sequence.pad_sequences(input_data,
+    def predict(self, parsed_jsons):
+        input_datas = [self.preprocessing(parsed_json['text']) for parsed_json in parsed_jsons]
+        input_datas = sequence.pad_sequences(input_datas,
                                             value=self.artifacts.word_index["<PAD>"],
                                             padding='post',
                                             maxlen=80)
 
-        return self.artifacts.model.predict_classes(input_data)
+        return self.artifacts.model.predict_classes(input_datas).T[0]
