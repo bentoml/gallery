@@ -67,9 +67,15 @@ for model serving in production.
 * ResNet50 Image Recognition (ONNX model zoo) - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb)
 
 
-### End-to-end workflow with AWS SageMaker
+### End-to-end workflow
 
-* Movie Review with TensorFlow 2.0 and BERT - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynbb)
+* ### AWS SageMaker
+
+    * Movie Review with TensorFlow 2.0 and BERT - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynbb)
+
+* ###  SQL Server Machine Learning Services
+
+    * Iris Classifier deployed with SQL Server - [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/end-to-end/sql-server-deployment/sql-server-deployment.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/end-to-end/sql-server-deployment/sql-server-deployment.ipynb)
 
 
 ## Contributing
