@@ -1,15 +1,14 @@
 
 # holt.py
 from bentoml import env, artifacts, api, BentoService
-from bentoml.handlers import DataframeHandler,DataframeInput
-from bentoml.artifact import PickleArtifact
+from bentoml.adapters import DataframeInput
+from bentoml.service.artifacts.common import PickleArtifact
 import numpy as np
 
-@env(pip_dependencies=["statsmodels==0.10.1","joblib","numpy"],conda_dependencies=["ruamel.yaml==0.16"])
-
+@env(pip_dependencies=["statsmodels==0.10.1","joblib","numpy"])
 @artifacts([PickleArtifact('model')])
 class holt(BentoService):
-    @api(input=DataframeInput())
+    @api(input=DataframeInput(), batch=True)
     def predict(self, df):
 
         # Printing the dataframe to cross-cjheck
