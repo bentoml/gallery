@@ -1,8 +1,7 @@
-*
-!.gitattributes
-!.gitignore
-!readme.md
-!.gitkeep
-!*.ipynb
-!*/
 .ipynb_checkpoints
+__pycache__
+data/
+*.py
+tensorflow/fashion-mnist/test_model/
+tensorflow/imdb/keras_model/
+tensorflow/imdb/model/
