@@ -5,3 +5,6 @@ data/
 tensorflow/fashion-mnist/test_model/
 tensorflow/imdb/keras_model/
 tensorflow/imdb/model/
+**/mlruns
+bentomlflow/iris_classifier.py
+
