@@ -5,6 +5,9 @@ data/
 tensorflow/fashion-mnist/test_model/
 tensorflow/imdb/keras_model/
 tensorflow/imdb/model/
-**/mlruns
+
+# mlflow artifacts 
+bentomlflow/mlruns
+# bentoml necessary file for serving written from nobook when run
 bentomlflow/iris_classifier.py
 
