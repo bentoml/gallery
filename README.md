@@ -73,7 +73,9 @@ for model serving in production.
 * Named Entity Recognizer - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/spacy/named-entity-recognizer/named-entity-recognizer.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/spacy/named-entity-recognizer/named-entity-recognizer.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/spacy/named-entity-recognizer/named-entity-recognizer.ipynb)
 
 
+### MLflow
 
+* Load Mlflow model - [source](https://github.com/bentoml/gallery/blob/master/bentomlflow/mlflow-to-bentoml-example.ipynb)
 ### End-to-end workflow
 
 * ### AWS SageMaker
