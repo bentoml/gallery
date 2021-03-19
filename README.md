@@ -66,6 +66,10 @@ for model serving in production.
 * ResNet50 Image Recognition (ONNX model zoo) - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb)
 
 
+### PaddlePaddle
+
+* LinearRegression - [NEED PROPER LINK COLAB](https://colab.research.google.com/drive/1Iyya4l2dreeJTpjClLks-hb6i1sVHW0c#scrollTo=n7qADc_KcJI-) | [NEED PROPER LINK NBVIEWER](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/scikit-learn/sentiment-analysis/sklearn-sentiment-analysis.ipynb) | [NEED PROPER LINK SOURCE](https://github.com/bentoml/gallery/blob/master/scikit-learn/sentiment-analysis/sklearn-sentiment-analysis.ipynb)
+
 ## Contributing
 
 Have questions or feedback? Post a [new github issue](https://github.com/bentoml/BentoML/issues/new/choose)
