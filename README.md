@@ -70,7 +70,7 @@ for model serving in production.
 
 ### PaddlePaddle
 
-* LinearRegression - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb) | [SOURCE](https://github.com/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb)
+* LinearRegression - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb) | [Source](https://github.com/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb)
 
 
 ### Spacy
