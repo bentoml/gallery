@@ -1,15 +1,15 @@
 
 from bentoml import api, env, BentoService, artifacts
-from bentoml.artifact import XgboostModelArtifact
-from bentoml.handlers import DataframeHandler
+from bentoml.frameworks.xgboost import XgboostModelArtifact
+from bentoml.adapters import DataframeInput
 
 import xgboost as xgb
 
-@env(pip_dependencies=['xgboost'])
+@env(pip_packages=['xgboost'])
 @artifacts([XgboostModelArtifact('model')])
 class LeagueWinPrediction(BentoService):
     
-    @api(DataframeHandler)
+    @api(input=DataframeInput(), batch=True)
     def predict(self, df):
         dmatrix = xgb.DMatrix(df)
         return self.artifacts.model.predict(dmatrix)

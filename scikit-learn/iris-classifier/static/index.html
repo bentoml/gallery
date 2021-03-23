@@ -1,0 +1,70 @@
+<!doctype html>
+
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Iris Classifier | Bento ML</title>
+        <meta name="description" content="Bento ML Custom UI Demo">
+        <meta name="author" content="Karan Sheth">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="css/styles.css?v=1.0">
+    </head>
+
+    <body>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="#" class="brand-logo center">Bento ML | Iris Classifier Custom UI Demo</a>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col s10 offset-s1">
+                    <div class="card">
+                        <div class="row">
+                            <div class="input-field col s3">
+                                <input id="sepal_w" type="number" value="1.2" class="validate" step="0.01" min="0" max="10">
+                                <label for="sepal_w">Sepal Width (in cm)</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input id="sepal_l" type="number" value="1.2" class="validate" step="0.01" min="0" max="10">
+                                <label for="sepal_l">Sepal Length (in cm)</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input id="petal_w" type="number" value="1.2" class="validate" step="0.01" min="0" max="10">
+                                <label for="petal_w">Petal Width (in cm)</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input id="petal_l" type="number" value="1.2" class="validate" step="0.01" min="0" max="10">
+                                <label for="petal_l">Petal Length (in cm)</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s6 offset-s3" style="display: flex;justify-content: space-between;">
+                                <a class="waves-effect waves-light btn-small blue" id="randomize">Randomize</a>
+                                <a class="waves-effect waves-light btn-small blue" id="predict">Predict</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s4 center" id="setosa">
+                                <img class="responsive-img" src="img/setosa.jpeg">
+                            </div>
+                            <div class="col s4 center" id="versicolor">
+                                <img class="responsive-img" src="img/versicolor.jpeg">
+                            </div>
+                            <div class="col s4 center" id="verginica">
+                                <img class="responsive-img" src="img/verginica.jpeg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="js/scripts.js"></script>
+    </body>
+
+</html>

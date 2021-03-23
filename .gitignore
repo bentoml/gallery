@@ -1,7 +1,13 @@
 .ipynb_checkpoints
-*/.ipynb_checkpoints/*
 __pycache__
-*/__pycache__/*
+data/
+*.py
+tensorflow/fashion-mnist/test_model/
+tensorflow/imdb/keras_model/
+tensorflow/imdb/model/
 
-**/data/*
-.DS_Store
+# mlflow artifacts 
+bentomlflow/mlruns
+# bentoml necessary file for serving written from nobook when run
+bentomlflow/iris_classifier.py
+

@@ -1,15 +1,18 @@
 import pandas as pd
 import bentoml
-from bentoml.artifact import SklearnModelArtifact
+from bentoml.frameworks.sklearn import SklearnModelArtifact
+from bentoml.service.artifacts.common import PickleArtifact
 from bentoml.handlers import DataframeHandler
+from bentoml.adapters import DataframeInput
 
-@bentoml.artifacts([SklearnModelArtifact('model')])
-@bentoml.env(pip_dependencies=["scikit-learn", "pandas"])
-class SentimentAnalysisService(bentoml.BentoService):
+@bentoml.artifacts([PickleArtifact('model')])
+@bentoml.env(pip_packages=["scikit-learn", "pandas"])
+class SKSentimentAnalysis(bentoml.BentoService):
 
-    @bentoml.api(DataframeHandler, typ='series')
-    def predict(self, series):
+    @bentoml.api(input=DataframeInput(), batch=True)
+    def predict(self, df):
         """
         predict expects pandas.Series as input
         """        
+        series = df.iloc[0,:]
         return self.artifacts.model.predict(series)
