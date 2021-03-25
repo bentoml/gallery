@@ -68,6 +68,11 @@ for model serving in production.
 * ResNet50 Image Recognition (ONNX model zoo) - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb)
 
 
+### PaddlePaddle
+
+* LinearRegression - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb) | [Source](https://github.com/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb)
+
+
 ### Spacy
 
 * Named Entity Recognizer - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/spacy/named-entity-recognizer/named-entity-recognizer.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/spacy/named-entity-recognizer/named-entity-recognizer.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/spacy/named-entity-recognizer/named-entity-recognizer.ipynb)
