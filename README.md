@@ -73,6 +73,11 @@ for model serving in production.
 * LinearRegression - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb) | [Source](https://github.com/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb)
 
 
+### PaddleHub
+
+* Image Segmentation - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/paddlehub/image-segmentation/image-segmentation.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/paddlehub/image-segmentation/image-segmentation.ipynb) | [Source](https://github.com/bentoml/gallery/blob/master/paddlehub/image-segmentation/image-segmentation.ipynb)
+
+
 ### Spacy
 
 * Named Entity Recognizer - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/spacy/named-entity-recognizer/named-entity-recognizer.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/spacy/named-entity-recognizer/named-entity-recognizer.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/spacy/named-entity-recognizer/named-entity-recognizer.ipynb)
