@@ -1,0 +1,74 @@
+<!doctype html>
+
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>PaddleHub Image Segmentation | Bento ML</title>
+        <meta name="description" content="Bento ML Custom UI Demo">
+        <meta name="author" content="Chau Vu">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="css/styles.css?v=1.0">
+    </head>
+
+    <body>
+        <nav>
+            <div class="nav-wrapper blue">
+                <a href="#" class="brand-logo center">Bento ML | PaddleHub Image Segmentation Custom UI</a>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col s10 offset-s1">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col s6 center" id="setosa">
+                                <h4>Input Image</h4>
+                                <img class="responsive-img" src="" id="preview">
+                                <br/>
+                                <span class="btn btn-upload">
+                                    <i class="material-icons left">cloud_upload</i>
+                                    Upload Image
+                                    <input type="file" accept="image/*" onchange="previewFile()">
+                                </span>
+                            </div>
+                            <div class="col s6 center" id="versicolor">
+                                <h4>Output Image</h4>
+                                <div class="preloader-wrapper big active" id="spinner">
+                                    <div class="spinner-layer spinner-blue-only">
+                                      <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                      </div><div class="gap-patch">
+                                        <div class="circle"></div>
+                                      </div><div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                <img class="responsive-img" src="" id="output">
+                                <br/>
+                                <span class="btn btn-upload" id="download" onclick="download()">
+                                    <i class="material-icons left">download</i>
+                                    Download Image
+                                    <a target="_blank" href="" download="segmented_image.png"></a>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 center">
+                                <button class="btn" onclick="segmentation()">Run Segmentation</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <script src="js/scripts.js"></script>
+    </body>
+
+</html>
