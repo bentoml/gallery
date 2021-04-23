@@ -72,6 +72,9 @@ for model serving in production.
 
 * LinearRegression - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb) | [Source](https://github.com/bentoml/gallery/blob/master/paddlepaddle/LinearRegression/LinearRegression.ipynb)
 
+### PaddleOCR
+
+* PaddleOCR Sample Notebook - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/paddleOCR/paddleOCR.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/master/paddleOCR/paddleOCR.ipynb) | [Source](https://github.com/bentoml/gallery/blob/master/master/paddleOCR/paddleOCR.ipynb)
 
 ### Spacy
 
