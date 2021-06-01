@@ -83,23 +83,24 @@ for model serving in production.
 * Named Entity Recognizer - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/spacy/named-entity-recognizer/named-entity-recognizer.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/spacy/named-entity-recognizer/named-entity-recognizer.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/spacy/named-entity-recognizer/named-entity-recognizer.ipynb)
 
 
-### MLflow
-
-* Load Mlflow model - [source](https://github.com/bentoml/gallery/blob/master/bentomlflow/mlflow-to-bentoml-example.ipynb)
-### End-to-end workflow
-
-* ### AWS SageMaker
-
-    * Movie Review with TensorFlow 2.0 and BERT - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynbb)
-
-* ###  SQL Server Machine Learning Services
-
-    * Iris Classifier deployed with SQL Server - [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/end-to-end/sql-server-deployment/sql-server-deployment.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/end-to-end/sql-server-deployment/sql-server-deployment.ipynb)
-
-
 ### Statsmodels
 
 * Shampoo Sales Prediction -  [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/statsmodels_holt/bentoml_statsmodels.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/statsmodels_holt/bentoml_statsmodels.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/statsmodels_holt/bentoml_statsmodels.ipynb)
+
+
+
+### AWS SageMaker
+
+* Movie Review with TensorFlow 2.0 and BERT - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynbb)
+
+###  SQL Server Machine Learning Services
+
+* Iris Classifier deployed with SQL Server - [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/end-to-end/sql-server-deployment/sql-server-deployment.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/end-to-end/sql-server-deployment/sql-server-deployment.ipynb)
+
+### MLflow
+
+* Load Mlflow model - [source](https://github.com/bentoml/gallery/blob/master/bentomlflow/mlflow-to-bentoml-example.ipynb)
+
 
 ## Contributing
 
