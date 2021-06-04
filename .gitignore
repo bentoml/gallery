@@ -1,6 +1,7 @@
 .ipynb_checkpoints
 __pycache__
 data/
+venv/
 *.py
 tensorflow/fashion-mnist/test_model/
 tensorflow/imdb/keras_model/
@@ -10,4 +11,3 @@ tensorflow/imdb/model/
 bentomlflow/mlruns
 # bentoml necessary file for serving written from nobook when run
 bentomlflow/iris_classifier.py
-
