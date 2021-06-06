@@ -2,7 +2,6 @@ import os
 import time
 
 import torch
-from model import TextClassificationModel, summary
 from torchtext.datasets import AG_NEWS
 from torchtext.data.utils import get_tokenizer
 from collections import Counter
@@ -95,43 +94,3 @@ def evaluate(model, data_loader, criterion):
             total_acc += (predited_label.argmax(1) == label).sum().item()
             total_count += label.size(0)
     return total_acc / total_count
-
-
-if __name__ == '__main__':
-    if not os.path.exists("model"):
-        os.makedirs("model", exist_ok=True)
-    tokenizer, vocab = get_tokenizer_vocab()
-    text_pipeline, label_pipeline = get_pipeline(tokenizer, vocab)
-    vocab_size, emsize, num_class = get_model_params(vocab)
-    model = TextClassificationModel(vocab_size, emsize, num_class).to(device)
-
-    summary(model)
-    criterion = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=LR)
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.1)
-    total_accu = None
-
-    train_iter, test_iter = AG_NEWS(root='dataset')
-    test_dataset = list(test_iter)
-    split_train_, split_valid_ = get_train_valid_split(train_iter)
-
-    train_data_loader = DataLoader(split_train_, batch_size=BATCH_SIZE, shuffle=True, collate_fn=collate_batch)
-    valid_data_loader = DataLoader(split_valid_, batch_size=BATCH_SIZE, shuffle=True, collate_fn=collate_batch)
-    test_data_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=True, collate_fn=collate_batch)
-
-    for epoch in range(1, EPOCHS + 1):
-        epoch_start_time = time.time()
-        train(model, train_data_loader, optimizer, criterion, epoch)
-        accu_val = evaluate(model, valid_data_loader, criterion)
-        if total_accu is not None and total_accu > accu_val:
-            scheduler.step()
-        else:
-            total_accu = accu_val
-            torch.save(model.state_dict(), 'model/pytorch_model.pt')
-        print('-' * 59)
-        print(f'| end of epoch {epoch:1d} | time: {time.time() - epoch_start_time:5.2f}s | valid accuracy {accu_val:8.3f}')
-        print('-' * 59)
-
-    print('Checking the results of test dataset.')
-    accu_test = evaluate(model, test_data_loader, criterion)
-    print('test accuracy {:8.3f}'.format(accu_test))
