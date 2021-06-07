@@ -19,6 +19,7 @@ for model serving in production.
 
 * Fashion MNIST - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/pytorch/fashion-mnist/pytorch-fashion-mnist.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/pytorch/fashion-mnist/pytorch-fashion-mnist.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/pytorch/fashion-mnist/pytorch-fashion-mnist.ipynb)
 * CIFAR-10 Image Classification - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/pytorch/cifar10-image-classification/pytorch-cifar10-image-classification.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/pytorch/cifar10-image-classification/pytorch-cifar10-image-classification.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/pytorch/cifar10-image-classification/pytorch-cifar10-image-classification.ipynb)
+* GPU Serving with PyTorch - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/pytorch/news-classification-gpu/news-classification.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/pytorch/news-classification-gpu/news-classification.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/pytorch/news-classification-gpu/news-classification.ipynb) | [helper scripts](https://github.com/bentoml/gallery/blob/master/pytorch/news-classification-gpu/train.py)
 
 
 ### Tensorflow Keras
@@ -33,6 +34,7 @@ for model serving in production.
 * tf.Function echo model - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/tensorflow/echo/tensorflow-echo.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/tensorflow/echo/tensorflow-echo.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/tensorflow/echo/tensorflow-echo.ipynb)
 * Tf2 fashion MNIST - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/tensorflow/fashion-mnist/tensorflow_2_fasion_mnist.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/tensorflow/fashion-mnist/tensorflow_2_fashion_mnist.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/tensorflow/fashion-mnist/tensorflow_2_fashion_mnist.ipynb)
 * Movie Review Sentiment with BERT - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/tensorflow/bert/bert_movie_reviews.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/tensorflow/bert/bert_movie_reviews.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/tensorflow/bert/bert_movie_reviews.ipynb)
+* GPU Serving with Tensorflow - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/tensorflow/sentiment-analysis-gpu/sentiment-analysis-gpu.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/tensorflow/sentiment-analysis-gpu/sentiment-analysis-gpu.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/tensorflow/sentiment-analysis-gpu/sentiment-analysis-gpu.ipynb)
 
 ### XGBoost
 
@@ -64,8 +66,8 @@ for model serving in production.
 ### ONNX
 
 * Scikit-learn Iris Classifier - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/onnx/sklearn-iris-classifier/SK-iris-classifier.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/onnx/sklearn-iris-classifier/SK-iris-classifier.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/onnx/sklearn-iris-classifier/SK-iris-classifier.ipynb)
-
 * ResNet50 Image Recognition (ONNX model zoo) - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/onnx/resnet50/resnet50.ipynb)
+* GPU Serving with ONNX - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/onnx/news-classification-gpu/news-classification-gpu.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/onnx/news-classification-gpu/news-classification-gpu.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/onnx/news-classification-gpu/news-classification-gpu.ipynb)
 
 
 ### PaddlePaddle
@@ -93,9 +95,11 @@ for model serving in production.
 
 * Movie Review with TensorFlow 2.0 and BERT - [Google Colab](https://colab.research.google.com/github/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynb) | [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/end-to-end/sagemaker-deployment/MovieReview-sagemaker-deployment.ipynbb)
 
+
 ###  SQL Server Machine Learning Services
 
 * Iris Classifier deployed with SQL Server - [nbviewer](https://nbviewer.jupyter.org/github/bentoml/gallery/blob/master/end-to-end/sql-server-deployment/sql-server-deployment.ipynb) | [source](https://github.com/bentoml/gallery/blob/master/end-to-end/sql-server-deployment/sql-server-deployment.ipynb)
+
 
 ### MLflow
 
