@@ -106,6 +106,12 @@ for model serving in production.
 * Load Mlflow model - [source](https://github.com/bentoml/gallery/blob/master/bentomlflow/mlflow-to-bentoml-example.ipynb)
 
 
+### RedisAI
+
+* Tf2 fashion MNIST - [source](https://github.com/bentoml/gallery/blob/master/bentoml-redisai/tensorflow/tensorflow_2_fashion_mnist.ipynb)
+
+* CIFAR-10 Image Classification - [source](https://github.com/bentoml/gallery/blob/master/bentoml-redisai/pytorch/pytorch-cifar10-image-classification.ipynb)
+
 ## Contributing
 
 Have questions or feedback? Post a [new github issue](https://github.com/bentoml/BentoML/issues/new/choose)
