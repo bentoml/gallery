@@ -1,2 +1,0 @@
-age,workclass,fnlwgt,education,education-num,marital-status,occupation,relationship,race,sex,capital-gain,capital-loss,hours-per-week,native-country,salary
-49, Private,101320, Assoc-acdm,12.0, Married-civ-spouse,, Wife, White, Female,0,1902,40, United-States,>=50k
