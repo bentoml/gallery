@@ -11,3 +11,5 @@ tensorflow/imdb/model/
 bentomlflow/mlruns
 # bentoml necessary file for serving written from nobook when run
 bentomlflow/iris_classifier.py
+
+.DS_Store
