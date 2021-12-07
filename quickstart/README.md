@@ -2,20 +2,29 @@
 
 This is a sample project demonstrating basic usage of BentoML, the machine learning model serving library.
 
+### Install Dependencies
 
-1. Train a classification model with sklearn's built-in iris dataset:
+Install python packages required for running this project:
+```bash
+pip install -r ./requirements.txt
+```
+
+### Model Training
+
+First step, train a classification model with sklearn's built-in iris dataset and save the model
+with BentoML:
 
 ```bash
 python train.py
 ```
 
-Verify that the models has saved to local model store:
+This should save a new model in the BentoML local model store:
 
 ```bash
 bentoml models list
 ```
 
-Verify that the model can be loaded as runner in Python:
+Verify that the model can be loaded as runner from Python shell:
 
 ```python
 import bentoml.sklearn
@@ -25,9 +34,29 @@ runner = bentoml.sklearn.load_runner("iris_clf:latest")
 runner.run([5.9, 3. , 5.1, 1.8])  # => array(2)
 ```
 
-2. Test the service code defined in `iris_classifier.py`:
+### Create ML Service
 
-Start an API server locally:
+The ML Service code is defined in the `iris_classifier.py` file:
+
+```python
+# iris_classifier.py
+import numpy as np
+import bentoml
+import bentoml.sklearn
+from bentoml.io import NumpyNdarray
+
+
+iris_clf_runner = bentoml.sklearn.load_runner("iris_clf:latest")
+
+svc = bentoml.Service("iris_classifier", runners=[iris_clf_runner])
+
+
+@svc.api(input=NumpyNdarray(), output=NumpyNdarray())
+def classify(input_series: np.ndarray) -> np.ndarray:
+    return iris_clf_runner.run(input_series)
+```
+
+Start an API server locally to test the service code above:
 
 ```bash
 bentoml serve iris_classifier:svc --reload
@@ -37,12 +66,13 @@ With the `--reload` flag, the API server will automatically restart when the sou
 file `iris_classifier.py` is being edited, to boost your development productivity.
 
 
-Verify the endpoint can be accessed from localhost:
+Verify the endpoint can be accessed locally:
 ```bash
 curl -X POST -H "content-type: application/json" --data "[5, 4, 3, 2]" http://127.0.0.1:5000/classify
 ```
 
-3. Build Bento for deployment
+
+### Build Bento for deployment
 
 A `bentofile` is already created in this directory for building a Bento for the iris_classifier
 service:
@@ -76,14 +106,59 @@ time for BentoML to resolve all dependency versions:
                                path="/Users/chef/bentoml/bentos/iris_classifier/invwzzsw7li6zckb2ie5eubhd/") created
 ```
 
+This Bento can now be loaded for serving:
 
-4. Containerize Bento for deployment
+```bash
+bentoml serve iris_classifier:latest --production
+```
 
-Make sure you have docker installed and docker deamon running, and run the following command:
+The Bento directory contains all code, files, models and configs required for running this service.
+BentoML standarlizes this file structure which enables serving runtimes and deployment tools to be
+built on top of it. By default, Bentos are managed under the `~/bentoml/bentos` directory:
+
+```
+> cd ~/bentoml/bentos/iris_classifier && cd $(cat latest)
+
+> tree
+.
+├── README.md
+├── apis
+│   └── openapi.yaml
+├── bento.yaml
+├── env
+│   ├── docker
+│   │   ├── Dockerfile
+│   │   ├── entrypoint.sh
+│   │   └── init.sh
+│   └── python
+│       ├── requirements.lock.txt
+│       ├── requirements.txt
+│       └── version.txt
+├── models
+│   └── iris_clf
+│       ├── latest
+│       └── y3f4ijcxj3i6zo6x2ie5eubhd
+│           ├── model.yaml
+│           └── saved_model.pkl
+└── src
+    ├── iris_classifier.py
+    └── train.py
+
+8 directories, 14 files
+```
+
+
+### Containerize Bento for deployment
+
+Make sure you have docker installed and docker deamon running, and the following command
+will use your local docker environment to build a new docker image, containing the model
+server configured from this Bento:
 
 ```bash
 bentoml containerize iris_classifier:latest
 ```
 
-
-
+Test out the docker image built:
+```bash
+docker run iris_classifier:invwzzsw7li6zckb2ie5eubhd -p 5000:5000
+```
