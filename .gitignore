@@ -58,3 +58,4 @@ coverage.xml
 *.xml
 
 
+.ipynb_checkpoints
