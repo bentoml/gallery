@@ -1,6 +1,5 @@
 import numpy as np
 import bentoml
-import bentoml.sklearn
 from bentoml.io import NumpyNdarray
 
 
