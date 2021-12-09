@@ -27,7 +27,7 @@ bentoml models list
 Verify that the model can be loaded as runner from Python shell:
 
 ```python
-import bentoml.sklearn
+import bentoml
 
 runner = bentoml.sklearn.load_runner("iris_clf:latest")
 
@@ -42,7 +42,6 @@ The ML Service code is defined in the `iris_classifier.py` file:
 # iris_classifier.py
 import numpy as np
 import bentoml
-import bentoml.sklearn
 from bentoml.io import NumpyNdarray
 
 

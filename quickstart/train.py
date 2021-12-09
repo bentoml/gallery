@@ -1,7 +1,6 @@
 from sklearn import svm, datasets
 
 import bentoml
-import bentoml.sklearn
 
 
 if __name__ == "__main__":
