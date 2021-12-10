@@ -14,6 +14,8 @@ productionizing a machine learning mdoel.
 
 Each gallery project is under its own folder, typically containing the following files:
 
+| file name | description |
+| --- | --- |
 | README.md | a step-by-step guide running the project Python scripts from CLI |
 | {PROJECT_NAME}.ipynb | a jupyter notebook shows the same workflow but from notebook environment |
 | requirements.txt | required PyPI packages for this project |
