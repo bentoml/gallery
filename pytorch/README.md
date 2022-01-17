@@ -2,6 +2,12 @@
 
 This is a sample project demonstrating basic usage of BentoML, the machine learning model serving library.
 
+In this project, we will train a digit recognition model using PyTorch on the MNIST dataset, build
+an ML service for the model, serve the model behind an HTTP endpoint, and containerize the model
+server as a docker image for production deployment.
+
+This project is also available to run from a notebook: https://github.com/bentoml/gallery/blob/main/pytorch/pytorch_mnist_demo.ipynb
+
 ### Install Dependencies
 
 Install python packages required for running this project:
