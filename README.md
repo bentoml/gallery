@@ -2,12 +2,16 @@
 
 This is a collection of machine learning projects that utilizes [BentoML](https://github.com/bentoml/BentoML)
 for model serving. The goal is to demonstrate real-world BentoML usage and best practices in
-productionizing a machine learning mdoel.
+productionizing a machine learning model for serving.
+
+Note: You are looking at gallery examples for BentoML 1.0 version, which is still under early beta release. 
+For prior stable versions (0.13.x), see the [0.13-LTS branch](https://github.com/bentoml/gallery/tree/0.13-LTS).
 
 
 ## Projects List
 
 * Quickstart (sklearn on iris dataset): https://github.com/bentoml/gallery/tree/main/quickstart
+* PyTorch MNIST: https://github.com/bentoml/gallery/tree/main/pytorch
 
 
 ## Project layout
@@ -31,7 +35,7 @@ Each gallery project is under its own folder, typically containing the following
 
 If you have issues running these projects or have suggestions for improvement, use [Github Issues 🐱](https://github.com/bentoml/gallery/issues/new)
 
-If you are interested in contributing new projects to this repo, let's talk 🥰 - Join us on [Slack](https://join.slack.com/t/bentoml/shared_invite/enQtNjcyMTY3MjE4NTgzLTU3ZDc1MWM5MzQxMWQxMzJiNTc1MTJmMzYzMTYwMjQ0OGEwNDFmZDkzYWQxNzgxYWNhNjAxZjk4MzI4OGY1Yjg) and share your idea in #dev channel
+If you are interested in contributing new projects to this repo, let's talk 🥰 - Join us on [Slack](https://join.slack.com/t/bentoml/shared_invite/enQtNjcyMTY3MjE4NTgzLTU3ZDc1MWM5MzQxMWQxMzJiNTc1MTJmMzYzMTYwMjQ0OGEwNDFmZDkzYWQxNzgxYWNhNjAxZjk4MzI4OGY1Yjg) and share your idea in #bentoml-dev channel
 
 Before you create a Pull Request, make sure:
 * Follow the basic structures and naming conventions of other existing gallery projects

@@ -1,4 +1,4 @@
-# BentoML # BentoML PyTorch MNIST Tutorial
+# BentoML PyTorch MNIST Tutorial
 
 This is a sample project demonstrating basic usage of BentoML, the machine learning model serving library.
 
