@@ -1,12 +1,6 @@
-# BentoML Quickstart
+# BentoML Quickstart Demo
 
 This is a sample project demonstrating basic usage of BentoML, the machine learning model serving library.
-
-In this project, we will train a classifier model using Scikit-learn and the Iris dataset, build
-an ML service for the model, serve the model behind an HTTP endpoint, and containerize the model
-server as a docker image for production deployment.
-
-This project is also available to run from a notebook: https://github.com/bentoml/gallery/blob/main/quickstart/iris_classifier.ipynb
 
 ### Install Dependencies
 

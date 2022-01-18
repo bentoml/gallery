@@ -10,7 +10,7 @@ For prior stable versions (0.13.x), see the [0.13-LTS branch](https://github.com
 
 ## Projects List
 
-* Scikit-learn Iris Classifier: https://github.com/bentoml/gallery/tree/main/quickstart
+* Quickstart (sklearn on iris dataset): https://github.com/bentoml/gallery/tree/main/quickstart
 * PyTorch MNIST: https://github.com/bentoml/gallery/tree/main/pytorch
 
 
