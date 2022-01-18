@@ -24,6 +24,6 @@ def host() -> t.Generator[str, None, None]:
     bentoml.build("service:svc")
 
     with run_api_server(
-        bento="pytorch_mnist_demo:latest", config_file="bentoml_config.yml"
+        bento="pytorch_mnist_demo:latest",
     ) as host:
         yield host
