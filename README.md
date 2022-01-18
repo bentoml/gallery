@@ -8,6 +8,13 @@ Note: You are looking at gallery examples for BentoML 1.0 version, which is stil
 For prior stable versions (0.13.x), see the [0.13-LTS branch](https://github.com/bentoml/gallery/tree/0.13-LTS).
 
 
+BentoML 1.0 preview release is required for running gallery projects here:
+
+```bash
+pip install bentoml --pre
+```
+
+
 ## Projects List
 
 * Scikit-learn Iris Classifier: https://github.com/bentoml/gallery/tree/main/quickstart
