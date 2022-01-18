@@ -12,6 +12,8 @@ from torch.utils.data import ConcatDataset, DataLoader
 from torchvision import transforms
 from torchvision.datasets import MNIST
 
+from model import SimpleConvNet
+
 K_FOLDS = 5
 NUM_EPOCHS = 3
 LOSS_FUNCTION = nn.CrossEntropyLoss()
@@ -37,34 +39,6 @@ def get_dataset():
     test_set = MNIST(os.getcwd(), download=True, transform=transforms.ToTensor(), train=False)
     return train_set, test_set
 
-
-class SimpleConvNet(nn.Module):
-    '''
-    Simple Convolutional Neural Network
-    '''
-    def __init__(self):
-        super().__init__()
-        self.layers = nn.Sequential(
-            nn.Conv2d(1, 10, kernel_size=3),
-            nn.ReLU(),
-            nn.Flatten(),
-            nn.Linear(26 * 26 * 10, 50),
-            nn.ReLU(),
-            nn.Linear(50, 20),
-            nn.ReLU(),
-            nn.Linear(20, 10)
-        )
-
-    def forward(self, x):
-        return self.layers(x)
-
-    def predict(self, inp):
-        """predict digit for input"""
-        self.eval()
-        with torch.no_grad():
-            raw_output = self(inp)
-            _, pred = torch.max(raw_output, 1)
-            return pred
 
 def train_epoch(model, optimizer, loss_function, train_loader, epoch, device="cpu"):
     # Mark training flag
