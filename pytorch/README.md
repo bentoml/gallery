@@ -188,33 +188,32 @@ built on top of it. By default, Bentos are managed under the `~/bentoml/bentos` 
 
 > tree
 .
-├── bmygukdtzpy6zlc5vcqvsoywq
-│   ├── apis
-│   │   └── openapi.yaml
-│   ├── bento.yaml
-│   ├── env
-│   │   ├── conda
-│   │   ├── docker
-│   │   │   ├── Dockerfile
-│   │   │   ├── entrypoint.sh
-│   │   │   └── init.sh
-│   │   └── python
-│   │       ├── requirements.lock.txt
-│   │       ├── requirements.txt
-│   │       └── version.txt
-│   ├── models
-│   │   └── pytorch_mnist_demo
-│   │       ├── latest
-│   │       └── xm6jsddtu3y6zluuvcqvsoywq
-│   │           ├── model.yaml
-│   │           └── saved_model.pt
-│   ├── README.md
-│   └── src
-│       ├── service.py
-│       └── train.py
-└── latest
+├── apis
+│   └── openapi.yaml
+├── bento.yaml
+├── env
+│   ├── conda
+│   ├── docker
+│   │   ├── Dockerfile
+│   │   ├── entrypoint.sh
+│   │   └── init.sh
+│   └── python
+│       ├── requirements.lock.txt
+│       ├── requirements.txt
+│       └── version.txt
+├── models
+│   └── pytorch_mnist_demo
+│       ├── eqxdigtybch6nkfb
+│       │   ├── model.yaml
+│       │   └── saved_model.pt
+│       └── latest
+├── README.md
+└── src
+    ├── model.py
+    ├── service.py
+    └── train.py
 
-10 directories, 16 files
+9 directories, 15 files
 ```
 
 
