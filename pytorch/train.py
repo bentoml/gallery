@@ -153,7 +153,7 @@ if __name__ == '__main__':
                         help=f'number of folds for k-fold cross-validation (default: {K_FOLDS}, 1 to disable cv)')
     parser.add_argument('--cuda', action='store_true', default=False,
                         help='enable CUDA training')
-    parser.add_argument('--model-name', type=str, default="pytorch_mnist_demo",
+    parser.add_argument('--model-name', type=str, default="pytorch_mnist",
                         help='name for saved the model')
 
     args = parser.parse_args()

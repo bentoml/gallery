@@ -7,7 +7,7 @@ from bentoml.io import Image, NumpyNdarray
 from PIL.Image import Image as PILImage
 
 mnist_runner = bentoml.pytorch.load_runner(
-    "pytorch_mnist_demo",
+    "pytorch_mnist",
     name="mnist_runner",
     predict_fn_name="predict",
 )
