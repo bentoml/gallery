@@ -1,4 +1,4 @@
-project_slug = "bentoml_gallery_{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}"
+project_slug = "bentoml_gallery_{{ cookiecutter.__project_dir }}"
 
 if hasattr(project_slug, "isidentifier"):
     assert (

@@ -24,6 +24,6 @@ def host() -> t.Generator[str, None, None]:
     bentoml.build("service:svc")
 
     with run_api_server(
-        bento="{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}:latest",
+        bento="{{ cookiecutter.__full_name }}:latest",
     ) as host:
         yield host

@@ -1,0 +1,10 @@
+{
+    "author": "{{cookiecutter.author}}",
+    "email": "{{cookiecutter.email}}",
+    "framework": "{{cookiecutter.framework}}",
+    "project_name": "{{cookiecutter.project_name}}",
+    "project_dir": "{{ cookiecutter.__project_dir }}",
+    "project_slug": "{{ cookiecutter.__project_slug }}",
+    "full_name": "{{ cookiecutter.__full_name }}",
+    "include_tests": "{{cookiecutter.include_tests}}"
+}

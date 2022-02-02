@@ -7,7 +7,7 @@ In this project, we will train a {{cookiecutter.project_name}} using {{cookiecut
 an ML service for the model, serve the model behind an HTTP endpoint, and containerize the model
 server as a docker image for production deployment.
 
-This project is also available to run from a [Jupyter Notebook](https://github.com/bentoml/gallery/blob/main/{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}/{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}/{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}.ipynb). You can also try it out on [Colab](https://colab.research.google.com/github/bentoml/gallery/blob/main/{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}/{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}/{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}.ipynb).
+This project is also available to run from a [Jupyter Notebook](https://github.com/bentoml/gallery/blob/main/{{ cookiecutter.__project_dir }}/{{ cookiecutter.__project_slug }}/{{ cookiecutter.__full_name }}_demo.ipynb). You can also try it out on [Colab](https://colab.research.google.com/github/bentoml/gallery/blob/main/{{ cookiecutter.__project_dir }}/{{ cookiecutter.__project_slug }}/{{ cookiecutter.__full_name }}_demo.ipynb).
 
 ### Install Dependencies
 
@@ -36,7 +36,7 @@ Verify that the model can be loaded as runner from an interactive Python shell:
 import bentoml
 # import necessary library for preprocess
 
-runner = bentoml.{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}.load_runner("{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}:latest")
+runner = bentoml.{{ cookiecutter.__project_dir }}.load_runner("{{ cookiecutter.__project_slug }}:latest")
 
 # preprocess an input called `inp`
 ...
@@ -82,16 +82,16 @@ Bento for the service:
 Note that we exclude `tests/` from the bento using `exclude`.
 
 Simply run `bentoml build` from current directory to build a Bento with the latest
-version of the `{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}` model. This may take a while when running for the first
+version of the `{{ cookiecutter.__full_name }}` model. This may take a while when running for the first
 time for BentoML to resolve all dependency versions:
 
 ```
 > bentoml build
 
-[01:14:04 AM] INFO     Building BentoML service "{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}:[[bento_tag]]" from build context      
+[01:14:04 AM] INFO     Building BentoML service "{{ cookiecutter.__full_name }}:[[bento_tag]]" from build context      
                        "/home/chef/workspace/gallery/pytorch"                                                         
-              INFO     Packing model "{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}:[[model_tag]]" from                               
-                       "/home/chef/bentoml/models/{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}/[[model_tag]]"                       
+              INFO     Packing model "{{ cookiecutter.__project_slug }}:[[model_tag]]" from                               
+                       "/home/chef/bentoml/models/{{ cookiecutter.__project_slug }}/[[model_tag]]"                       
               INFO     Locking PyPI package versions..                                                                 
 [01:14:05 AM] INFO                                                                                                     
                        ██████╗░███████╗███╗░░██╗████████╗░█████╗░███╗░░░███╗██╗░░░░░                                   
@@ -101,14 +101,14 @@ time for BentoML to resolve all dependency versions:
                        ██████╦╝███████╗██║░╚███║░░░██║░░░╚█████╔╝██║░╚═╝░██║███████╗                                   
                        ╚═════╝░╚══════╝╚═╝░░╚══╝░░░╚═╝░░░░╚════╝░╚═╝░░░░░╚═╝╚══════╝                                   
                                                                                                                        
-              INFO     Successfully built Bento(tag="{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}:[[bento_tag]]") at                 
-                       "/home/chef/bentoml/bentos/{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}/[[bento_tag]]/"                      
+              INFO     Successfully built Bento(tag="{{ cookiecutter.__full_name }}:[[bento_tag]]") at                 
+                       "/home/chef/bentoml/bentos/{{ cookiecutter.__full_name }}/[[bento_tag]]/"                      
 ```
 
 This Bento can now be loaded for serving:
 
 ```bash
-bentoml serve {{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}:latest --production
+bentoml serve {{ cookiecutter.__full_name }}:latest --production
 ```
 
 The Bento directory contains all code, files, models and configs required for running this service.
@@ -116,7 +116,7 @@ BentoML standarlizes this file structure which enables serving runtimes and depl
 built on top of it. By default, Bentos are managed under the `~/bentoml/bentos` directory:
 
 ```
-> cd ~/bentoml/bentos/{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }} && cd $(cat latest)
+> cd ~/bentoml/bentos/{{ cookiecutter.__full_name }} && cd $(cat latest)
 
 > tree
 .
@@ -134,7 +134,7 @@ built on top of it. By default, Bentos are managed under the `~/bentoml/bentos` 
 │       ├── requirements.txt
 │       └── version.txt
 ├── models
-│   └── {{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}
+│   └── {{ cookiecutter.__full_name }}
 │       ├── [[model_tag]] 
 │       │   ├── [[model_content]]
 │       │   └── [[model_content]]
@@ -156,10 +156,10 @@ will use your local docker environment to build a new docker image, containing t
 server configured from this Bento:
 
 ```bash
-bentoml containerize {{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}:latest
+bentoml containerize {{ cookiecutter.__full_name }}:latest
 ```
 
 Test out the docker image built:
 ```bash
-docker run -p 5000:5000 {{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}:[[docker_tag]]
+docker run -p 5000:5000 {{ cookiecutter.__full_name }}:[[docker_tag]]
 ```

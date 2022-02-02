@@ -47,7 +47,7 @@ if __name__ == '__main__':
                         help=f'number of folds for k-fold cross-validation (default: {K_FOLDS}, 1 to disable cv)')
     parser.add_argument('--cuda', action='store_true', default=False,
                         help='enable CUDA training')
-    parser.add_argument('--model-name', type=str, default="{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}",
+    parser.add_argument('--model-name', type=str, default="{{ cookiecutter.__project_slug }}",
                         help='name for saved the model')
 
     args = parser.parse_args()
@@ -72,7 +72,7 @@ if __name__ == '__main__':
         "cv_stats": cv_results,
     }
 
-    bentoml.{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}.save(
+    bentoml.{{ cookiecutter.__project_dir }}.save(
         args.model_name,
         trained_model,
         metadata=metadata,

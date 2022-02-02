@@ -1,7 +1,7 @@
 import os
 import shutil
 
-project_slug = "bentoml_gallery_{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}"
+project_slug = "bentoml_gallery_{{ cookiecutter.__project_dir }}"
 
 def remove(filepath):
     if os.path.isfile(filepath):
