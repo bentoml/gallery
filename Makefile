@@ -5,4 +5,4 @@ help: ## Show all Makefile targets
 
 create-new-gallery-projects: ## Create new gallery projects from templates
 	@pip install -r ./scripts/requirements.txt
-	@./scripts/gallery_cli.py
+	@./scripts/new_gallery_project.py

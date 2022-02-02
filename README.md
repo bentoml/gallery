@@ -31,14 +31,29 @@ Each gallery project is under its own folder, typically containing the following
 | {PROJECT_NAME}.ipynb | a jupyter notebook shows the same workflow but from notebook environment |
 | requirements.txt | required PyPI packages for this project |
 | train.py | a python script for training an ML model and saving it with BentoML |
-| import_model.py | import an existing trained model to BentoML |
+| model.py | import an existing trained model to BentoML |
 | service.py | python code that defines the bentoml.Service instance for serving |
 | bentofile.yaml | the bento build file for building the service into a Bento |
 | .bentoignore | files to exclude from build directory, when building a Bento |
 | benchmark.py | a python script that tests the baseline performance of the final model server created |
 
+## How to create a new projects
 
-## How to contribute
+If you have `make`, just simply run the following in the gallery root:
+```bash
+make
+```
+
+If not, install the [requirements.txt](./scripts/requirements.txt):
+```bash
+pip install -r ./scripts/requirements.txt
+```
+Then run:
+```bash
+./scripts/new_gallery_project.py
+```
+
+## Contribution
 
 If you have issues running these projects or have suggestions for improvement, use [Github Issues 🐱](https://github.com/bentoml/gallery/issues/new)
 
