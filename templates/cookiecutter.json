@@ -1,0 +1,10 @@
+{
+    "author": "BentoML Team",
+    "email": "contact@bentoml.com",
+    "framework": "PyTorch",
+    "project_name": "MNIST Classifier",
+    "include_tests": [
+        "True",
+        "False"
+    ]
+}

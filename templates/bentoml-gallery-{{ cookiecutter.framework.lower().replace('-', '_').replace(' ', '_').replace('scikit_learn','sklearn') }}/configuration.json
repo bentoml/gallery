@@ -1,0 +1,10 @@
+{
+    "author": "{{cookiecutter.author}}",
+    "email": "{{cookiecutter.email}}",
+    "framework": "{{cookiecutter.framework}}",
+    "project_name": "{{cookiecutter.project_name}}",
+    "project_dir": "{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}",
+    "project_slug": "{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}",
+    "full_name": "{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}",
+    "include_tests": "{{cookiecutter.include_tests}}"
+}
