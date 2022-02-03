@@ -7,6 +7,7 @@
         "True",
         "False"
     ],
+    "include_pretrained_model": ["Yes", "No"],
     "__project_dir": "{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}",
     "__project_slug": "{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}",
     "__full_name": "{{ cookiecutter.framework.lower().replace('-', '_').replace(' ', '_').replace('scikit_learn','sklearn') }}_{{ cookiecutter.project_name.lower().replace('-', '_').replace(' ', '_') }}"

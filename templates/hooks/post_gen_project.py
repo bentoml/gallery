@@ -9,7 +9,12 @@ def remove(filepath):
     elif os.path.isdir(filepath):
         shutil.rmtree(filepath)
 
-include_tests = '{{cookiecutter.include_tests}}' == 'True'
+include_tests = '{{cookiecutter.include_tests}}'.lower() == 'true'
+include_pretrained_model = '{{cookiecutter.include_pretrained_model}}'.lower() == 'yes'
+
+
+if not include_pretrained_model:
+    remove('model.py')
 
 if not include_tests:
     # remove top-level file inside the generated folder

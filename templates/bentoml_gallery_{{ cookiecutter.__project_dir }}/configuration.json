@@ -6,5 +6,6 @@
     "project_dir": "{{ cookiecutter.__project_dir }}",
     "project_slug": "{{ cookiecutter.__project_slug }}",
     "full_name": "{{ cookiecutter.__full_name }}",
-    "include_tests": "{{cookiecutter.include_tests}}"
+    "include_tests": "{{cookiecutter.include_tests}}",
+    "include_pretrained_model": "{{cookiecutter.include_pretrained_model}}"
 }

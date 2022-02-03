@@ -23,7 +23,8 @@ with open(directory + "/configuration.json", "r") as configuration_file:
 project_dir = configuration['project_dir']
 project_slug = configuration['project_slug']
 notebook_filename = configuration['full_name']
-include_tests = configuration['include_tests'] == "True"
+include_tests = configuration['include_tests'].lower() == "true"
+include_pretrained_model = configuration['include_pretrained_model'].lower() ==  'yes'
 
 result_gallery_dir = Path(gallery_root, project_dir, project_slug)
 result_gallery_dir.mkdir(parents=True, exist_ok=True)
@@ -35,13 +36,16 @@ shutil.move(str(Path(directory, ".bentoignore")), str(Path(result_gallery_dir, "
 shutil.move(str(Path(directory, f"{notebook_filename}_demo.ipynb")), str(Path(result_gallery_dir, f"{notebook_filename}_demo.ipynb")))
 shutil.move(str(Path(directory, "service.py")), str(Path(result_gallery_dir, "service.py")))
 shutil.move(str(Path(directory, "train.py")), str(Path(result_gallery_dir, "train.py")))
-shutil.move(str(Path(directory, "model.py")), str(Path(result_gallery_dir, "model.py")))
 shutil.move(str(Path(directory, "bentofile.yaml")), str(Path(result_gallery_dir, "bentofile.yaml")))
 shutil.move(str(Path(directory, "requirements.txt")), str(Path(result_gallery_dir, "requirements.txt")))
+
+if include_pretrained_model:
+    shutil.move(str(Path(directory, "import_model.py")), str(Path(result_gallery_dir, "import_model.py")))
+else:
+    shutil.move(str(Path(directory, "model.py")), str(Path(result_gallery_dir, "model.py")))
 
 if include_tests:
     shutil.move(str(Path(directory, "samples")), str(Path(result_gallery_dir, "samples")))
     shutil.move(str(Path(directory, "tests")), str(Path(result_gallery_dir, "tests")))
 
-os.rmdir(directory)
-
+shutil.rmtree(directory)
