@@ -1,10 +1,7 @@
 workflow:
-- generate a new repo with the given CLI
- `bentoml-gallery add_new_gallery_project`
-  options: TODO
- -> generate a new cookiecutter-template
+- add gallery root, run `make` -> generate a new cookiecutter-template
 
-- edit service.py, train.py, model.py, bentofile.yaml, requirements.txt, the generated jupyter notebook
+- edit `service.py`, `train.py`, `model.py`, `bentofile.yaml`, `requirements.txt`, the generated jupyter notebook
 
 - edit the interactive code under the ipython shell section, check other example repo on how to edit it, and also remove all comments under this section
 
@@ -21,5 +18,3 @@ workflow:
 
 - then edit all the boilerplate files freely, make sure to document all additional steps or files in your tutorial.
 
-TODO:
-- preprocess and remove directory name correctly for CLI
