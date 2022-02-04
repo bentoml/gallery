@@ -1,13 +1,24 @@
-# BentoML's Transformers Roberta Text Classification Tutorial
+# BentoML's Sentiment Analysis Tutorial
 
 This is a sample project demonstrating basic usage of BentoML, The Unified Model
 Serving Framework.
 
-In this project, we will train a Roberta Text Classification using Transformers, build
-an ML service for the model, serve the model behind an HTTP endpoint, and containerize the model
+In this project, There are two parts:
+
+1. We will import a pretrained Roberta model
+2. We will also fine-tuning the model and compare the results between the two models.
+
+We then create an ML service for both models, serve it behind an HTTP endpoint, and containerize the model
 server as a docker image for production deployment.
 
+We will also enable GPU supports for this service, and deploy it to [Yatai](https://github.com/bentoml/Yatai)
+
 This project is also available to run from a [Jupyter Notebook](https://github.com/bentoml/gallery/blob/main/transformers/roberta_text_classification/transformers_roberta_text_classification_demo.ipynb). You can also try it out on [Colab](https://colab.research.google.com/github/bentoml/gallery/blob/main/transformers/roberta_text_classification/transformers_roberta_text_classification_demo.ipynb).
+
+### Specification
+
+model: [`siebert/sentiment-roberta-large-english`](https://huggingface.co/siebert/sentiment-roberta-large-english)
+framework: [`transformers`](https://huggingface.co/docs/transformers/index)
 
 ### Install Dependencies
 
@@ -49,28 +60,6 @@ runner.run(inp)
 The ML Service code is defined in the [`service.py`](./service.py) file:
 
 ```python
-import typing as t
-
-import bentoml
-import numpy as np
-import PIL.Image
-
-from bentoml.io import Image, NumpyNdarray
-from PIL.Image import Image as PILImage
-
-roberta_text_classification_runner = bentoml.transformers.load_runner(
-    "transformers_roberta_text_classification",
-    name="roberta_text_classification_runner",
-)
-
-svc = bentoml.Service(
-    name="transformers_roberta_text_classification",
-    runners=[
-        roberta_text_classification_runner,
-    ],
-)
-
-
 ```
 
 We defined the following API for our endpoints with a single runner: [[endpoints]]
