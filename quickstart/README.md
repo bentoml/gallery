@@ -165,5 +165,5 @@ bentoml containerize iris_classifier:latest
 
 Test out the docker image built:
 ```bash
-docker run iris_classifier:invwzzsw7li6zckb2ie5eubhd -p 5000:5000
+docker run -p 5000:5000 iris_classifier:invwzzsw7li6zckb2ie5eubhd 
 ```
