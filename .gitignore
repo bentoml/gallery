@@ -59,3 +59,4 @@ coverage.xml
 
 
 .ipynb_checkpoints
+.DS_Store
