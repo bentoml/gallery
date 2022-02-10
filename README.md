@@ -18,7 +18,7 @@ pip install bentoml --pre
 ## Projects List
 
 * Scikit-learn Iris Classifier: https://github.com/bentoml/gallery/tree/main/quickstart
-* PyTorch MNIST: https://github.com/bentoml/gallery/tree/main/pytorch
+* PyTorch MNIST: https://github.com/bentoml/gallery/tree/main/pytorch_mnist
 
 
 ## Project layout
