@@ -124,6 +124,11 @@ Verify the endpoint can be accessed locally:
 curl -H "Content-Type: multipart/form-data" -F'fileobj=@samples/1.png;type=image/png' http://127.0.0.1:5000/predict_image
 ```
 
+We can also do a simple local benchmark if [locust](https://locust.io) is installed:
+```bash
+locust --headless -u 100 -r 1000 --run-time 10m --host http://127.0.0.1:5000
+```
+
 
 ### Build Bento for deployment
 
