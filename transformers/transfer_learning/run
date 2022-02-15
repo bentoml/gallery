@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+MODIFIED_PY="fine_tune_roberta.sync.py"
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m'
+
+PASS() {
+    echo -e "$GREEN""[PASS]""$NC" "$*"
+}
+
+INFO() {
+    echo -e "${YELLOW}[INFO]${NC}" "$*"
+}
+
+FAIL() {
+    echo -e "$RED""[FAIL]""$NC" "$*"
+}
+
+set_on_failed_callback() {
+    set -E
+    trap "$*" ERR
+}
+check_cmd() {
+    command -v "$1" > /dev/null 2>&1
+}
+
+need_cmd() {
+    if ! check_cmd "$1"; then
+        FAIL "need $1 (command not found)"
+        exit 1
+    fi
+}
+
+set_on_failed_callback 'exit'
+
+dev() {
+    if [ -z ${EDITOR+x} ]; then
+        INFO "EDITOR is not set, default to vim..."
+        need_cmd vim
+        EDITOR=vim
+    fi
+
+    need_cmd jupyter
+    pip list | grep jupyter-ascending &>/dev/null || { FAIL 2>&1 "jupyter-ascending is not available in this python environment. Exitting..."; exit $?; }
+    nohup jupyter notebook --allow-root fine_tune_roberta.sync.ipynb > error.log & echo $!>pid.log
+    if [ $(uname) == "Darwin" ]; then
+        # MacOS stat
+        MODTIME=$(stat -f "%m" $MODIFIED_PY)
+        $EDITOR $MODIFIED_PY || { FAIL 2>&1 "Unclean exit of editor; aborting!"; kill -9 $(cat pid.log); exit $?; }
+        NEWTIME=$(stat -f "%m" $MODIFIED_PY)
+        if [ $NEWTIME -eq $MODTIME ]; then
+            INFO "No changes done".
+        fi
+        kill -9 $(cat pid.log)
+    else
+        # Unix-based stat
+        MODTIME=$(stat -c "%Y" $MODIFIED_PY)
+        $EDITOR $MODIFIED_PY || { FAIL 2>&1 "Unclean exit of editor; aborting!"; kill -9 $(cat pid.log); exit $?; }
+        NEWTIME=$(stat -c "%Y" $MODIFIED_PY)
+        if [ $NEWTIME -eq $MODTIME ]; then
+            INFO "No changes done".
+        fi
+        kill -9 $(cat pid.log)
+    fi
+}
+
+dev

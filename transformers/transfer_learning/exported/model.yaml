@@ -1,0 +1,20 @@
+name: roberta_fine_tune
+version: iaaofxeowcnlfgxi
+bentoml_version: 1.0.0a3.post21+g2f6e2648
+creation_time: 2022-02-15 22:40:18.084072+00:00
+api_version: v1
+module: bentoml.transformers
+context:
+  framework_name: transformers
+  pip_dependencies:
+  - transformers==4.17.0.dev0
+  pipeline: false
+  bentoml_version: 1.0.0a3.post21+g2f6e2648
+  python_version: 3.9.7
+labels: {}
+options:
+  model: RobertaForSequenceClassification
+  tokenizer: RobertaTokenizerFast
+  feature_extractor: false
+metadata:
+  transfer-learning: true
