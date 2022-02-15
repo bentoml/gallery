@@ -3,13 +3,8 @@
 MODIFIED_PY="fine_tune_roberta.sync.py"
 
 RED='\033[0;31m'
-GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
-
-PASS() {
-    echo -e "$GREEN""[PASS]""$NC" "$*"
-}
 
 INFO() {
     echo -e "${YELLOW}[INFO]${NC}" "$*"
@@ -19,10 +14,6 @@ FAIL() {
     echo -e "$RED""[FAIL]""$NC" "$*"
 }
 
-set_on_failed_callback() {
-    set -E
-    trap "$*" ERR
-}
 check_cmd() {
     command -v "$1" > /dev/null 2>&1
 }
@@ -33,8 +24,6 @@ need_cmd() {
         exit 1
     fi
 }
-
-set_on_failed_callback 'exit'
 
 dev() {
     if [ -z ${EDITOR+x} ]; then

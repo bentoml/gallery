@@ -22,38 +22,39 @@ jupyter notebook fine_tune_roberta.sync.ipynb
 ```
 
 <details>
+  <summary>Neovim</summary>
 
-    <summary>Neovim</summary>
+  If you are using VimScript, then follow instruction [here](https://github.com/untitled-ai/jupyter_ascending.vim#installation).
 
-    If you are using VimScript, then follow instruction [here](https://github.com/untitled-ai/jupyter_ascending.vim#installation).
+  If you are using Lua within Neovim, add the following under `init.lua`:
 
-    If you are using Lua within Neovim, add the following under `init.lua`:
+  ```lua
+  local vim = vim
 
-    ```lua
-    local vim = vim
+  vim.api.nvim_set_keymap('n', '<space><space>x', '<CR>:call jupyter_ascending#execute()<CR>', {})
+  vim.api.nvim_set_keymap('n', '<space><space>X', '<CR>:call jupyter_ascending#execute_all()<CR>', {})
+  ```
 
-    vim.g.jupyter_ascending_auto_write = 'true'
+  Save and recompile to source the changes in configuration.
 
-    vim.api.nvim_set_keymap('n', '<space><space>x', '<CR>:call jupyter_ascending#execute()<CR>', {})
-    vim.api.nvim_set_keymap('n', '<space><space>X', '<CR>:call jupyter_ascending#execute_all()<CR>', {})
-    ```
+  Then edit [fine_tune_roberta.sync.py](./fine_tune_roberta.sync.py). The jupyter notebook will be synced whenever you saved the python file.
 
-    Save and recompile to source the changes in configuration.
+  <b>NOTE: </b> The Lua configuration is opinionated, meaning you can customize to your usage. The above is just an example on how you can achieve the equivalent setup in VimScript
 
-    Then edit [fine_tune_roberta.sync.py](./fine_tune_roberta.sync.py). The jupyter notebook will be synced whenever you saved the python file.
-
-    <b>NOTE: </b> The Lua configuration is opinionated, meaning you can customize to your usage. The above is just an example on how you can achieve the equivalent setup in VimScript
 
 </details>
 
 <details>
+  <summary>Terminal</summary>
 
-    <summary>Terminal</summary>
+  If you just want to use python API of `jupyter_ascending`:
 
-    If you just want to use python API of `jupyter_ascending`:
+  1. Edit [`fine_tune_roberta.sync.py`](./fine_tune_roberta.sync.py)
+  2. Sync the code into jupyter notebook: `python -m jupyter_ascending.requests.sync --filename fine_tune_roberta.sync.py`
+  3. Run the cell code: `python -m jupyter_ascending.requests.execute --filename fine_tune_roberta.sync.py --line 16`
 
-    1. Edit [`fine_tune_roberta.sync.py`](./fine_tune_roberta.sync.py)
-    2. Sync the code into jupyter notebook: `python -m jupyter_ascending.requests.sync --filename fine_tune_roberta.sync.py`
-    3. Run the cell code: `python -m jupyter_ascending.requests.execute --filename fine_tune_roberta.sync.py --line 16`
 
 </details>
+
+
+<b>Experimental:</b> run `./run_fine_tune` under this directory.
