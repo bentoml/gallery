@@ -7,7 +7,9 @@ include:
 - "*.py"
 exclude:
 - "tests/"
+- "results/"
+- "*.ipynb"
 python:
   packages:
-    - transformers
-    - Pillow
+    - git+https://github.com/huggingface/transformers
+    - datasets

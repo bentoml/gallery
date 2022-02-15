@@ -1,2 +1,3 @@
-scikit-learn
+git+https://github.com/huggingface/transformers
+datasets
 bentoml>=1.0.0a3

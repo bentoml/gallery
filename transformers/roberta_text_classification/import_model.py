@@ -1,13 +1,21 @@
 # Contributed by BentoML Team.
-# Transformers Roberta Text Classification model implementation.
+# Load a pretrained roberta pretrained model
 
-import transformers
 import bentoml
+import transformers
+from bentoml.exceptions import NotFound
+import logging
+from config import MODEL_NAME, TASKS, MODEL
 
-LM_HEAD = "sequence-classification"
+logger = logging.getLogger("bentoml")
 
-tag = bentoml.transformers.import_from_huggingface_hub("j-hartmann/emotion-english-distilroberta-base", lm_head=LM_HEAD)
+if __name__ == "__main__":
+    try:
+        meta = bentoml.models.get(MODEL_NAME)
+    except (NotFound, FileNotFoundError):
+        logger.info(f"{MODEL_NAME} not found under BentoML modelstore, loading from HuggingFace...")
+        classifier = transformers.pipeline(TASKS, model=MODEL, return_all_scores=True)
+        meta = bentoml.transformers.save(MODEL_NAME, classifier)
+    finally:
+        logger.info(f"Tag found under BentoML modelstore: {meta.tag}\nYou can then import this model with:\n\tmodel = bentoml.transformers.load('{meta.tag}')")
 
-runner = bentoml.transformers.load_runner(tag, tasks='text-classification', lm_head=LM_HEAD, return_all_scores=True)
-
-print(runner.run_batch(['I love you', "I don't want to spend time with you"]))
