@@ -1,13 +1,20 @@
-## Transfer Learning with Transformers :handshake: BentoML
+## Fine-tune with Transformers :handshake: BentoML
 
-### Installation
+<div align='center'>
+    <p align='center'>
+        <a href="https://colab.research.google.com/github/bentoml/gallery/blob/main/transformers/roberta_text_classification/transfer_learning/fine_tune_roberta.sync.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+        <a href="https://nbviewer.org/github/bentoml/gallery/blob/main/transformers/roberta_text_classification/transfer_learning/fine_tune_roberta.sync.ipynb"><img src="https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg" alt="nbviewer"/></a>
+        <a href="https://github.com/bentoml/gallery/tree/main/transformers/roberta_text_classification/transfer_learning/fine_tune_roberta.sync.ipynb"><img src="https://img.shields.io/badge/Made%20with-Jupyter-orange?logo=Jupyter" alt="Made with Jupyter"/></a>
+    </p>
+</div>
 
-Run [fine_tune_roberta.sync.ipynb](./fine_tune_roberta.sync.ipynb) either locally or on [Colab](https://colab.research.google.com/github/bentoml/gallery/blob/main/transformers/roberta_text_classification/transfer_learning/fine_tune_roberta.sync.ipynb)
+### How to use this
 
-You can either train the model on Colab and then import it into BentoML, or
-quickly import our pretrained model with `bentoml import` CLI:
-```bash
-# TODO: when import/export CLI is ready
+One can fine tune the model by running [notebook](./fine_tune_roberta.sync.ipynb) or import our [fine-tune model](./exported) under a IPython shell:
+```python
+import bentoml
+tag = bentoml.models.import_model("./exported")
+model, tokenizer = bentoml.transformers.load(tag, return_config=False)
 ```
 
 
