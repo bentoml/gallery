@@ -1,0 +1,4 @@
+torch
+bentoml>=1.0.0a
+tqdm
+nltk
