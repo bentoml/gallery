@@ -1,6 +1,12 @@
-# BentoML Gallery
+[<img src="https://raw.githubusercontent.com/bentoml/BentoML/main/docs/source/_static/img/bentoml-readme-header.jpeg" width="600px" margin-left="-5px">](https://github.com/bentoml/BentoML)
 
-This is a collection of machine learning projects that utilizes [BentoML](https://github.com/bentoml/BentoML)
+# BentoML Gallery  [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=BentoML:%20The%20Unified%20Model%20Serving%20Framework%20&url=https://github.com/bentoml&via=bentomlai&hashtags=mlops,bentoml)
+
+BentoML is an open platform that simplifies ML model deployment and enables you to serve your models at production scale in minutes
+
+👉 [Pop into our Slack community!](https://join.slack.bentoml.org) We're happy to help with any issue you face or even just to meet you and hear what you're working on :)
+
+This repository is a collection of machine learning projects that utilizes [BentoML](https://github.com/bentoml/BentoML)
 for model serving. The goal is to demonstrate real-world BentoML usage and best practices in
 productionizing a machine learning model for serving.
 
