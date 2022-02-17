@@ -4,7 +4,7 @@ This is a sample project demonstrating basic usage of BentoML, the machine learn
 
 In this project, we will train a summarization model using PyTorch on the [Reddit TL;DR](https://zenodo.org/record/1043504) dataset, build an ML service for the model, serve the model behind an HTTP endpoint, and containerize the model server as a docker image for production deployment.
 
-This project is also available to run from a notebook: https://github.com/bentoml/gallery/blob/main/pytorch/TLDR/pytorch_tldr_demo.ipynb
+This project is also available to run from a notebook: https://github.com/bentoml/gallery/blob/main/pytorch_seq2seq/pytorch_tldr_demo.ipynb
 
 ### Install Dependencies
 
@@ -22,23 +22,22 @@ First step, train a summarization model with PyTorch:
 python train.py
 ```
 
-Additionally, there should be a new model in the BentoML local model store:
+There should now be two new models in the BentoML local model store:
 
 ```bash
 bentoml models list
+> pytorch_tldr_encoder
+> pytorch_tldr_decoder
 ```
 
 Verify that the model can be loaded as runner from Python shell:
 
 ```python
-import numpy as np
-import PIL.Image
-
 import bentoml
 
 runner = bentoml.pytorch.load_runner("pytorch_tldr:latest")
 
-# runner.run(arr)  # => tensor(0)
+runner.run(["Some text to summarization!"])
 ```
 
 ### Create ML Service
@@ -50,53 +49,33 @@ The ML Service code is defined in the `service.py` file:
 import typing as t
 
 import bentoml
-from bentoml.io import Image
-from bentoml.io import NumpyNdarray
+from bentoml.io import Text
+from train import normalizeString
 
+encoder = bentoml.pytorch.load_runner(
+    "pytorch_tldr_encoder"
+)
 
-tldr_runner = bentoml.pytorch.load_runner(
-    "pytorch_tldr",
-    name="tldr_runner",
-    predict_fn_name="predict",
+decoder = bentoml.pytorch.load_runner(
+    "pytorch_tldr_decoder"
 )
 
 svc = bentoml.Service(
     name="pytorch_tldr_demo",
     runners=[
-        tldr_runner,
+        encoder,
+        decoder,
     ],
 )
 
 
-@svc.api(
-    input=NumpyNdarray(dtype="float32", enforce_dtype=True),
-    output=NumpyNdarray(dtype="int64"),
-)
-async def predict_ndarray(
-    inp: "np.ndarray[t.Any, np.dtype[t.Any]]",
-) -> "np.ndarray[t.Any, np.dtype[t.Any]]":
-    assert inp.shape == (28, 28)
-    # We are using greyscale image and our PyTorch model expect one
-    # extra channel dimension
-    inp = np.expand_dims(inp, 0)
-    output_tensor = await tldr_runner.async_run(inp)
-    return output_tensor.numpy()
-
-
-@svc.api(input=Image(), output=NumpyNdarray(dtype="int64"))
-async def predict_image(f: PILImage) -> "np.ndarray[t.Any, np.dtype[t.Any]]":
-    assert isinstance(f, PILImage)
-    arr = np.array(f)/255.0
-    assert arr.shape == (28, 28)
-
-    # We are using greyscale image and our PyTorch model expect one
-    # extra channel dimension
-    arr = np.expand_dims(arr, 0).astype("float32")
-    output_tensor = await tldr_runner.async_run(arr)
-    return output_tensor.numpy()
+@svc.api(input=Text(), output=Text())
+def summarize(input_arr: t.List[str]) -> t.List[str]:
+    input_arr = list(map(normalizeString, input_arr))
+    enc_arr = encoder.run_batch(input_arr)
+    res = decoder.run_batch(enc_arr)
+    return res[0]['generated_text']
 ```
-
-We defined two api endpoints `/predict_ndarray` and `/predict_image` with single runner.
 
 Start an API server locally to test the service code above:
 
@@ -107,11 +86,9 @@ bentoml serve service:svc --reload
 With the `--reload` flag, the API server will automatically restart when the source
 file `service.py` is being edited, to boost your development productivity.
 
-Verify the endpoint can be accessed locally:
+### Check the Swagger service
 
-```bash
-curl -H "Content-Type: multipart/form-data" -F'fileobj=@samples/1.png;type=image/png' http://127.0.0.1:5000/predict_image
-```
+![Swagger UI](https://user-images.githubusercontent.com/25377399/154577036-2b3323f5-04a6-4b18-bd4b-362dd6abd82a.png)
 
 ### Build Bento for deployment
 
@@ -130,9 +107,7 @@ exclude:
   - "tests/"
 python:
   packages:
-    - scikit-learn
     - torch
-    - Pillow
 ```
 
 Note that we exclude `tests/` from the bento using `exclude`.

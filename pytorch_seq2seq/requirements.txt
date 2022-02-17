@@ -1,4 +1,7 @@
-torch
 bentoml>=1.0.0a
+requests
+pandas
+torch
+numpy
 tqdm
 nltk

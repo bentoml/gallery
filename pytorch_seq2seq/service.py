@@ -1,48 +1,45 @@
 import typing as t
+import unicodedata
+import re
 
 import bentoml
-import numpy as np
-import PIL.Image
-from bentoml.io import Image, NumpyNdarray
-from PIL.Image import Image as PILImage
+from bentoml.io import Text
 
-mnist_runner = bentoml.pytorch.load_runner(
-    "pytorch_mnist",
-    name="mnist_runner",
-    predict_fn_name="predict",
+
+def unicodeToAscii(s):
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', s)
+        if unicodedata.category(c) != 'Mn'
+    )
+
+
+def normalizeString(s):
+    s = unicodeToAscii(s.lower().strip())
+    s = re.sub(r"([.!?])", r" \1", s)
+    s = re.sub(r"[^a-zA-Z.!?]+", r" ", s)
+    return s
+
+
+encoder = bentoml.pytorch.load_runner(
+    "pytorch_tldr_encoder"
+)
+
+decoder = bentoml.pytorch.load_runner(
+    "pytorch_tldr_decoder"
 )
 
 svc = bentoml.Service(
-    name="pytorch_mnist_demo",
+    name="pytorch_tldr_demo",
     runners=[
-        mnist_runner,
+        encoder,
+        decoder,
     ],
 )
 
 
-@svc.api(
-    input=NumpyNdarray(dtype="float32", enforce_dtype=True),
-    output=NumpyNdarray(dtype="int64"),
-)
-async def predict_ndarray(
-    inp: "np.ndarray[t.Any, np.dtype[t.Any]]",
-) -> "np.ndarray[t.Any, np.dtype[t.Any]]":
-    assert inp.shape == (28, 28)
-    # We are using greyscale image and our PyTorch model expect one
-    # extra channel dimension
-    inp = np.expand_dims(inp, 0)
-    output_tensor = await mnist_runner.async_run(inp)
-    return output_tensor.numpy()
-
-
-@svc.api(input=Image(), output=NumpyNdarray(dtype="int64"))
-async def predict_image(f: PILImage) -> "np.ndarray[t.Any, np.dtype[t.Any]]":
-    assert isinstance(f, PILImage)
-    arr = np.array(f)/255.0
-    assert arr.shape == (28, 28)
-
-    # We are using greyscale image and our PyTorch model expect one
-    # extra channel dimension
-    arr = np.expand_dims(arr, 0).astype("float32")
-    output_tensor = await mnist_runner.async_run(arr)
-    return output_tensor.numpy()
+@svc.api(input=Text(), output=Text())
+def predict(input_arr: t.List[str]) -> t.List[str]:
+    input_arr = list(map(normalizeString, input_arr))
+    enc_arr = encoder.run_batch(input_arr)
+    res = decoder.run_batch(enc_arr)
+    return res[0]['generated_text']

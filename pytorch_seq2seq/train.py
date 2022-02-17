@@ -1,190 +1,208 @@
 import argparse
 import os
 import random
+import unicodedata
 
-import bentoml
-import numpy as np
-import torch
-import torch.nn.functional as F
-from sklearn.model_selection import KFold
-from torch import nn
-from torch.utils.data import ConcatDataset, DataLoader
-from torchvision import transforms
-from torchvision.datasets import MNIST
+from model import EncoderRNN, DecoderRNN, AttnDecoderRNN
 
-from model import SimpleConvNet
+import time
+import math
 
-K_FOLDS = 5
-NUM_EPOCHS = 3
-LOSS_FUNCTION = nn.CrossEntropyLoss()
+teacher_forcing_ratio = 0.5
 
 
-# reproducible setup for testing
-seed = 42
-random.seed(seed)
-np.random.seed(seed)
-torch.manual_seed(seed)
-torch.cuda.manual_seed(seed)
-torch.cuda.manual_seed_all(seed)
-torch.backends.cudnn.benchmark = False
-torch.backends.cudnn.deterministic = True
-
-def _dataloader_init_fn(worker_id):
-    np.random.seed(seed)
-
-
-def get_dataset():
-    # Prepare MNIST dataset by concatenating Train/Test part; we split later.
-    train_set = MNIST(os.getcwd(), download=True, transform=transforms.ToTensor(), train=True)
-    test_set = MNIST(os.getcwd(), download=True, transform=transforms.ToTensor(), train=False)
-    return train_set, test_set
-
-
-def train_epoch(model, optimizer, loss_function, train_loader, epoch, device="cpu"):
-    # Mark training flag
-    model.train()
-    for batch_idx, (inputs, targets) in enumerate(train_loader):
-        inputs, targets = inputs.to(device), targets.to(device)
-        optimizer.zero_grad()
-        outputs = model(inputs)
-        loss = loss_function(outputs, targets)
-        loss.backward()
-        optimizer.step()
-        if batch_idx % 499 == 0:
-            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                epoch, batch_idx * len(inputs), len(train_loader.dataset),
-                100. * batch_idx / len(train_loader), loss.item()))
-
-
-def test_model(model, test_loader, device="cpu"):
-    correct, total = 0, 0
-    model.eval()
-    with torch.no_grad():
-        for batch_idx, (inputs, targets) in enumerate(test_loader):
-            inputs, targets = inputs.to(device), targets.to(device)
-            outputs = model(inputs)
-            _, predicted = torch.max(outputs.data, 1)
-            total += targets.size(0)
-            correct += (predicted == targets).sum().item()
-
-    return correct, total
-    
-def cross_validate(dataset, epochs=NUM_EPOCHS, k_folds=K_FOLDS):
-    results = {}
-
-    # Define the K-fold Cross Validator
-    kfold = KFold(n_splits=k_folds, shuffle=True)
-
-    print('--------------------------------')
-
-    # K-fold Cross Validation model evaluation
-    for fold, (train_ids, test_ids) in enumerate(kfold.split(dataset)):
-
-        print(f'FOLD {fold}')
-        print('--------------------------------')
-    
-        # Sample elements randomly from a given list of ids, no replacement.
-        train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
-        test_subsampler = torch.utils.data.SubsetRandomSampler(test_ids)
-
-        # Define data loaders for training and testing data in this fold
-        train_loader = torch.utils.data.DataLoader(
-            dataset, 
-            batch_size=10,
-            sampler=train_subsampler,
-            worker_init_fn=_dataloader_init_fn,
-        )
-        test_loader = torch.utils.data.DataLoader(
-            dataset,
-            batch_size=10,
-            sampler=test_subsampler,
-            worker_init_fn=_dataloader_init_fn,
-        )
-
-        # Train this fold
-        model = SimpleConvNet()
-        optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
-        loss_function = nn.CrossEntropyLoss()
-        for epoch in range(epochs):
-            train_epoch(model, optimizer, loss_function, train_loader, epoch)
-
-        # Evaluation for this fold
-        correct, total = test_model(model, test_loader)
-        print('Accuracy for fold %d: %d %%' % (fold, 100.0 * correct / total))
-        print('--------------------------------')
-        results[fold] = 100.0 * (correct / total)
-
-    # Print fold results
-    print(f'K-FOLD CROSS VALIDATION RESULTS FOR {K_FOLDS} FOLDS')
-    print('--------------------------------')
-    sum = 0.0
-    for key, value in results.items():
-        print(f'Fold {key}: {value} %')
-        sum += value
-
-    print(f'Average: {sum/len(results.items())} %')
-
-    return results
-
-
-def train(dataset, epochs=NUM_EPOCHS, device="cpu"):
-
-    train_sampler = torch.utils.data.RandomSampler(dataset)
-    train_loader = torch.utils.data.DataLoader(
-        dataset, 
-        batch_size=10,
-        sampler=train_sampler,
-        worker_init_fn=_dataloader_init_fn,
-    )
-    model = SimpleConvNet()
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
-    loss_function = nn.CrossEntropyLoss()
-    for epoch in range(epochs):
-        train_epoch(model, optimizer, loss_function, train_loader, epoch, device)
-    return model
-
-    
-if __name__ == '__main__':
-
-    parser = argparse.ArgumentParser(description='BentoML PyTorch MNIST Example')
-    parser.add_argument('--epochs', type=int, default=NUM_EPOCHS, metavar='N',
-                        help=f'number of epochs to train (default: {NUM_EPOCHS})')
-    parser.add_argument('--k-folds', type=int, default=K_FOLDS, metavar='N',
-                        help=f'number of folds for k-fold cross-validation (default: {K_FOLDS}, 1 to disable cv)')
-    parser.add_argument('--cuda', action='store_true', default=False,
-                        help='enable CUDA training')
-    parser.add_argument('--model-name', type=str, default="pytorch_mnist",
-                        help='name for saved the model')
-
-    args = parser.parse_args()
-    use_cuda = args.cuda and torch.cuda.is_available()
-
-    device = torch.device("cuda" if use_cuda else "cpu")
-
-    train_set, test_set = get_dataset()
-    test_loader = torch.utils.data.DataLoader(
-        test_set,
-        batch_size=10,
-        sampler=torch.utils.data.RandomSampler(test_set),
-        worker_init_fn=_dataloader_init_fn,
+def unicodeToAscii(s):
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', s)
+        if unicodedata.category(c) != 'Mn'
     )
 
-    if args.k_folds > 1:
-        cv_results = cross_validate(train_set, args.epochs, args.k_folds)
+
+def normalizeString(s):
+    s = unicodeToAscii(s.lower().strip())
+    s = re.sub(r"([.!?])", r" \1", s)
+    s = re.sub(r"[^a-zA-Z.!?]+", r" ", s)
+    return s
+
+
+def indexesFromSentence(lang, sentence):
+    indices = []
+    for word in sentence.split(' '):
+        if word in lang.word2index:
+            # lang.addWord(word)
+            indices.append(lang.word2index[word])
+    return indices
+
+
+def tensorFromSentence(lang, sentence):
+    indexes = indexesFromSentence(lang, sentence)
+    indexes.append(EOS_token)
+    return torch.tensor(indexes, dtype=torch.long, device=device).view(-1, 1)
+
+
+def tensorsFromPair(pair):
+    input_tensor = tensorFromSentence(input_lang, pair[0])
+    target_tensor = tensorFromSentence(output_lang, pair[1])
+    return (input_tensor, target_tensor)
+
+
+def train(input_tensor, target_tensor, encoder, decoder, encoder_optimizer, decoder_optimizer, criterion, max_length=MAX_LENGTH):
+    encoder_hidden = encoder.initHidden()
+
+    encoder_optimizer.zero_grad()
+    decoder_optimizer.zero_grad()
+
+    input_length = input_tensor.size(0)
+    target_length = target_tensor.size(0)
+
+    encoder_outputs = torch.zeros(
+        max_length, encoder.hidden_size, device=device)
+
+    loss = 0
+
+    for ei in range(input_length):
+        encoder_output, encoder_hidden = encoder(
+            input_tensor[ei], encoder_hidden)
+        encoder_outputs[ei] = encoder_output[0, 0]
+
+    decoder_input = torch.tensor([[SOS_token]], device=device)
+
+    decoder_hidden = encoder_hidden
+
+    use_teacher_forcing = True if random.random() < teacher_forcing_ratio else False
+
+    if use_teacher_forcing:
+        # Teacher forcing: Feed the target as the next input
+        for di in range(target_length):
+            decoder_output, decoder_hidden, decoder_attention = decoder(
+                decoder_input, decoder_hidden, encoder_outputs)
+            loss += criterion(decoder_output, target_tensor[di])
+            decoder_input = target_tensor[di]  # Teacher forcing
+
     else:
-        cv_results = {}
+        # Without teacher forcing: use its own predictions as the next input
+        for di in range(target_length):
+            decoder_output, decoder_hidden, decoder_attention = decoder(
+                decoder_input, decoder_hidden, encoder_outputs)
+            topv, topi = decoder_output.topk(1)
+            decoder_input = topi.squeeze().detach()  # detach from history as input
 
-    trained_model = train(train_set, args.epochs, device)
-    correct, total = test_model(trained_model, test_loader, device)
+            loss += criterion(decoder_output, target_tensor[di])
+            if decoder_input.item() == EOS_token:
+                break
 
-    # training related 
-    metadata = {
-        "acc": float(correct)/total,
-        "cv_stats": cv_results,
-    }
+    loss.backward()
 
-    bentoml.pytorch.save(
-        args.model_name,
-        trained_model,
-        metadata=metadata,
+    encoder_optimizer.step()
+    decoder_optimizer.step()
+
+    return loss.item() / target_length
+
+
+def asMinutes(s):
+    m = math.floor(s / 60)
+    s -= m * 60
+    return '%dm %ds' % (m, s)
+
+
+def timeSince(since, percent):
+    now = time.time()
+    s = now - since
+    es = s / (percent)
+    rs = es - s
+    return '%s (- %s)' % (asMinutes(s), asMinutes(rs))
+
+
+def trainIters(encoder, decoder, n_iters, print_every=1000, plot_every=100, learning_rate=0.01):
+    start = time.time()
+    plot_losses = []
+    print_loss_total = 0  # Reset every print_every
+    plot_loss_total = 0  # Reset every plot_every
+
+    encoder_optimizer = optim.SGD(encoder.parameters(), lr=learning_rate)
+    decoder_optimizer = optim.SGD(decoder.parameters(), lr=learning_rate)
+    training_pairs = [tensorsFromPair(random.choice(pairs))
+                      for i in range(n_iters)]
+    criterion = nn.NLLLoss()
+
+    for iter in range(1, n_iters + 1):
+        training_pair = training_pairs[iter - 1]
+        input_tensor = training_pair[0]
+        target_tensor = training_pair[1]
+
+        loss = train(input_tensor, target_tensor, encoder,
+                     decoder, encoder_optimizer, decoder_optimizer, criterion)
+        print_loss_total += loss
+        plot_loss_total += loss
+
+        if iter % print_every == 0:
+            print_loss_avg = print_loss_total / print_every
+            print_loss_total = 0
+            print('%s (%d %d%%) %.4f' % (timeSince(start, iter / n_iters),
+                                         iter, iter / n_iters * 100, print_loss_avg))
+
+            plot_loss_avg = plot_loss_total / plot_every
+            plot_losses.append(plot_loss_avg)
+            plot_loss_total = 0
+
+            input_lang, output_lang, pairs_2 = prepareData(
+                'content', 'summary')
+            training_pairs = [tensorsFromPair(random.choice(pairs_2))
+                              for i in range(n_iters)]
+
+    showPlot(plot_losses)
+
+
+def evaluate(encoder, decoder, sentence, max_length=MAX_LENGTH):
+    with torch.no_grad():
+        input_tensor = tensorFromSentence(input_lang, sentence)
+        input_length = input_tensor.size()[0]
+        encoder_hidden = encoder.initHidden()
+
+        encoder_outputs = torch.zeros(
+            max_length, encoder.hidden_size, device=device)
+
+        for ei in range(input_length):
+            encoder_output, encoder_hidden = encoder(input_tensor[ei],
+                                                     encoder_hidden)
+            encoder_outputs[ei] += encoder_output[0, 0]
+
+        decoder_input = torch.tensor([[SOS_token]], device=device)  # SOS
+
+        decoder_hidden = encoder_hidden
+
+        decoded_words = []
+        decoder_attentions = torch.zeros(max_length, max_length)
+
+        for di in range(max_length):
+            decoder_output, decoder_hidden, decoder_attention = decoder(
+                decoder_input, decoder_hidden, encoder_outputs)
+            decoder_attentions[di] = decoder_attention.data
+            topv, topi = decoder_output.data.topk(1)
+            if topi.item() == EOS_token:
+                decoded_words.append('<EOS>')
+                break
+            else:
+                decoded_words.append(output_lang.index2word[topi.item()])
+
+            decoder_input = topi.squeeze().detach()
+
+        return decoded_words, decoder_attentions[:di + 1]
+
+
+if __name__ == '__main__':
+    hidden_size = 256
+    encoder1 = EncoderRNN(input_lang.n_words, hidden_size).to(device)
+    attn_decoder1 = AttnDecoderRNN(
+        hidden_size, output_lang.n_words, dropout_p=0.1).to(device)
+
+    trainIters(encoder1, attn_decoder1, 6000, print_every=1000)
+
+    tag_encoder = bentoml.pytorch.save(
+        "pytorch_tldr_encoder",
+        encoder1,
+    )
+    tag_decoder = bentoml.pytorch.save(
+        "pytorch_tldr_decoder",
+        attn_decoder1,
     )
