@@ -121,12 +121,12 @@ file `service.py` is being edited, to boost your development productivity.
 
 Verify the endpoint can be accessed locally:
 ```bash
-curl -H "Content-Type: multipart/form-data" -F'fileobj=@samples/1.png;type=image/png' http://127.0.0.1:5000/predict_image
+curl -H "Content-Type: multipart/form-data" -F'fileobj=@samples/1.png;type=image/png' http://127.0.0.1:3000/predict_image
 ```
 
 We can also do a simple local benchmark if [locust](https://locust.io) is installed:
 ```bash
-locust --headless -u 100 -r 1000 --run-time 10m --host http://127.0.0.1:5000
+locust --headless -u 100 -r 1000 --run-time 10m --host http://127.0.0.1:3000
 ```
 
 
@@ -234,5 +234,5 @@ bentoml containerize pytorch_mnist_demo:latest
 
 Test out the docker image built:
 ```bash
-docker run -p 5000:5000 pytorch_mnist_demo:invwzzsw7li6zckb2ie5eubhd
+docker run -p 3000:3000
 ```

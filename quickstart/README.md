@@ -73,7 +73,7 @@ file `iris_classifier.py` is being edited, to boost your development productivit
 
 Verify the endpoint can be accessed locally:
 ```bash
-curl -X POST -H "content-type: application/json" --data "[5, 4, 3, 2]" http://127.0.0.1:5000/classify
+curl -X POST -H "content-type: application/json" --data "[5, 4, 3, 2]" http://127.0.0.1:3000/classify
 ```
 
 
@@ -165,5 +165,5 @@ bentoml containerize iris_classifier:latest
 
 Test out the docker image built:
 ```bash
-docker run -p 5000:5000 iris_classifier:invwzzsw7li6zckb2ie5eubhd 
+docker run -p 3000:3000 iris_classifier:invwzzsw7li6zckb2ie5eubhd 
 ```
