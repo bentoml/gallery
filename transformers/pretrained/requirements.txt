@@ -1,4 +1,7 @@
--r requirements.txt
+git+https://github.com/huggingface/transformers
+datasets
+bentoml>=1.0.0a3
+locust
 black==22.1.0
 codecov
 coverage>=4.4

@@ -1,4 +1,0 @@
-git+https://github.com/huggingface/transformers
-datasets
-psutils
-bentoml>=1.0.0a3
