@@ -1,6 +1,6 @@
 from locust import HttpUser, task, between
 
-with open("samples/1.png", "rb") as f:
+with open("samples/0.png", "rb") as f:
     test_image_bytes = f.read()
 
 
