@@ -1,4 +1,5 @@
 bentoml>=1.0.0a
+essential_generators
 requests
 pandas
 torch
