@@ -178,8 +178,14 @@ python:
 Note that we exclude `tests/` from the bento using `exclude`.
 
 Simply run `bentoml build` from current directory to build a Bento with the latest
-version of the `tensorflow_mnist` model. This may take a while when running for the first
-time for BentoML to resolve all dependency versions:
+version of the `tensorflow_mnist` model.
+
+If running the latest version of macos use:
+```bash
+bentoml build --bentofile bentofile-macos.yaml
+```
+
+This may take a while when running for the first time for BentoML to resolve all dependency versions:
 
 ```
 > bentoml build
@@ -204,7 +210,7 @@ time for BentoML to resolve all dependency versions:
 This Bento can now be loaded for serving:
 
 ```bash
-bentoml serve tensorflow_mnist_demo:latest --production
+bentoml serve tensorflow_mnist_demo:latest --production --port <PORT>
 ```
 
 The Bento directory contains all code, files, models and configs required for running this service.
@@ -257,5 +263,5 @@ bentoml containerize tensorflow_mnist_demo:latest
 
 Test out the docker image built:
 ```bash
-docker run -p 3000:3000 tensorflow_mnist_demo:invwzzsw7li6zckb2ie5eubhd
+docker run -p 3000:3000 tensorflow_mnist_demo:latest
 ```

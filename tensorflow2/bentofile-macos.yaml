@@ -1,0 +1,14 @@
+service: "service:svc"
+description: "file: ./README.md"
+labels:
+  owner: bentoml-team
+  stage: demo
+include:
+- "*.py"
+exclude:
+- "tests/"
+- "locustfile.py"
+python:
+  packages:
+    - tensorflow-macos
+    - Pillow
