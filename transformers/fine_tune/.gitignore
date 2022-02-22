@@ -1,0 +1,4 @@
+*.sync.*
+*.log
+run_dev
+models

@@ -1,0 +1,12 @@
+git+https://github.com/huggingface/transformers
+datasets
+bentoml>=1.0.0a3
+locust
+black==22.1.0
+coverage>=4.4
+isort>=5.0.0
+pylint>=2.11.0
+pytest-cov>=3.0.0
+pytest>=6.2.0
+attrs>=21.1
+essential-generators

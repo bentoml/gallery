@@ -5,7 +5,6 @@
 -->
 <div align='center'>
     <p align='center'>
-        <a href="https://colab.research.google.com/github/bentoml/gallery/blob/main/transformers/pretrained/pretrained_roberta.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
         <a href="https://nbviewer.org/github/bentoml/gallery/blob/main/transformers/pretrained/pretrained_roberta.ipynb"><img src="https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg" alt="nbviewer"/></a>
         <a href="https://github.com/bentoml/gallery/tree/main/transformers/pretrained/pretrained_roberta.ipynb"><img src="https://img.shields.io/badge/Made%20with-Jupyter-orange?logo=Jupyter" alt="Made with Jupyter"/></a>
     </p>
@@ -104,15 +103,15 @@ async def sentiment(sentence: str) -> t.Dict[str, t.Any]:
 
 
 @svc.api(input=JSON(), output=JSON())
-async def batch_sentiment(sentence: t.Dict[str, t.List[str]]) -> t.Dict[int, t.Dict[str, t.Union[str, float]]]:
-    processed = preprocess(sentence)
+async def batch_sentiment(sentences: t.Dict[str, t.List[str]]) -> t.Dict[int, t.Dict[str, t.Union[str, float]]]:
+    processed = preprocess(sentences)
     outputs = await asyncio.gather(*[clf_runner.async_run(s) for s in processed["text"]])
     return postprocess(processed, outputs)  # type: ignore
 
 
 @svc.api(input=JSON(), output=JSON())
-async def batch_all_scores(sentence: t.Dict[str, t.List[str]]) -> t.Dict[int, t.Dict[str, t.Union[str, float]]]:
-    processed = preprocess(sentence)
+async def batch_all_scores(sentences: t.Dict[str, t.List[str]]) -> t.Dict[int, t.Dict[str, t.Union[str, float]]]:
+    processed = preprocess(sentences)
     outputs = await asyncio.gather(*[all_runner.async_run(s) for s in processed["text"]])
     return postprocess(processed, outputs)  # type: ignore
 ```

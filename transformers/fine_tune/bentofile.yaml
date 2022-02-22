@@ -1,0 +1,16 @@
+service: "service:svc"
+description: "file: ./README.md"
+labels:
+  owner: bentoml-team
+  stage: demo
+include:
+- "*.py"
+- "transfer_learning/exported"
+exclude:
+- "tests/"
+- "models/"
+- "*.ipynb"
+python:
+  packages:
+    - git+https://github.com/huggingface/transformers
+    - datasets
