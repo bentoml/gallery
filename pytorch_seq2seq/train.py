@@ -1,14 +1,116 @@
 import argparse
 import os
+import re
 import random
 import unicodedata
+import pandas as pd
 
-from model import EncoderRNN, DecoderRNN, AttnDecoderRNN
+from model import EncoderRNN, DecoderRNN, AttnDecoderRNN,\
+    MAX_LENGTH, device
 
+from os.path import exists
 import time
 import math
 
+import torch
+from torch import optim
+import torch.nn as nn
+
+
 teacher_forcing_ratio = 0.5
+
+
+def getData():
+    dataset_path = 'dataset/corpus-webis-tldr-17.zip'
+    if not exists(dataset_path):
+        r = requests.get(
+            'https://zenodo.org/record/1043504/files/corpus-webis-tldr-17.zip?download=1')
+        with open(dataset_path, 'wb') as f:
+            f.write(r.content)
+        with zipfile.ZipFile(dataset_path, 'r') as z:
+            z.extractall('dataset/')
+
+
+eng_prefixes = (
+    "i am ", "i m ",
+    "he is", "he s ",
+    "she is", "she s ",
+    "you are", "you re ",
+    "we are", "we re ",
+    "they are", "they re ",
+)
+
+
+def filterPair(p):
+    return len(p[0].split(' ')) < MAX_LENGTH and \
+        len(p[1].split(' ')) < MAX_LENGTH and \
+        p[1].startswith(eng_prefixes)
+
+
+def filterPairs(pairs):
+    return [pair for pair in pairs if filterPair(pair)]
+
+
+def prepareData(lang1, lang2, reverse=False):
+    input_lang, output_lang, pairs = readLangs(lang1, lang2, reverse)
+    print("Read %s sentence pairs" % len(pairs))
+    pairs = filterPairs(pairs)
+    print("Trimmed to %s sentence pairs" % len(pairs))
+    print("Counting words...")
+    for pair in pairs:
+        input_lang.addSentence(pair[0])
+        output_lang.addSentence(pair[1])
+    print("Counted words:")
+    print(input_lang.name, input_lang.n_words)
+    print(output_lang.name, output_lang.n_words)
+    return input_lang, output_lang, pairs
+
+
+def readLangs(lang1, lang2, reverse=False):
+    print("Reading lines...")
+
+    lines = next(df)
+
+    # Split every line into pairs and normalize
+    pairs = [[normalizeString(s) for s in l] for l in
+             zip(lines['content'], lines['summary'])]
+
+    # Reverse pairs, make Lang instances
+    if reverse:
+        pairs = [list(reversed(p)) for p in pairs]
+        input_lang = Lang(lang2)
+        output_lang = Lang(lang1)
+    else:
+        input_lang = Lang(lang1)
+        output_lang = Lang(lang2)
+
+    return input_lang, output_lang, pairs
+
+
+SOS_token = 0
+EOS_token = 1
+
+
+class Lang:
+    def __init__(self, name):
+        self.name = name
+        self.word2index = {}
+        self.word2count = {}
+        self.index2word = {0: "SOS", 1: "EOS"}
+        self.n_words = 2  # Count SOS and EOS
+
+    def addSentence(self, sentence):
+        for word in sentence.split(' '):
+            self.addWord(word)
+
+    def addWord(self, word):
+        if word not in self.word2index:
+            self.word2index[word] = self.n_words
+            self.word2count[word] = 1
+            self.index2word[self.n_words] = word
+            self.n_words += 1
+        else:
+            self.word2count[word] += 1
 
 
 def unicodeToAscii(s):
@@ -150,8 +252,6 @@ def trainIters(encoder, decoder, n_iters, print_every=1000, plot_every=100, lear
             training_pairs = [tensorsFromPair(random.choice(pairs_2))
                               for i in range(n_iters)]
 
-    showPlot(plot_losses)
-
 
 def evaluate(encoder, decoder, sentence, max_length=MAX_LENGTH):
     with torch.no_grad():
@@ -191,18 +291,14 @@ def evaluate(encoder, decoder, sentence, max_length=MAX_LENGTH):
 
 
 if __name__ == '__main__':
+    getData()
+    df = pd.read_json('dataset/corpus-webis-tldr-17.json',
+                      lines=True, chunksize=1000)
+    input_lang, output_lang, pairs = prepareData('content', 'summary')
+
     hidden_size = 256
-    encoder1 = EncoderRNN(input_lang.n_words, hidden_size).to(device)
-    attn_decoder1 = AttnDecoderRNN(
+    encoder = EncoderRNN(input_lang.n_words, hidden_size).to(device)
+    decoder = AttnDecoderRNN(
         hidden_size, output_lang.n_words, dropout_p=0.1).to(device)
 
-    trainIters(encoder1, attn_decoder1, 6000, print_every=1000)
-
-    tag_encoder = bentoml.pytorch.save(
-        "pytorch_tldr_encoder",
-        encoder1,
-    )
-    tag_decoder = bentoml.pytorch.save(
-        "pytorch_tldr_decoder",
-        attn_decoder1,
-    )
+    trainIters(encoder, decoder, 100, print_every=10)

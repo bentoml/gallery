@@ -9,4 +9,4 @@ exclude:
   - "tests/"
 python:
   packages:
-    - torch
+    - torch==1.10.2

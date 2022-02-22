@@ -4,7 +4,7 @@ This is a sample project demonstrating basic usage of BentoML, the machine learn
 
 In this project, we will train a summarization model using PyTorch on the [Reddit TL;DR](https://zenodo.org/record/1043504) dataset, build an ML service for the model, serve the model behind an HTTP endpoint, and containerize the model server as a docker image for production deployment.
 
-This project is also available to run from a notebook: https://github.com/bentoml/gallery/blob/main/pytorch_seq2seq/pytorch_tldr_demo.ipynb
+This project is also available to run from a notebook: https://github.com/bentoml/gallery/blob/main/pytorch_seq2seq/pytorch_seq2seq.ipynb
 
 ### Install Dependencies
 
@@ -26,8 +26,7 @@ There should now be two new models in the BentoML local model store:
 
 ```bash
 bentoml models list
-> pytorch_tldr_encoder
-> pytorch_tldr_decoder
+> pytorch_seq2seq
 ```
 
 Verify that the model can be loaded as runner from Python shell:
@@ -35,7 +34,7 @@ Verify that the model can be loaded as runner from Python shell:
 ```python
 import bentoml
 
-runner = bentoml.pytorch.load_runner("pytorch_tldr:latest")
+runner = bentoml.pytorch.load_runner("pytorch_seq2seq:latest")
 
 runner.run(["Some text to summarization!"])
 ```
@@ -50,37 +49,48 @@ import typing as t
 
 import bentoml
 from bentoml.io import Text
-from train import normalizeString
 
-encoder = bentoml.pytorch.load_runner(
-    "pytorch_tldr_encoder"
-)
 
-decoder = bentoml.pytorch.load_runner(
-    "pytorch_tldr_decoder"
+def unicodeToAscii(s):
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', s)
+        if unicodedata.category(c) != 'Mn'
+    )
+
+
+def normalizeString(s):
+    s = unicodeToAscii(s.lower().strip())
+    s = re.sub(r"([.!?])", r" \1", s)
+    s = re.sub(r"[^a-zA-Z.!?]+", r" ", s)
+    return s
+
+
+model = bentoml.pytorch.load(
+    "pytorch_seq2seq"
 )
 
 svc = bentoml.Service(
-    name="pytorch_tldr_demo",
+    name="pytorch_seq2seq",
     runners=[
-        encoder,
-        decoder,
+        model['encoder'],
+        model['decoder'],
     ],
 )
 
 
 @svc.api(input=Text(), output=Text())
-def summarize(input_arr: t.List[str]) -> t.List[str]:
-    input_arr = list(map(normalizeString, input_arr))
-    enc_arr = encoder.run_batch(input_arr)
-    res = decoder.run_batch(enc_arr)
-    return res[0]['generated_text']
+async def summarize(input_arr: str) -> str:
+    input_arr = normalizeString(input_arr)
+    enc_arr = await encoder.run(input_arr)
+    res = await decoder.run(enc_arr)
+    return res['generated_text']
+
 ```
 
 Start an API server locally to test the service code above:
 
 ```bash
-bentoml serve service:svc --reload
+bentoml serve service.py:svc --reload
 ```
 
 With the `--reload` flag, the API server will automatically restart when the source
@@ -96,7 +106,7 @@ A `bentofile` is already created in this directory for building a
 Bento for the service:
 
 ```yaml
-service: "service:svc"
+service: "seq2seq:svc"
 description: "file: ./README.md"
 labels:
   owner: bentoml-team
@@ -113,16 +123,16 @@ python:
 Note that we exclude `tests/` from the bento using `exclude`.
 
 Simply run `bentoml build` from current directory to build a Bento with the latest
-version of the `pytorch_tldr` model. This may take a while when running for the first
+version of the `pytorch_seq2seq` model. This may take a while when running for the first
 time for BentoML to resolve all dependency versions:
 
 ```
 > bentoml build
 
-[01:14:04 AM] INFO     Building BentoML service "pytorch_tldr_demo:bmygukdtzpy6zlc5vcqvsoywq" from build context
+[01:14:04 AM] INFO     Building BentoML service "pytorch_seq2seq:bmygukdtzpy6zlc5vcqvsoywq" from build context
                        "/home/chef/workspace/gallery/pytorch"
-              INFO     Packing model "pytorch_tldr_demo:xm6jsddtu3y6zluuvcqvsoywq" from
-                       "/home/chef/bentoml/models/pytorch_tldr_demo/xm6jsddtu3y6zluuvcqvsoywq"
+              INFO     Packing model "pytorch_seq2seq:xm6jsddtu3y6zluuvcqvsoywq" from
+                       "/home/chef/bentoml/models/pytorch_seq2seq/xm6jsddtu3y6zluuvcqvsoywq"
               INFO     Locking PyPI package versions..
 [01:14:05 AM] INFO
                        ██████╗░███████╗███╗░░██╗████████╗░█████╗░███╗░░░███╗██╗░░░░░
@@ -132,14 +142,14 @@ time for BentoML to resolve all dependency versions:
                        ██████╦╝███████╗██║░╚███║░░░██║░░░╚█████╔╝██║░╚═╝░██║███████╗
                        ╚═════╝░╚══════╝╚═╝░░╚══╝░░░╚═╝░░░░╚════╝░╚═╝░░░░░╚═╝╚══════╝
 
-              INFO     Successfully built Bento(tag="pytorch_tldr_demo:bmygukdtzpy6zlc5vcqvsoywq") at
-                       "/home/chef/bentoml/bentos/pytorch_tldr_demo/bmygukdtzpy6zlc5vcqvsoywq/"
+              INFO     Successfully built Bento(tag="pytorch_seq2seq:bmygukdtzpy6zlc5vcqvsoywq") at
+                       "/home/chef/bentoml/bentos/pytorch_seq2seq/bmygukdtzpy6zlc5vcqvsoywq/"
 ```
 
 This Bento can now be loaded for serving:
 
 ```bash
-bentoml serve pytorch_tldr_demo:latest --production
+bentoml serve pytorch_seq2seq:latest --production
 ```
 
 The Bento directory contains all code, files, models and configs required for running this service.
@@ -147,7 +157,7 @@ BentoML standardizes this file structure which enables serving runtimes and depl
 built on top of it. By default, Bentos are managed under the `~/bentoml/bentos` directory:
 
 ```
-> cd ~/bentoml/bentos/pytorch_tldr_demo && cd $(cat latest)
+> cd ~/bentoml/bentos/pytorch_seq2seq && cd $(cat latest)
 
 > tree
 .
@@ -165,7 +175,7 @@ built on top of it. By default, Bentos are managed under the `~/bentoml/bentos` 
 │       ├── requirements.txt
 │       └── version.txt
 ├── models
-│   └── pytorch_tldr_demo
+│   └── pytorch_seq2seq
 │       ├── eqxdigtybch6nkfb
 │       │   ├── model.yaml
 │       │   └── saved_model.pt
@@ -186,13 +196,13 @@ will use your local docker environment to build a new docker image, containing t
 server configured from this Bento:
 
 ```bash
-bentoml containerize pytorch_tldr_demo:latest
+bentoml containerize pytorch_seq2seq:latest
 ```
 
 Test out the docker image built:
 
 ```bash
-docker run -p 5000:5000 pytorch_tldr_demo:invwzzsw7li6zckb2ie5eubhd
+docker run -p 5000:5000 pytorch_seq2seq:invwzzsw7li6zckb2ie5eubhd
 ```
 
 ### Sources

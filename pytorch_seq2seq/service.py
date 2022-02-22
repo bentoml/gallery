@@ -1,6 +1,4 @@
 import typing as t
-import unicodedata
-import re
 
 import bentoml
 from bentoml.io import Text
@@ -20,26 +18,22 @@ def normalizeString(s):
     return s
 
 
-encoder = bentoml.pytorch.load_runner(
-    "pytorch_tldr_encoder"
-)
-
-decoder = bentoml.pytorch.load_runner(
-    "pytorch_tldr_decoder"
+model = bentoml.pytorch.load(
+    "pytorch_seq2seq"
 )
 
 svc = bentoml.Service(
-    name="pytorch_tldr_demo",
+    name="pytorch_seq2seq",
     runners=[
-        encoder,
-        decoder,
+        model['encoder'],
+        model['decoder'],
     ],
 )
 
 
 @svc.api(input=Text(), output=Text())
-def predict(input_arr: t.List[str]) -> t.List[str]:
-    input_arr = list(map(normalizeString, input_arr))
-    enc_arr = encoder.run_batch(input_arr)
-    res = decoder.run_batch(enc_arr)
-    return res[0]['generated_text']
+async def summarize(input_arr: str) -> str:
+    input_arr = normalizeString(input_arr)
+    enc_arr = await encoder.run(input_arr)
+    res = await decoder.run(enc_arr)
+    return res['generated_text']
