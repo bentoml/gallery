@@ -133,7 +133,10 @@ exclude:
 - "tests/"
 - "*.ipynb"
 python:
+  lock_packages: false
   packages:
+    - -f https://download.pytorch.org/whl/cpu/torch_stable.html
+    - torch==1.10.2+cpu
     - git+https://github.com/huggingface/transformers
     - datasets
 ```
@@ -167,10 +170,53 @@ bentoml serve pretrained_clf:latest --production
 Make sure Docker and daemon is running, then `bentoml containerize` will build
 a docker image for the model server aboved:
 ```bash
-bentoml containerize pretrained_clf:latest
+» bentoml containerize pretrained_clf:latest
+[14:15:48] INFO     [boot] Building docker image for Bento(tag="pretrained_clf:zt4vvsurw63thgxi")...
+[+] Building 135.9s (19/19) FINISHED
+ => [internal] load build definition from Dockerfile                                                                                                                                                                                                                                   0.0s
+ => => transferring dockerfile: 958B                                                                                                                                                                                                                                                   0.0s
+ => [internal] load .dockerignore                                                                                                                                                                                                                                                      0.0s
+ => => transferring context: 2B                                                                                                                                                                                                                                                        0.0s
+ => [internal] load metadata for docker.io/bentoml/bento-server:1.0.0a4-python3.9-debian-runtime                                                                                                                                                                                       1.5s
+ => [auth] bentoml/bento-server:pull token for registry-1.docker.io                                                                                                                                                                                                                    0.0s
+ => [ 1/13] FROM docker.io/bentoml/bento-server:1.0.0a4-python3.9-debian-runtime@sha256:8db6e54428a0ec4cc5d90710ce2727939ee6c7317255677f4855fc250a597c8c                                                                                                                              14.0s
+ => => resolve docker.io/bentoml/bento-server:1.0.0a4-python3.9-debian-runtime@sha256:8db6e54428a0ec4cc5d90710ce2727939ee6c7317255677f4855fc250a597c8c                                                                                                                                 0.0s
+ => => sha256:fd58f80ab93165a3528a3517720accedee2888cb041a71dcef39f44ec7950502 5.26kB / 5.26kB                                                                                                                                                                                         0.0s
+ => => sha256:72a69066d2febc34d8f3dbcb645f7b851a57e9681322ece7ad8007503b783c19 27.15MB / 27.15MB                                                                                                                                                                                       1.0s
+ => => sha256:750772c51f8a5228ee8d1ab13e865af36dac574e65c95d25b985f8cc67340650 92.89MB / 92.89MB                                                                                                                                                                                       4.5s
+ => => sha256:6b8f7a6fc9262b707e8de94ecf2a0a79064cef42411a7d06bba5d836e2e0d42a 58.50MB / 58.50MB                                                                                                                                                                                       3.3s
+ => => sha256:8db6e54428a0ec4cc5d90710ce2727939ee6c7317255677f4855fc250a597c8c 1.79kB / 1.79kB                                                                                                                                                                                         0.0s
+ => => sha256:0aa5f948503b1c0bbdfaca80d9934d064b978a1e008b0fd243af5c568c21cfe1 34.05MB / 34.05MB                                                                                                                                                                                       3.2s
+ => => extracting sha256:72a69066d2febc34d8f3dbcb645f7b851a57e9681322ece7ad8007503b783c19                                                                                                                                                                                              2.2s
+ => => sha256:5dc30d464099737777f848b3b8e7c5df3d78b9b2da336eb2e391ebb7fb5c0b9d 530B / 530B                                                                                                                                                                                             3.4s
+ => => sha256:0c05293a0c9c23ef73fa271d253904ebba7b5100ef2f0fd0a6a33989c39bba35 31.52MB / 31.52MB                                                                                                                                                                                       4.9s
+ => => extracting sha256:750772c51f8a5228ee8d1ab13e865af36dac574e65c95d25b985f8cc67340650                                                                                                                                                                                              4.6s
+ => => extracting sha256:6b8f7a6fc9262b707e8de94ecf2a0a79064cef42411a7d06bba5d836e2e0d42a                                                                                                                                                                                              2.3s
+ => => extracting sha256:0aa5f948503b1c0bbdfaca80d9934d064b978a1e008b0fd243af5c568c21cfe1                                                                                                                                                                                              0.9s
+ => => extracting sha256:5dc30d464099737777f848b3b8e7c5df3d78b9b2da336eb2e391ebb7fb5c0b9d                                                                                                                                                                                              0.0s
+ => => extracting sha256:0c05293a0c9c23ef73fa271d253904ebba7b5100ef2f0fd0a6a33989c39bba35                                                                                                                                                                                              1.0s
+ => [internal] load build context                                                                                                                                                                                                                                                     10.5s
+ => => transferring context: 332.01MB                                                                                                                                                                                                                                                 10.4s
+ => [ 2/13] RUN groupadd -g 1034 -o bentoml && useradd -m -u 1034 -g 1034 -o -r bentoml                                                                                                                                                                                                0.7s
+ => [ 3/13] RUN mkdir /home/bentoml/bento && chown bentoml:bentoml /home/bentoml/bento -R                                                                                                                                                                                              0.3s
+ => [ 4/13] WORKDIR /home/bentoml/bento                                                                                                                                                                                                                                                0.0s
+ => [ 5/13] COPY --chown=bentoml:bentoml ./env ./env                                                                                                                                                                                                                                   0.0s
+ => [ 6/13] RUN chmod +x ./env/docker/init.sh                                                                                                                                                                                                                                          0.2s
+ => [ 7/13] RUN ./env/docker/init.sh ensure_python                                                                                                                                                                                                                                     0.5s
+ => [ 8/13] RUN ./env/docker/init.sh restore_conda_env                                                                                                                                                                                                                                 0.3s
+ => [ 9/13] RUN ./env/docker/init.sh install_pip_packages                                                                                                                                                                                                                            116.6s
+ => [10/13] RUN ./env/docker/init.sh install_wheels                                                                                                                                                                                                                                    0.3s
+ => [11/13] RUN ./env/docker/init.sh user_setup_script                                                                                                                                                                                                                                 0.3s
+ => [12/13] COPY --chown=bentoml:bentoml . ./                                                                                                                                                                                                                                          0.3s
+ => [13/13] RUN chmod +x ./env/docker/entrypoint.sh                                                                                                                                                                                                                                    0.2s
+ => exporting to image                                                                                                                                                                                                                                                                 0.7s
+ => => exporting layers                                                                                                                                                                                                                                                                0.6s
+ => => writing image sha256:8423510b91a7d646145b6470a83c182bf1ffe635566155d43f0d8da01fc9ca8a                                                                                                                                                                                           0.0s
+ => => naming to docker.io/library/pretrained_clf:zt4vvsurw63thgxi                                                                                                                                                                                                                     0.0s
+[14:18:04] INFO     [boot] Successfully built docker image "pretrained_clf:zt4vvsurw63thgxi"
 ```
 
 Test out the newly built docker image:
 ```bash
-docker run -p 3000:3000 
+docker run -p 3000:3000 pretrained_clf:zt4vvsurw63thgxi
 ```

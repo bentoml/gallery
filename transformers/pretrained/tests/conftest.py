@@ -3,7 +3,6 @@
 
 import typing as t
 
-import numpy as np
 import pytest
 from bentoml.testing.server import run_api_server
 
@@ -13,7 +12,7 @@ def pytest_configure(config):  # pylint: disable=unused-argument
     import sys
     import subprocess
 
-    cmd = f"{sys.executable} {os.path.join(os.getcwd(), 'train.py')} --k-folds=0"
+    cmd = f"{sys.executable} {os.path.join(os.getcwd(), 'import_model.py')}"
     subprocess.run(cmd, shell=True, check=True)
 
 
@@ -23,7 +22,5 @@ def host() -> t.Generator[str, None, None]:
 
     bentoml.build("service:svc")
 
-    with run_api_server(
-        bento="transformers_roberta_text_classification:latest",
-    ) as host:
+    with run_api_server(bento="pretrained_clf:latest") as host:
         yield host
