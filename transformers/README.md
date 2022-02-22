@@ -15,6 +15,6 @@ We will demonstrate how to create an ML service for both models, serve it behind
 Install python packages required under any folder of choice:
 
 ```bash
-pip install -r ./requirements-dev.txt
+pip install -r ./requirements.txt
 ```
 

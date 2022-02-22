@@ -1,10 +1,13 @@
 ## Pretrained Roberta with Transformers :handshake: BentoML
 
+<!--
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bentoml/gallery/blob/main/transformers/pretrained/pretrained_roberta.ipynb)[![nbviewer](https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.org/github/bentoml/gallery/blob/main/transformers/pretrained/pretrained_roberta.ipynb)[![Made with Jupyter](https://img.shields.io/badge/Made%20with-Jupyter-orange?logo=Jupyter)](https://github.com/bentoml/gallery/tree/main/transformers/pretrained/pretrained_roberta.ipynb)
+-->
 <div align='center'>
     <p align='center'>
-        <a href="https://colab.research.google.com/github/bentoml/gallery/blob/main/transformers/roberta_text_classification/transfer_learning/fine_tune_roberta.sync.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
-        <a href="https://nbviewer.org/github/bentoml/gallery/blob/main/transformers/roberta_text_classification/transfer_learning/fine_tune_roberta.sync.ipynb"><img src="https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg" alt="nbviewer"/></a>
-        <a href="https://github.com/bentoml/gallery/tree/main/transformers/roberta_text_classification/transfer_learning/fine_tune_roberta.sync.ipynb"><img src="https://img.shields.io/badge/Made%20with-Jupyter-orange?logo=Jupyter" alt="Made with Jupyter"/></a>
+        <a href="https://colab.research.google.com/github/bentoml/gallery/blob/main/transformers/pretrained/pretrained_roberta.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+        <a href="https://nbviewer.org/github/bentoml/gallery/blob/main/transformers/pretrained/pretrained_roberta.ipynb"><img src="https://raw.githubusercontent.com/jupyter/design/master/logos/Badges/nbviewer_badge.svg" alt="nbviewer"/></a>
+        <a href="https://github.com/bentoml/gallery/tree/main/transformers/pretrained/pretrained_roberta.ipynb"><img src="https://img.shields.io/badge/Made%20with-Jupyter-orange?logo=Jupyter" alt="Made with Jupyter"/></a>
     </p>
 </div>
 
@@ -39,18 +42,18 @@ runner.run_batch(["Hello World", "I love you", "I hate you"])
 
 ```python
 # service.py
-import ast
+import re
 import typing as t
-import logging
+import asyncio
+import unicodedata
 
 import bentoml
 from bentoml.io import JSON
 from bentoml.io import Text
 
+
 MODEL_NAME = "roberta_text_classification"
 TASKS = "text-classification"
-
-logger = logging.getLogger("bentoml")
 
 clf_runner = bentoml.transformers.load_runner(MODEL_NAME, tasks=TASKS)
 
@@ -61,42 +64,62 @@ all_runner = bentoml.transformers.load_runner(
 svc = bentoml.Service(name="pretrained_clf", runners=[clf_runner, all_runner])
 
 
+def normalize(s: str) -> str:
+    s = "".join(
+        c
+        for c in unicodedata.normalize("NFD", s.lower().strip())
+        if unicodedata.category(c) != "Mn"
+    )
+    s = re.sub(r"([.!?])", r" \1", s)
+    s = re.sub(r"[^a-zA-Z.!?]+", r" ", s)
+    return s
+
+
+def preprocess(sentence: t.Dict[str, t.List[str]]) -> t.Dict[str, t.List[str]]:
+    assert 'text' in sentence, "Given JSON does not contain `text` field"
+    if not isinstance(sentence['text'], list):
+        sentence['text'] = [sentence['text']]
+    return {k: [normalize(s) for s in v] for k, v in sentence.items()}
+
+
 def convert_result(res) -> t.Dict[str, t.Any]:
     if isinstance(res, list):
         return {l["label"]: l["score"] for l in res}
     return {res["label"]: res["score"]}
 
 
-def preprocess(sentence: str) -> t.List[str]:
-    return ast.literal_eval(sentence)
-
-
 def postprocess(
-    input_str: t.List[str], output: t.List[t.Dict[str, t.Any]]
-) -> t.Dict[str, t.Any]:
-    res = {}
-    for i, (sent, pred) in enumerate(zip(input_str, output)):
-        res[i] = {"inputs": sent, **convert_result(pred)}
-        logger.debug(f"entry: {res[i]}")
-    return res
+    inputs: t.Dict[str, t.List[str]], outputs: t.List[t.Dict[str, t.Any]]
+) -> t.Dict[int, t.Dict[str, t.Union[str, float]]]:
+    return {
+        i: {"input": sent, **convert_result(pred)}
+        for i, (sent, pred) in enumerate(zip(inputs["text"], outputs))
+    }
 
 
 @svc.api(input=Text(), output=JSON())
-async def batch_sentiment(sentence: str) -> t.Dict[str, t.Any]:
-    processed = preprocess(sentence)
-    output = await clf_runner.async_run_batch(processed)
-    return postprocess(processed, output)
+async def sentiment(sentence: str) -> t.Dict[str, t.Any]:
+    res = await clf_runner.async_run(sentence)
+    return {"input": sentence, "label": res['label']}
 
 
-@svc.api(input=Text(), output=JSON())
-async def batch_all_scores(sentence: str) -> t.Dict[str, t.Any]:
+@svc.api(input=JSON(), output=JSON())
+async def batch_sentiment(sentence: t.Dict[str, t.List[str]]) -> t.Dict[int, t.Dict[str, t.Union[str, float]]]:
     processed = preprocess(sentence)
-    output = await all_runner.async_run_batch(processed)
-    return postprocess(processed, output)
+    outputs = await asyncio.gather(*[clf_runner.async_run(s) for s in processed["text"]])
+    return postprocess(processed, outputs)  # type: ignore
+
+
+@svc.api(input=JSON(), output=JSON())
+async def batch_all_scores(sentence: t.Dict[str, t.List[str]]) -> t.Dict[int, t.Dict[str, t.Union[str, float]]]:
+    processed = preprocess(sentence)
+    outputs = await asyncio.gather(*[all_runner.async_run(s) for s in processed["text"]])
+    return postprocess(processed, outputs)  # type: ignore
 ```
 
-We defined two separate endpoints `/batch_sentiment` and `batch_all_scores`, which both
-returns a list of predicted emotions from given sentence
+We defined two separate endpoints `/batch_sentiment` and `batch_all_scores` which creates an inference graph to make use of BentoML's dynamic batching, which both
+returns a list of predicted emotions from given sentence. We also create
+`/sentiment` endpoints which accept a single sentence as input.
 
 Start a service with reload enabled:
 ```python
