@@ -58,12 +58,20 @@ bentoml models list
 Verify that the model can be loaded as runner from Python shell:
 
 ```python
+import numpy as np
+import PIL.Image
+
 import bentoml
 
 runner = bentoml.tensorflow.load_runner("tensorflow_mnist:latest")
 
-# TODO add an appropriate test example 
-runner.run([5.9, 3. , 5.1, 1.8])  # => array(2)
+img = PIL.Image.open("samples/0.png")
+arr = np.array(img) / 255.0
+arr = arr.astype("float32")
+
+# add color channel dimension for greyscale image
+arr = np.expand_dims(arr, 2)
+runner.run(arr)  # => returns an array of probabilities for numbers 0-9
 ```
 
 ### Create ML Service
@@ -83,7 +91,7 @@ from bentoml.io import Image
 from bentoml.io import NumpyNdarray
 
 
-mnist_runner = bentoml.pytorch.load_runner(
+mnist_runner = bentoml.tensorflow.load_runner(
     "tensorflow_mnist",
     name="mnist_runner",
     predict_fn_name="predict",
@@ -105,9 +113,9 @@ async def predict_ndarray(
     inp: "np.ndarray[t.Any, np.dtype[t.Any]]",
 ) -> "np.ndarray[t.Any, np.dtype[t.Any]]":
     assert inp.shape == (28, 28)
-    # We are using greyscale image and our PyTorch model expect one
+
     # extra channel dimension
-    inp = np.expand_dims(inp, 0)
+    inp = np.expand_dims(inp, 2)
     output_tensor = await mnist_runner.async_run(inp)
     return output_tensor.numpy()
 
@@ -118,9 +126,8 @@ async def predict_image(f: PILImage) -> "np.ndarray[t.Any, np.dtype[t.Any]]":
     arr = np.array(f)/255.0
     assert arr.shape == (28, 28)
 
-    # We are using greyscale image and our PyTorch model expect one
     # extra channel dimension
-    arr = np.expand_dims(arr, 0).astype("float32")
+    arr = np.expand_dims(arr, 2).astype("float32")
     output_tensor = await mnist_runner.async_run(arr)
     return output_tensor.numpy()
 ```
@@ -139,7 +146,7 @@ file `service.py` is being edited, to boost your development productivity.
 
 Verify the endpoint can be accessed locally:
 ```bash
-curl -H "Content-Type: multipart/form-data" -F'fileobj=@samples/1.png;type=image/png' http://127.0.0.1:5000/predict_image
+curl -H "Content-Type: multipart/form-data" -F'fileobj=@samples/0.png;type=image/png' http://127.0.0.1:5000/predict_image
 ```
 
 We can also do a simple local benchmark if [locust](https://locust.io) is installed:
@@ -178,7 +185,7 @@ time for BentoML to resolve all dependency versions:
 > bentoml build
 
 [01:14:04 AM] INFO     Building BentoML service "tensorflow_mnist_demo:bmygukdtzpy6zlc5vcqvsoywq" from build context      
-                       "/home/chef/workspace/gallery/pytorch"                                                         
+                       "/home/chef/workspace/gallery/tensorflow2"                                                         
               INFO     Packing model "tensorflow_mnist_demo:xm6jsddtu3y6zluuvcqvsoywq" from                               
                        "/home/chef/bentoml/models/tensorflow_mnist_demo/xm6jsddtu3y6zluuvcqvsoywq"                       
               INFO     Locking PyPI package versions..                                                                 
@@ -250,5 +257,5 @@ bentoml containerize tensorflow_mnist_demo:latest
 
 Test out the docker image built:
 ```bash
-docker run -p 5000:5000 tensorflow_mnist_demo:invwzzsw7li6zckb2ie5eubhd
+docker run -p 3000:3000 tensorflow_mnist_demo:invwzzsw7li6zckb2ie5eubhd
 ```
