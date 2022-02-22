@@ -31,13 +31,25 @@ bentoml models list
 > pytorch_seq2seq_decoder
 ```
 
+If you'd like to skip training, running the block below will use the pre-trained model for the bentoml runners.
+
 Verify that the model can be loaded as runner from Python shell:
 
 ```python
 import bentoml
+from model import EncoderRNN, DecoderRNN, AttnDecoderRNN, MAX_LENGTH, device
 
-runner_encoder = bentoml.pytorch.load_runner("pytorch_seq2seq_encoder:latest")
-runner_decoder = bentoml.pytorch.load_runner("pytorch_seq2seq_decoder:latest")
+
+try:
+  runner_encoder = bentoml.pytorch.load_runner("pytorch_seq2seq_encoder:latest")
+  runner_decoder = bentoml.pytorch.load_runner("pytorch_seq2seq_decoder:latest")
+except bentoml.exceptions.NotFound:
+  import torch
+  seq2seq = torch.load("../models/seq2seq.pt") # Load the model
+  bentoml.pytorch.save(name="pytorch_seq2seq_encoder", model=seq2seq["encoder"])
+  bentoml.pytorch.save(name="pytorch_seq2seq_decoder", model=seq2seq["decoder"])
+  runner_encoder = bentoml.pytorch.load_runner("pytorch_seq2seq_encoder:latest")
+  runner_decoder = bentoml.pytorch.load_runner("pytorch_seq2seq_decoder:latest")
 
 encoded_sentence = runner_encoder.run(["some text to summarize"])
 print(runner_decoder.run(encoded_sentence))
@@ -56,8 +68,8 @@ from bentoml.io import Text
 
 ...
 
-encoder_runner = bentoml.pytorch.load("pytorch_seq2seq_encoder")
-decoder_runner = bentoml.pytorch.load("pytorch_seq2seq_decoder")
+encoder_runner = bentoml.pytorch.load_runner("pytorch_seq2seq_encoder:latest")
+decoder_runner = bentoml.pytorch.load_runner("pytorch_seq2seq_decoder:latest")
 
 svc = bentoml.Service(
     name="pytorch_seq2seq",
@@ -97,7 +109,7 @@ bentoml serve service.py:svc --reload
 With the `--reload` flag, the API server will automatically restart when the source
 file `service.py` is being edited, to boost your development productivity.
 
-Users can also access 127.0.0.1:3000 to access the swaggers docs and interact with the service in real time
+Users can also access 127.0.0.1:5000 to access the swaggers docs and interact with the service in real time
 
 ### Build Bento for deployment
 

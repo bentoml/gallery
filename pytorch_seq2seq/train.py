@@ -4,8 +4,16 @@ import re
 import random
 import unicodedata
 import pandas as pd
+import requests
 
-from model import EncoderRNN, DecoderRNN, AttnDecoderRNN, MAX_LENGTH, device
+from model import (
+    EncoderRNN,
+    DecoderRNN,
+    AttnDecoderRNN,
+    MAX_LENGTH,
+    hidden_size,
+    device,
+)
 
 from os.path import exists
 import time
@@ -23,6 +31,13 @@ teacher_forcing_ratio = 0.5
 
 SOS_token = 0
 EOS_token = 1
+
+input_lang = None
+output_lang = None
+with open("vectors.pkl", "r") as f:
+    vectors = pickle.load(f)
+    input_lang = vectors["input_lang"]
+    output_lang = vectors["output_lang"]
 
 
 def getData():
@@ -328,7 +343,6 @@ if __name__ == "__main__":
     df = pd.read_json("dataset/corpus-webis-tldr-17.json", lines=True, chunksize=1000)
     input_lang, output_lang, pairs = prepareData("content", "summary")
 
-    hidden_size = 256
     encoder = EncoderRNN(input_lang.n_words, hidden_size).to(device)
     decoder = AttnDecoderRNN(hidden_size, output_lang.n_words, dropout_p=0.1).to(device)
 

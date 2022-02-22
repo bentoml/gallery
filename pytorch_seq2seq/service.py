@@ -1,7 +1,12 @@
 import typing as t
+import unicodedata
+import re
+import pickle
 
 import bentoml
 from bentoml.io import Text
+
+from train import evaluate
 
 
 def unicodeToAscii(s):
@@ -17,8 +22,8 @@ def normalizeString(s):
     return s
 
 
-encoder_runner = bentoml.pytorch.load("pytorch_seq2seq_encoder")
-decoder_runner = bentoml.pytorch.load("pytorch_seq2seq_decoder")
+encoder_runner = bentoml.pytorch.load_runner("pytorch_seq2seq_encoder:latest")
+decoder_runner = bentoml.pytorch.load_runner("pytorch_seq2seq_decoder:latest")
 
 svc = bentoml.Service(
     name="pytorch_seq2seq",
@@ -32,9 +37,9 @@ svc = bentoml.Service(
 @svc.api(input=Text(), output=Text())
 async def summarize(input_sentence: str) -> str:
     input_sentence = normalizeString(input_sentence)
-    enc_sentence = await encoder.async_run(input_sentence)
-    res = await decoder.async_run(enc_sentence)
-    return res["generated_text"]
+    output, attn = await evaluate(encoder_runner, decoder_runner, input_sentence)
+    output_sentence = " ".join(output)
+    return output_sentence
 
 
 @svc.api(input=Text(), output=Text())
@@ -42,7 +47,6 @@ async def summarize_batch(input_arr: [str]) -> [str]:
     input_arr = list(map(normalizeString, input_arr))
     results = []
     for input_sentence in input_arr:
-        enc_arr = await encoder.async_run(input_arr)
-        res = await decoder.async_run(enc_arr)
-        results.append(res["generated_text"])
+        output, attn = await evaluate(encoder_runner, decoder_runner, input_sentence)
+        results.append(" ".join(output))
     return results
