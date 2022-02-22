@@ -5,12 +5,16 @@ labels:
   stage: demo
 include:
 - "*.py"
-- "transfer_learning/exported"
 exclude:
+- "locustfile.py"
 - "tests/"
 - "models/"
 - "*.ipynb"
 python:
+  lock_packages: false
   packages:
+    - -f https://download.pytorch.org/whl/cpu/torch_stable.html
+    - torch==1.10.2+cpu
     - git+https://github.com/huggingface/transformers
     - datasets
+

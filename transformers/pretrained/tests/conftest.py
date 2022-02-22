@@ -18,9 +18,11 @@ def pytest_configure(config):  # pylint: disable=unused-argument
 
 @pytest.fixture(scope="session")
 def host() -> t.Generator[str, None, None]:
-    import bentoml
+    import sys
+    import subprocess
 
-    bentoml.build("service:svc")
+    cmd = f"{sys.executable} -m bentoml build"
+    subprocess.run(cmd, shell=True, check=True)
 
     with run_api_server(bento="pretrained_clf:latest") as host:
         yield host
