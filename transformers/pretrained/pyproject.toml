@@ -10,7 +10,6 @@ exclude = '''
     | _build
     | build
     | dist
-    | transfer_learning
   )/
 )
 '''

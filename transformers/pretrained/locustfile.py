@@ -1,9 +1,15 @@
+import json
 from locust import task
 from locust import between
 from locust import HttpUser
+import random
+from essential_generators import DocumentGenerator
 
-test_text = '["I love you", "I hope we will meet one day, but now, I have to leave."]'
+random.seed(400)
+gen = DocumentGenerator()
 
+BATCH = 5
+INPUTS = [gen.sentence() for _ in range(BATCH)]
 
 class PreTrainedRoberta(HttpUser):
 
@@ -11,8 +17,12 @@ class PreTrainedRoberta(HttpUser):
 
     @task
     def sentiment(self):
-        self.client.post("/sentiment", test_text)
+        self.client.post("/sentiment", "I hope we will meet one day, but now, I have to leave.")
 
     @task
-    def all_scores(self):
-        self.client.post("/all_scores", test_text)
+    def batch_sentiment(self):
+        self.client.post("/batch_sentiment", json.dumps({"text":INPUTS}))
+
+    @task
+    def batch_all_scores(self):
+        self.client.post("/batch_all_scores", json.dumps({"text":INPUTS}))

@@ -82,20 +82,20 @@ def postprocess(
 
 
 @svc.api(input=Text(), output=JSON())
-async def sentiment(sentence: str) -> t.Dict[str, t.Any]:
+async def batch_sentiment(sentence: str) -> t.Dict[str, t.Any]:
     processed = preprocess(sentence)
     output = await clf_runner.async_run_batch(processed)
     return postprocess(processed, output)
 
 
 @svc.api(input=Text(), output=JSON())
-async def all_scores(sentence: str) -> t.Dict[str, t.Any]:
+async def batch_all_scores(sentence: str) -> t.Dict[str, t.Any]:
     processed = preprocess(sentence)
     output = await all_runner.async_run_batch(processed)
     return postprocess(processed, output)
 ```
 
-We defined two separate endpoints `/sentiment` and `all_scores`, which both
+We defined two separate endpoints `/batch_sentiment` and `batch_all_scores`, which both
 returns a list of predicted emotions from given sentence
 
 Start a service with reload enabled:
@@ -107,7 +107,7 @@ With the `--reload` flag, the API server will automatically restart when the sou
 One can then navigate to `127.0.0.1:3000` and interact with Swagger UI.
 One can also verify the endpoints locally with `curl`:
 ```bash
-curl -X POST "http://127.0.0.1:3000/sentiment" \
+curl -X POST "http://127.0.0.1:3000/batch_sentiment" \
     -H "accept: application/json" -H "Content-Type: text/plain" \
     -d "[\"I love you\",\"I hope that we will meet one day, but now, our path diverges\"]"
 ```

@@ -4,3 +4,9 @@ format:
 
 test:
 	pytest -vvv
+
+run:
+	bentoml serve service.py:svc --reload
+
+benchmark:
+	locust --headless -u 100 -r 1000 --run-time 2m --host http://127.0.0.1:3000
