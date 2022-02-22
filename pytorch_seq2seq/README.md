@@ -81,7 +81,7 @@ svc = bentoml.Service(
 @svc.api(input=Text(), output=Text())
 async def summarize(input_arr: str) -> str:
     input_arr = normalizeString(input_arr)
-    enc_arr = await encoder.run(input_arr)
+    enc_arr = await encoder.async_run(input_arr)
     res = await decoder.run(enc_arr)
     return res['generated_text']
 
