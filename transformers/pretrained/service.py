@@ -7,7 +7,6 @@ import bentoml
 from bentoml.io import JSON
 from bentoml.io import Text
 
-
 MODEL_NAME = "roberta_text_classification"
 TASKS = "text-classification"
 
@@ -32,9 +31,9 @@ def normalize(s: str) -> str:
 
 
 def preprocess(sentence: t.Dict[str, t.List[str]]) -> t.Dict[str, t.List[str]]:
-    assert 'text' in sentence, "Given JSON does not contain `text` field"
-    if not isinstance(sentence['text'], list):
-        sentence['text'] = [sentence['text']]
+    assert "text" in sentence, "Given JSON does not contain `text` field"
+    if not isinstance(sentence["text"], list):
+        sentence["text"] = [sentence["text"]]
     return {k: [normalize(s) for s in v] for k, v in sentence.items()}
 
 
@@ -56,18 +55,26 @@ def postprocess(
 @svc.api(input=Text(), output=JSON())
 async def sentiment(sentence: str) -> t.Dict[str, t.Any]:
     res = await clf_runner.async_run(sentence)
-    return {"input": sentence, "label": res['label']}
+    return {"input": sentence, "label": res["label"]}
 
 
 @svc.api(input=JSON(), output=JSON())
-async def batch_sentiment(sentences: t.Dict[str, t.List[str]]) -> t.Dict[int, t.Dict[str, t.Union[str, float]]]:
+async def batch_sentiment(
+    sentences: t.Dict[str, t.List[str]]
+) -> t.Dict[int, t.Dict[str, t.Union[str, float]]]:
     processed = preprocess(sentences)
-    outputs = await asyncio.gather(*[clf_runner.async_run(s) for s in processed["text"]])
+    outputs = await asyncio.gather(
+        *[clf_runner.async_run(s) for s in processed["text"]]
+    )
     return postprocess(processed, outputs)  # type: ignore
 
 
 @svc.api(input=JSON(), output=JSON())
-async def batch_all_scores(sentences: t.Dict[str, t.List[str]]) -> t.Dict[int, t.Dict[str, t.Union[str, float]]]:
+async def batch_all_scores(
+    sentences: t.Dict[str, t.List[str]]
+) -> t.Dict[int, t.Dict[str, t.Union[str, float]]]:
     processed = preprocess(sentences)
-    outputs = await asyncio.gather(*[all_runner.async_run(s) for s in processed["text"]])
+    outputs = await asyncio.gather(
+        *[all_runner.async_run(s) for s in processed["text"]]
+    )
     return postprocess(processed, outputs)  # type: ignore

@@ -18,6 +18,7 @@ BATCH = 5
 
 expected_results = b'{"input":"\\"Our path diverges.\\"","label":"neutral"}'
 
+
 @pytest.fixture()
 def batched_sentence() -> t.Callable[[int], str]:
     def _(batch=5) -> str:
@@ -39,6 +40,7 @@ async def test_sentiment(host):
         assert_status=200,
         assert_data=expected_results,
     )
+
 
 @pytest.mark.asyncio
 async def test_batch_sentiment(host, batched_sentence):

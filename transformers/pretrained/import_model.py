@@ -1,4 +1,5 @@
 import bentoml
+
 import transformers
 
 TASKS = "text-classification"
