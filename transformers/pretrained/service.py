@@ -7,6 +7,8 @@ import bentoml
 from bentoml.io import JSON
 from bentoml.io import Text
 
+from pydantic import BaseModel, constr
+
 MODEL_NAME = "roberta_text_classification"
 TASKS = "text-classification"
 
@@ -17,6 +19,24 @@ all_runner = bentoml.transformers.load_runner(
 )
 
 svc = bentoml.Service(name="pretrained_clf", runners=[clf_runner, all_runner])
+
+class Inputs(BaseModel):
+    text: t.List[str]
+
+ResultIdx = constr(regex=r'^\d+$')
+
+class Prediction(BaseModel):
+    input: str
+    sadness: float
+    joy: float
+    love: float
+    anger: float
+    fear: float
+    surprise: float
+
+class Outputs(BaseModel):
+    # https://pydantic-docs.helpmanual.io/usage/models/#custom-root-types
+    __root__: t.Dict[ResultIdx, Prediction]
 
 
 def normalize(s: str) -> str:
@@ -30,11 +50,8 @@ def normalize(s: str) -> str:
     return s
 
 
-def preprocess(sentence: t.Dict[str, t.List[str]]) -> t.Dict[str, t.List[str]]:
-    assert "text" in sentence, "Given JSON does not contain `text` field"
-    if not isinstance(sentence["text"], list):
-        sentence["text"] = [sentence["text"]]
-    return {k: [normalize(s) for s in v] for k, v in sentence.items()}
+def preprocess(sentences: Inputs) -> t.Dict[str, t.List[str]]:
+    return {k: [normalize(s) for s in v] for k, v in sentences.dict().items()}
 
 
 def convert_result(res) -> t.Dict[str, t.Any]:
@@ -58,10 +75,8 @@ async def sentiment(sentence: str) -> t.Dict[str, t.Any]:
     return {"input": sentence, "label": res["label"]}
 
 
-@svc.api(input=JSON(), output=JSON())
-async def batch_sentiment(
-    sentences: t.Dict[str, t.List[str]]
-) -> t.Dict[int, t.Dict[str, t.Union[str, float]]]:
+@svc.api(input=JSON(pydantic_model=Inputs), output=JSON(pydantic_model=Outputs))
+async def batch_sentiment(sentences:Inputs) -> t.Dict[str, t.Dict[str, t.Union[str, float]]]:
     processed = preprocess(sentences)
     outputs = await asyncio.gather(
         *[clf_runner.async_run(s) for s in processed["text"]]
@@ -69,10 +84,8 @@ async def batch_sentiment(
     return postprocess(processed, outputs)  # type: ignore
 
 
-@svc.api(input=JSON(), output=JSON())
-async def batch_all_scores(
-    sentences: t.Dict[str, t.List[str]]
-) -> t.Dict[int, t.Dict[str, t.Union[str, float]]]:
+@svc.api(input=JSON(pydantic_model=Inputs), output=JSON(pydantic_model=Outputs))
+async def batch_all_scores(sentences: Inputs) -> t.Dict[str, t.Dict[str, t.Union[str, float]]]:
     processed = preprocess(sentences)
     outputs = await asyncio.gather(
         *[all_runner.async_run(s) for s in processed["text"]]
