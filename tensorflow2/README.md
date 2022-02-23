@@ -169,22 +169,17 @@ labels:
 include:
 - "*.py"
 exclude:
-- "tests/"
 - "locustfile.py"
 python:
+  lock_packages: false
   packages:
     - tensorflow
 ```
 
-Note that we exclude `tests/` from the bento using `exclude`.
+Note that we exclude `locustfile.py` from the bento using `exclude`.
 
 Simply run `bentoml build` from current directory to build a Bento with the latest
 version of the `tensorflow_mnist` model.
-
-If running the latest version of macos use:
-```bash
-bentoml build --bentofile bentofile-macos.yaml
-```
 
 This may take a while when running for the first time for BentoML to resolve all dependency versions:
 

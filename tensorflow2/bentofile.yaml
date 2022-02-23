@@ -6,9 +6,9 @@ labels:
 include:
 - "*.py"
 exclude:
-- "tests/"
 - "locustfile.py"
 python:
+  lock_packages: false
   packages:
     - tensorflow
     - Pillow
