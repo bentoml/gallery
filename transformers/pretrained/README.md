@@ -10,7 +10,7 @@
     </p>
 </div>
 
-We are going to use [`j-hartmann/emotion-english-distilroberta-base`](https://huggingface.co/j-hartmann/emotion-english-distilroberta-base) and serve it under `/predict`
+We are going to use [`j-hartmann/emotion-english-distilroberta-base`](https://huggingface.co/j-hartmann/emotion-english-distilroberta-base) and serve it with BentoML.
 
 
 ### Instruction
@@ -161,6 +161,7 @@ python:
     - torch==1.10.2+cpu
     - git+https://github.com/huggingface/transformers
     - datasets
+    - pydantic 
 ```
 
 ```bash
