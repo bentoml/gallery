@@ -1,4 +1,4 @@
-service: "iris_classifier:svc"
+service: "service:svc"
 description: "file: ./README.md"
 labels:
   owner: bentoml-team
