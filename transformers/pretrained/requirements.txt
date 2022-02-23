@@ -10,3 +10,4 @@ pytest-cov>=3.0.0
 pytest>=6.2.0
 attrs>=21.1
 essential-generators
+pydantic

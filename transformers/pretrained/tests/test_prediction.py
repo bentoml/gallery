@@ -1,7 +1,6 @@
 # pylint: disable=redefined-outer-name
 # type: ignore[no-untyped-def]
 
-import ast
 import json
 import random
 import typing as t
