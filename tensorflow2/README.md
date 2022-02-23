@@ -1,4 +1,4 @@
-# BentoML TensorFlow2 Tutorial
+# BentoML TensorFlow 2 Tutorial
 
 This is a sample project demonstrating usage of BentoML following the advanced TensorFlow2 quickstart here: https://www.tensorflow.org/tutorials/quickstart/advanced
 
@@ -151,7 +151,7 @@ curl -H "Content-Type: multipart/form-data" -F'fileobj=@samples/0.png;type=image
 
 We can also do a simple local benchmark if [locust](https://locust.io) is installed:
 ```bash
-locust --headless -u 100 -r 1000 --run-time 10m --host http://127.0.0.1:5000
+locust --headless -u 100 -r 1000 --run-time 10m --host http://127.0.0.1:3000
 ```
 
 
@@ -170,6 +170,7 @@ include:
 - "*.py"
 exclude:
 - "tests/"
+- "locustfile.py"
 python:
   packages:
     - tensorflow
@@ -210,7 +211,7 @@ This may take a while when running for the first time for BentoML to resolve all
 This Bento can now be loaded for serving:
 
 ```bash
-bentoml serve tensorflow_mnist_demo:latest --production --port <PORT>
+bentoml serve tensorflow_mnist_demo:latest --production
 ```
 
 The Bento directory contains all code, files, models and configs required for running this service.
