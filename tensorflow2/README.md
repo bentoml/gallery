@@ -223,6 +223,7 @@ built on top of it. By default, Bentos are managed under the `~/bentoml/bentos` 
 
 > tree
 .
+├── README.md
 ├── apis
 │   └── openapi.yaml
 ├── bento.yaml
@@ -237,18 +238,20 @@ built on top of it. By default, Bentos are managed under the `~/bentoml/bentos` 
 │       ├── requirements.txt
 │       └── version.txt
 ├── models
-│   └── tensorflow_mnist_demo
-│       ├── eqxdigtybch6nkfb
-│       │   ├── model.yaml
-│       │   └── saved_model.pt
-│       └── latest
-├── README.md
+│   └── tensorflow_mnist
+│       ├── latest
+│       └── wz77wdeuegyh2du5
+│           ├── assets
+│           ├── model.yaml
+│           ├── saved_model.pb
+│           └── variables
+│               ├── variables.data-00000-of-00001
+│               └── variables.index
 └── src
-    ├── model.py
     ├── service.py
     └── train.py
 
-9 directories, 15 files
+11 directories, 16 files
 ```
 
 
