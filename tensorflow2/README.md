@@ -146,7 +146,7 @@ file `service.py` is being edited, to boost your development productivity.
 
 Verify the endpoint can be accessed locally:
 ```bash
-curl -H "Content-Type: multipart/form-data" -F'fileobj=@samples/0.png;type=image/png' http://127.0.0.1:5000/predict_image
+curl -H "Content-Type: multipart/form-data" -F'fileobj=@samples/0.png;type=image/png' http://127.0.0.1:3000/predict_image
 ```
 
 We can also do a simple local benchmark if [locust](https://locust.io) is installed:

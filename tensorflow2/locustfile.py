@@ -1,4 +1,4 @@
-from locust import HttpUser, task, between
+from locust import HttpUser, between, task
 
 with open("samples/0.png", "rb") as f:
     test_image_bytes = f.read()
@@ -12,4 +12,3 @@ class TensorFlow2MNISTLoadTestUser(HttpUser):
     def predict_image(self):
         files = {"upload_files": ("1.png", test_image_bytes, "image/png")}
         self.client.post("/predict_image", files=files)
-

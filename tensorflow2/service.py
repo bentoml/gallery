@@ -1,14 +1,9 @@
-import typing as t
-
 import bentoml
 import numpy as np
-import PIL.Image
 from bentoml.io import Image, NumpyNdarray
 from PIL.Image import Image as PILImage
 
-mnist_runner = bentoml.tensorflow.load_runner(
-    "tensorflow_mnist:latest"
-)
+mnist_runner = bentoml.tensorflow.load_runner("tensorflow_mnist:latest")
 
 svc = bentoml.Service(
     name="tensorflow_mnist_demo",
@@ -22,9 +17,7 @@ svc = bentoml.Service(
     input=NumpyNdarray(dtype="float32", enforce_dtype=True),
     output=NumpyNdarray(dtype="float32"),
 )
-async def predict_ndarray(
-    inp: "np.ndarray[t.Any, np.dtype[t.Any]]",
-) -> "np.ndarray[t.Any, np.dtype[t.Any]]":
+async def predict_ndarray(inp: "np.ndarray") -> "np.ndarray":
     assert inp.shape == (28, 28)
     # We are using greyscale image and our PyTorch model expect one
     # extra channel dimension
@@ -33,9 +26,9 @@ async def predict_ndarray(
 
 
 @svc.api(input=Image(), output=NumpyNdarray(dtype="float32"))
-async def predict_image(f: PILImage) -> "np.ndarray[t.Any, np.dtype[t.Any]]":
+async def predict_image(f: PILImage) -> "np.ndarray":
     assert isinstance(f, PILImage)
-    arr = np.array(f)/255.0
+    arr = np.array(f) / 255.0
     assert arr.shape == (28, 28)
 
     # We are using greyscale image and our PyTorch model expect one
