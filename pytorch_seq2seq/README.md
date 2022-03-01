@@ -37,68 +37,26 @@ Verify that the model can be loaded as runner from Python shell:
 
 ```python
 import bentoml
-from model import EncoderRNN, DecoderRNN, AttnDecoderRNN, MAX_LENGTH, device
+from model import EncoderRNN, DecoderRNN, AttnDecoderRNN, device
 
+MAX_LENGTH = 260
 
 try:
   runner_encoder = bentoml.pytorch.load_runner("pytorch_seq2seq_encoder:latest")
   runner_decoder = bentoml.pytorch.load_runner("pytorch_seq2seq_decoder:latest")
 except bentoml.exceptions.NotFound:
   import torch
-  seq2seq = torch.load("../models/seq2seq.pt") # Load the model
+  seq2seq = torch.load("models/seq2seq.pt") # Load the model
   bentoml.pytorch.save(name="pytorch_seq2seq_encoder", model=seq2seq["encoder"])
   bentoml.pytorch.save(name="pytorch_seq2seq_decoder", model=seq2seq["decoder"])
   runner_encoder = bentoml.pytorch.load_runner("pytorch_seq2seq_encoder:latest")
   runner_decoder = bentoml.pytorch.load_runner("pytorch_seq2seq_decoder:latest")
 
-encoded_sentence = runner_encoder.run(["some text to summarize"])
+encoded_sentence = runner_encoder.run("some text to summarize")
 print(runner_decoder.run(encoded_sentence))
 ```
 
-### Create ML Service
-
-The ML Service code is defined in the `service.py` file:
-
-```python
-# service.py
-import typing as t
-
-import bentoml
-from bentoml.io import Text
-
-...
-
-encoder_runner = bentoml.pytorch.load_runner("pytorch_seq2seq_encoder:latest")
-decoder_runner = bentoml.pytorch.load_runner("pytorch_seq2seq_decoder:latest")
-
-svc = bentoml.Service(
-    name="pytorch_seq2seq",
-    runners=[
-        encoder_runner,
-        decoder_runner,
-    ],
-)
-
-
-@svc.api(input=Text(), output=Text())
-async def summarize(input_sentence: str) -> str:
-    input_sentence = normalizeString(input_sentence)
-    enc_sentence = await encoder.async_run(input_sentence)
-    res = await decoder.async_run(enc_sentence)
-    return res["generated_text"]
-
-
-@svc.api(input=Text(), output=Text())
-async def summarize_batch(input_arr: [str]) -> [str]:
-    input_arr = list(map(normalizeString, input_arr))
-    results = []
-    for input_sentence in input_arr:
-        enc_arr = await encoder.async_run(input_arr)
-        res = await decoder.async_run(enc_arr)
-        results.append(res["generated_text"])
-    return results
-
-```
+## Host the model with BentoML
 
 Start an API server locally to test the service code above:
 

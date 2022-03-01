@@ -34,10 +34,10 @@ EOS_token = 1
 
 input_lang = None
 output_lang = None
-with open("vectors.pkl", "r") as f:
-    vectors = pickle.load(f)
-    input_lang = vectors["input_lang"]
-    output_lang = vectors["output_lang"]
+# with open("models/vectors.pkl", "r") as f:
+#     vectors = pickle.load(f)
+#     input_lang = vectors["input_lang"]
+#     output_lang = vectors["output_lang"]
 
 
 def getData():
@@ -191,12 +191,14 @@ def train(
     input_length = input_tensor.size(0)
     target_length = target_tensor.size(0)
 
-    encoder_outputs = torch.zeros(max_length, encoder.hidden_size, device=device)
+    encoder_outputs = torch.zeros(
+        max_length, encoder.hidden_size, device=device)
 
     loss = 0
 
     for ei in range(input_length):
-        encoder_output, encoder_hidden = encoder(input_tensor[ei], encoder_hidden)
+        encoder_output, encoder_hidden = encoder(
+            input_tensor[ei], encoder_hidden)
         encoder_outputs[ei] = encoder_output[0, 0]
 
     decoder_input = torch.tensor([[SOS_token]], device=device)
@@ -259,7 +261,8 @@ def trainIters(
 
     encoder_optimizer = optim.SGD(encoder.parameters(), lr=learning_rate)
     decoder_optimizer = optim.SGD(decoder.parameters(), lr=learning_rate)
-    training_pairs = [tensorsFromPair(random.choice(pairs)) for i in range(n_iters)]
+    training_pairs = [tensorsFromPair(random.choice(pairs))
+                      for i in range(n_iters)]
     criterion = nn.NLLLoss()
 
     for iter in range(1, n_iters + 1):
@@ -296,57 +299,28 @@ def trainIters(
             plot_losses.append(plot_loss_avg)
             plot_loss_total = 0
 
-            input_lang, output_lang, pairs_2 = prepareData("content", "summary")
+            input_lang, output_lang, pairs_2 = prepareData(
+                "content", "summary")
             training_pairs = [
                 tensorsFromPair(random.choice(pairs_2)) for i in range(n_iters)
             ]
 
 
-def evaluate(encoder, decoder, sentence, max_length=MAX_LENGTH):
-    with torch.no_grad():
-        input_tensor = tensorFromSentence(input_lang, sentence)
-        input_length = input_tensor.size()[0]
-        encoder_hidden = encoder.initHidden()
-
-        encoder_outputs = torch.zeros(max_length, encoder.hidden_size, device=device)
-
-        for ei in range(input_length):
-            encoder_output, encoder_hidden = encoder(input_tensor[ei], encoder_hidden)
-            encoder_outputs[ei] += encoder_output[0, 0]
-
-        decoder_input = torch.tensor([[SOS_token]], device=device)  # SOS
-
-        decoder_hidden = encoder_hidden
-
-        decoded_words = []
-        decoder_attentions = torch.zeros(max_length, max_length)
-
-        for di in range(max_length):
-            decoder_output, decoder_hidden, decoder_attention = decoder(
-                decoder_input, decoder_hidden, encoder_outputs
-            )
-            decoder_attentions[di] = decoder_attention.data
-            topv, topi = decoder_output.data.topk(1)
-            if topi.item() == EOS_token:
-                decoded_words.append("<EOS>")
-                break
-            else:
-                decoded_words.append(output_lang.index2word[topi.item()])
-
-            decoder_input = topi.squeeze().detach()
-
-        return decoded_words, decoder_attentions[: di + 1]
-
-
 if __name__ == "__main__":
     getData()
-    df = pd.read_json("dataset/corpus-webis-tldr-17.json", lines=True, chunksize=1000)
+    df = pd.read_json("dataset/corpus-webis-tldr-17.json",
+                      lines=True, chunksize=1000)
     input_lang, output_lang, pairs = prepareData("content", "summary")
 
     encoder = EncoderRNN(input_lang.n_words, hidden_size).to(device)
-    decoder = AttnDecoderRNN(hidden_size, output_lang.n_words, dropout_p=0.1).to(device)
+    decoder = AttnDecoderRNN(
+        hidden_size, output_lang.n_words, dropout_p=0.1).to(device)
 
     trainIters(encoder, decoder, 100, print_every=10)
 
     bentoml.pytorch.save(BENTOML_MODEL_NAME + "encoder", encoder)
     bentoml.pytorch.save(BENTOML_MODEL_NAME + "decoder", decoder)
+    bentoml.picklable_model.save('vectors', {
+        'input_lang': input_lang,
+        'output_lang': output_lang
+    })
