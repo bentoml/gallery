@@ -5,7 +5,10 @@ labels:
   stage: demo
 include:
 - "*.py"
+exclude:
+- "locustfile.py"
 python:
+  lock_packages: false
   packages:
-    - scikit-learn
-    - pandas
+    - tensorflow
+    - Pillow
