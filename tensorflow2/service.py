@@ -2,7 +2,6 @@ import bentoml
 import numpy as np
 import PIL.Image
 from bentoml.io import Image, NumpyNdarray
-from PIL.Image import Image as PILImage
 
 mnist_runner = bentoml.tensorflow.load_runner("tensorflow_mnist:latest")
 
@@ -27,8 +26,8 @@ async def predict_ndarray(inp: "np.ndarray") -> "np.ndarray":
 
 
 @svc.api(input=Image(), output=NumpyNdarray(dtype="float32"))
-async def predict_image(f: PILImage) -> "np.ndarray":
-    assert isinstance(f, PILImage)
+async def predict_image(f: PIL.Image) -> "np.ndarray":
+    assert isinstance(f, PIL.Image)
     arr = np.array(f) / 255.0
     assert arr.shape == (28, 28)
 
