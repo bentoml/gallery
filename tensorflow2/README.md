@@ -10,14 +10,14 @@ This project is also available to run from a notebook: https://github.com/bentom
 
 ### Install Dependencies
 
-First install the tensorflow library
+First install the requirements for this guide
 ```bash
-pip install tensorflow
+pip install -r requirements.txt
 ```
 
 For MacOS 11+
 ```bash
-pip install tensorflow-macos
+pip install -r requirements-macos.txt
 ```
 
 At the time of this writing, for M1 Macbooks, if you are getting the following error:
