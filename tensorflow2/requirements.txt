@@ -1,2 +1,3 @@
 tensorflow
-bentoml>=1.0.0a4
+pillow
+bentoml>=1.0.0a7
