@@ -12,4 +12,4 @@ if __name__ == "__main__":
     clf = svm.SVC()
     clf.fit(X, y)
 
-    bentoml.sklearn.save("iris_clf", clf)
+    bentoml.sklearn.save_model("iris_clf", clf)
