@@ -25,7 +25,7 @@ class IrisLoadTestUser(HttpUser):
     @task
     def classify(self):
         start = np.random.choice(num_of_rows - max_batch_size)
-        end = start + np.random.choice(max_batch_size)
+        end = start + np.random.choice(max_batch_size) + 1
 
         input_data = test_data[start:end]
         self.client.post("/classify", json=input_data.tolist())
