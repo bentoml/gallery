@@ -4,7 +4,7 @@ This is a sample project demonstrating basic usage of [BentoML](https://github.c
 Scikit-learn.
 
 In this project, we will train a classifier model using Scikit-learn and the Iris dataset, build
-an ML service for the model for serving the model behind an HTTP endpoint, and containerize the 
+an prediction service for serving the trained model via an HTTP server, and containerize the 
 model server as a docker image for production deployment.
 
 This project is also available to run from a notebook: https://github.com/bentoml/gallery/blob/main/quickstart/iris_classifier.ipynb
