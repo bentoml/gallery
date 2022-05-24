@@ -97,4 +97,4 @@ if __name__ == "__main__":
             f"Test Accuracy: {test_accuracy.result() * 100}"
         )
 
-    bentoml.tensorflow.save("tensorflow_mnist", model)
+    bentoml.tensorflow.save_model("tensorflow_mnist", model)
