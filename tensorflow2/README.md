@@ -45,7 +45,7 @@ python train.py
 
 If you look at the last line of train.py, you'll see:
 ````python
-bentoml.tensorflow.save("tensorflow_mnist", model)
+bentoml.tensorflow.save_model("tensorflow_mnist", model)
 ````
 
 
@@ -63,14 +63,15 @@ import PIL.Image
 
 import bentoml
 
-runner = bentoml.tensorflow.load_runner("tensorflow_mnist:latest")
+runner = bentoml.tensorflow.get("tensorflow_mnist:latest").to_runner()
 
 img = PIL.Image.open("samples/0.png")
 arr = np.array(img) / 255.0
 arr = arr.astype("float32")
 
-# add color channel dimension for greyscale image
+# add color channel dimension for greyscale image and convert it to single sampe batch
 arr = np.expand_dims(arr, 2)
+arr = np.expand_dims(arr, 0)
 runner.run(arr)  # => returns an array of probabilities for numbers 0-9
 ```
 
@@ -122,7 +123,7 @@ async def predict_ndarray(
 
 @svc.api(input=Image(), output=NumpyNdarray(dtype="int64"))
 async def predict_image(f: PILImage) -> "np.ndarray[t.Any, np.dtype[t.Any]]":
-    assert isinstance(f, PILImage)
+    assert isinstance(f, PILImage.Image)
     arr = np.array(f)/255.0
     assert arr.shape == (28, 28)
 
