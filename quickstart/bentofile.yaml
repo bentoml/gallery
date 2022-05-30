@@ -1,8 +1,7 @@
-service: "service:svc"
-description: "file: ./README.md"
+service: "service.py:svc"
 labels:
   owner: bentoml-team
-  stage: demo
+  project: gallery
 include:
 - "*.py"
 python:
