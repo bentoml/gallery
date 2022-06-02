@@ -223,7 +223,7 @@ Create a bento file `bentofile.yaml` for building a Bento for the service:
 
 
 ```python
-%%write bentofile.yaml
+%%writefile bentofile.yaml
 
 service: "service.py:cnn"  # A convention for locating your service: <YOUR_SERVICE_PY>:<YOUR_SERVICE_ANNOTATION>
 description: "file: ./README.md"
@@ -260,7 +260,7 @@ Bento is designed to be deployed to run efficiently in a variety of different en
 
 In this guide, we will show you the most basic way of deploying a Bento, which is converting a Bento into a Docker image containing the HTTP model server.
 
-Make sure you have docker installed and docker deamon running, and run the following commnand:
+Make sure you have docker installed and docker deamon running, and run the following command:
 
 
 ```python
