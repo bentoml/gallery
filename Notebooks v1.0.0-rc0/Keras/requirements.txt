@@ -1,0 +1,6 @@
+keras
+tensorflow
+scikit-learn
+numpy
+Pillow
+bentoml==1.0.0-rc0
