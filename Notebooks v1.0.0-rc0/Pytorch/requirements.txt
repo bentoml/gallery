@@ -1,0 +1,4 @@
+torch
+scikit-learn
+numpy
+bentoml==1.0.0-rc0
