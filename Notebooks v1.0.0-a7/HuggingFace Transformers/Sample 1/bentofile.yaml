@@ -1,0 +1,12 @@
+
+service: "service.py:translate"  # A convention for locating your service: <YOUR_SERVICE_PY>:<YOUR_SERVICE_ANNOTATION>
+description: "file: ./README.md"
+labels:
+    owner: bentoml-team
+    stage: demo
+include:
+ - "*.py"  # A pattern for matching which files to include in the bento
+python:
+  packages:
+   - transformers[tf-cpu] # Additional libraries to be included in the bento
+

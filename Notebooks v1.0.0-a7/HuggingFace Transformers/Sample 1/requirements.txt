@@ -1,0 +1,2 @@
+transformers[tf-cpu]
+bentoml==1.0.0-a7
