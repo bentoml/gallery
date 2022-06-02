@@ -1,6 +1,7 @@
 # pylint: disable=redefined-outer-name
 # type: ignore[no-untyped-def]
 
+import asyncio
 import io
 import json
 
@@ -19,7 +20,7 @@ def img_data():
         img_path = f"samples/{digit}.png"
         with open(img_path, "rb") as f:
             img_bytes = f.read()
-        img_arr = np.array(PIL.Image.open(io.BytesIO(img_bytes)))
+        img_arr = np.array(PIL.Image.open(f"samples/{digit}.png"))
         img_arr = img_arr / 255.0
         img_dic = {
             "bytes": img_bytes,
@@ -32,16 +33,30 @@ def img_data():
 
 @pytest.mark.asyncio
 async def test_numpy(host, img_data):
-    for d in img_data.values():
-        img_arr = d["array"]
-        img_arr_json = json.dumps(img_arr.tolist())
+    datas = [json.dumps(d["array"].tolist()) for d in img_data.values()]
+
+    # request one by one
+    for data in datas[:-3]:
         await async_request(
             "POST",
             f"http://{host}/predict_ndarray",
             headers={"Content-Type": "application/json"},
-            data=img_arr_json,
+            data=datas[0],
             assert_status=200,
         )
+
+    # request all at once, should trigger micro-batch prediction
+    tasks = tuple(
+        async_request(
+            "POST",
+            f"http://{host}/predict_ndarray",
+            headers={"Content-Type": "application/json"},
+            data=data,
+            assert_status=200,
+        )
+        for data in datas[-3:]
+    )
+    await asyncio.gather(*tasks)
 
 
 @pytest.mark.asyncio
