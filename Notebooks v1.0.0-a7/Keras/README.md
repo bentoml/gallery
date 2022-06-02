@@ -223,7 +223,7 @@ Create a bento file `bentofile.yaml` for building a Bento for the service:
 
 
 ```python
-%%write bentofile.yaml
+%%writefile bentofile.yaml
 
 service: "service.py:cnn"  # A convention for locating your service: <YOUR_SERVICE_PY>:<YOUR_SERVICE_ANNOTATION>
 description: "file: ./README.md"
