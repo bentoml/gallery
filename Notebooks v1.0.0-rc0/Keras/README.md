@@ -17,7 +17,7 @@ In this project, we will train a classifier model using Keras and the Cifar10 da
 ```python
 import keras 
 import numpy as np
-import matplotlib.pyplot as plt
+import tensorflow as tf
 from keras.layers import Input, Conv2D, Dense, Flatten, Dropout
 from keras.layers import GlobalMaxPooling2D, MaxPooling2D
 from keras.layers import BatchNormalization
@@ -27,7 +27,7 @@ from keras.models import Model
 
 ```python
 # Loading the dataset
-(x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
+(x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()
 assert x_train.shape == (50000, 32, 32, 3)
 assert x_test.shape == (10000, 32, 32, 3)
 assert y_train.shape == (50000, 1)
@@ -88,18 +88,21 @@ model.fit(
       epochs=3)
 ```
 
-## Save the model instance `net` to BentoML local model store
+## Save the model instance `model` to BentoML local model store
 
 
 ```python
-metadata ={'Accuracy':accuracy,'Precision':precision,'Recall':recall}
+metadata={'loss': 0.8530 , 'accuracy': 0.7044 , 'val_loss': 0.8454 , 'val_accuracy': 0.7124}
 
 labels = ['airplane','automobile','bird','cat','deer','dog','frog','horse','ship','truck']
 custom_obj={'labels': labels,
       'preprocessing':preprocessing_fun}
 
 import bentoml
-tag = bentoml.pytorch.save('cifar10_classifier',net,metadata=metadata,custom_objects = custom_objects)
+tag = bentoml.keras.save_model('cifar10_classifier_rc0',
+                           model,
+                           metadata=metadata,
+                           custom_objects = custom_obj)
 tag
 ```
 
@@ -119,15 +122,15 @@ import bentoml
 from bentoml.io import NumpyNdarray, Text, Image
 import PIL.Image
 
-model_tag = "cifar10_classifier:latest"
+model_tag = "cifar10_classifier_rc0:latest"
 # Load the runner for the latest Keras model we just saved
-cifar10_runner = bentoml.keras.load_runner(model_tag)
+cifar10_runner = bentoml.keras.get(model_tag).to_runner()
 cifar10_model = bentoml.models.get(model_tag)
 
 # Create the cifar10 service with the Keras runner
 # Multiple runners may be specified if needed in the runners array
 # When packaged as a bento, the runners here will included
-cnn = bentoml.Service("cifar10_classifier", runners=[cifar10_runner])
+cnn = bentoml.Service("cifar10_classifier_rc0", runners=[cifar10_runner])
 
 # Create API function with pre- and post- processing logic with your new "cnn" annotation
 @cnn.api(input=NumpyNdarray(), output=Text())
@@ -137,7 +140,7 @@ def predict_array(input_series: np.ndarray) -> str:
         input_data = cifar10_model.custom_objects['preprocessing'](
             input_series)
         
-        result = cifar10_runner.run(input_data)
+        result = cifar10_runner.predict.run(input_data)
         
         # Define post-processing logic
         result = cifar10_model.custom_objects['labels'][np.argmax(result)]
@@ -149,9 +152,9 @@ def predict_array(input_series: np.ndarray) -> str:
 @cnn.api(input=Image(), output=Text())
 def predict_image(f: PIL.Image) -> "np.ndarray":
     try:
-        arr = np.array(f)
+        arr = np.expand_dims(np.array(f),0)
         input_data = cifar10_model.custom_objects['preprocessing'](arr)
-        result = cifar10_runner.run(input_data)
+        result = cifar10_runner.predict.run(input_data)
         # Define post-processing logic
         result = cifar10_model.custom_objects['labels'][np.argmax(result)]
         return result
@@ -163,10 +166,14 @@ Start a dev model server to test out the service defined above
 
 
 ```python
-!bentoml serve service.py:svc --reload
+!bentoml serve service.py:cnn 
 ```
 
 Open your web browser at http://127.0.0.1:3000 to view the Bento UI for sending test requests. Now you can use something like:
+
+curl -H "Content-Type: multipart/form-data" -F'fileobj=@sample_image.png;type=image/png' http://127.0.0.1:3000/predict_image
+
+or execute the following code snippet.
 
 
 ```python
@@ -205,7 +212,8 @@ def test_image(host, img_path):
 
 
 ```python
-response=test_numpy('127.0.0.1:3000', x_test[2100])
+arr = np.expand_dims(x_test[2100],0)
+response=test_numpy('127.0.0.1:3000', arr)
 print(response.text)
 
 img_path = f"sample_image.png"
@@ -251,7 +259,7 @@ Starting a dev server with the Bento build:
 
 
 ```python
-!bentoml serve cifar10_classifier:latest
+!bentoml serve cifar10_classifier_rc0:latest
 ```
 
 ## Containerize and Deployment
@@ -264,20 +272,20 @@ Make sure you have docker installed and docker deamon running, and run the follo
 
 
 ```python
-!bentoml containerize cifar10_classifier:latest
+!bentoml containerize cifar10_classifier_rc0:latest
 ```
 
 This will build a new docker image with all source code, model files and dependencies in place, and ready for production deployment. To start a container with this docker image locally, run:
 
-`docker run -p 3000:3000 cifar10_classifier:c5nnhiw7666ijgh2 `
+`docker run -p 3000:3000 cifar10_classifier_rc0:c5nnhiw7666ijgh2 `
 
 ## What's Next?,
    
   - 👉 [Pop into our Slack community!](https://l.linklyhq.com/l/ktO8) We're happy to help with any issue you face or even just to meet you and hear what you're working on.,
    
-  - Dive deeper into the [Core Concepts](https://docs.bentoml.org/en/v1.0.0-a7/concepts/index.html) in BentoML,
+  - Dive deeper into the [Core Concepts](https://docs.bentoml.org/en/latest/concepts/index.html) in BentoML,
   
-  - Learn how to use BentoML with other ML Frameworks at [Frameworks Guide](https://docs.bentoml.org/en/v1.0.0-a7/frameworks/index.html) or check out other [gallery projects](https://github.com/bentoml/gallery),
+  - Learn how to use BentoML with other ML Frameworks at [Frameworks Guide](https://docs.bentoml.org/en/latest/frameworks/index.html) or check out other [gallery projects](https://github.com/bentoml/gallery),
   - Learn more about model deployment options for Bento:,
       - [🦄️ Yatai](https://github.com/bentoml/Yatai): Model Deployment at scale on Kubernetes,
       - [🚀 bentoctl](https://github.com/bentoml/bentoctl): Fast model deployment on any cloud platform
