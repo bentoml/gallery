@@ -1,3 +1,4 @@
 scikit-learn
 pandas
 bentoml>=1.0.0a
+ipykernel
