@@ -26,7 +26,7 @@ summarizer = pipeline("summarization")
 ```python
 import bentoml
 
-tag = bentoml.transformers.save('summarization', 
+tag = bentoml.transformers.save_model('summarization_rc0', 
                                 summarizer,
                                 metadata={'Description':'Created using Transformer Pipeline'})
 tag
@@ -45,29 +45,24 @@ Here we define as many api endpoints as we want.
 import bentoml
 from bentoml.io import Text
 
-model_tag = "summarization:latest"
+model_tag = "summarization_rc0:latest"
 
-summarize_runner = bentoml.transformers.load_runner(model_tag,tasks='summarization')
+summarize_runner = bentoml.transformers.get(model_tag).to_runner()
 summarize_model = bentoml.models.get(model_tag)
 
-summarize = bentoml.Service("summarization", runners=[summarize_runner])
+summarize = bentoml.Service("summarization_rc0", runners=[summarize_runner])
 
 
 @summarize.api(input=Text(), output=Text())
 def summarize_text(input_series: str) -> str:
     try:
         result = summarize_runner.run(input_series)
-        return result['summary_text']
+        return result[0]['summary_text']
     except:
         return 'Invalid Input'
 ```
 
-Start a dev model server to test out the service defined above
-
-
-```python
-!bentoml serve service.py:svc --reload
-```
+Start a dev model server to test out the service defined above by running the following command in the terminal: `bentoml serve service.py:summarize`
 
 Open your web browser at http://127.0.0.1:3000 to view the Bento UI for sending test requests. Now you can use something like:
 
@@ -147,7 +142,7 @@ Starting a dev server with the Bento build:
 
 
 ```python
-!bentoml serve summarization:latest
+!bentoml serve summarization_rc0:latest
 ```
 
 ## Containerize and Deployment
@@ -160,12 +155,12 @@ Make sure you have docker installed and docker deamon running, and run the follo
 
 
 ```python
-!bentoml containerize summarization:latest
+!bentoml containerize summarization_rc0:latest
 ```
 
 This will build a new docker image with all source code, model files and dependencies in place, and ready for production deployment. To start a container with this docker image locally, run:
 
-`docker run -p 3000:3000 cifar10_classifier:g3fbsno5u6agfgh2 `
+`docker run -p 3000:3000 summarization_rc0:g3fbsno5u6agfgh2 `
 
 ## What's Next?,
    
