@@ -16,6 +16,7 @@ In this project, we will train a classifier model using Pytorch and the breast c
 
 ```python
 # Loading the dataset
+import torch
 from sklearn import datasets
 dataset = datasets.load_breast_cancer()
 
@@ -158,17 +159,19 @@ def predict_cancer(input_series: np.ndarray) -> str:
         return 'Exception: Invalid Input'
 ```
 
-    Writing service.py
-
-
 Start a dev model server to test out the service defined above
 
 
 ```python
-!bentoml serve service.py:svc --reload
+!bentoml serve service.py:nn
 ```
 
-Open your web browser at http://127.0.0.1:3000 to view the Bento UI for sending test requests. Now you can use something like:
+Open your web browser at http://127.0.0.1:3000 to view the Bento UI for sending test requests. Now you can send request with curl command or any HTTP client, e.g.:
+
+curl -X POST -H "content-type: application/json" --data "[[1.900e+01, 1.891e+01, 1.234e+02, 1.138e+03, 8.217e-02, 8.028e-02, 9.271e-02, 5.627e-02, 1.946e-01, 5.044e-02, 6.896e-01, 1.342e+00, 5.216e+00, 8.123e+01, 4.428e-03, 2.731e-02, 4.040e-02, 1.361e-02, 2.030e-02, 2.686e-03, 2.232e+01, 2.573e+01, 1.482e+02, 1.538e+03, 1.021e-01, 2.264e-01, 3.207e-01, 1.218e-01, 2.841e-01, 6.541e-02]]" http://127.0.0.1:3000/predict_cancer
+
+or use something like:
+
 
 
 ```python
@@ -216,9 +219,6 @@ python:
    - numpy  # Additional libraries to be included in the bento
    - torch
 ```
-
-    Writing bentofile.yaml
-
 
 Simply run `bentoml build` from current directory to build a Bento with the latest version of the tensorflow_mnist model. This may take a while when running for the first time for BentoML to resolve all dependency versions:
 
