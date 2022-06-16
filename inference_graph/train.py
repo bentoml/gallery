@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     # Save models to BentoML local model store
     m1 = bentoml.transformers.save_model("bert-base-uncased", pipeline1)
-    m2 = bentoml.transformers.save_model("distilbert-base-uncased-finetuned-sst-2-english", pipeline2)
+    m2 = bentoml.transformers.save_model("distilbert", pipeline2)
     m3 = bentoml.transformers.save_model("prosusai-finbert", pipeline3)
 
     print(f"Model saved: {m1}, {m2}, {m3}")
