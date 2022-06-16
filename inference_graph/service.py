@@ -5,7 +5,7 @@ from bentoml.io import Text, JSON
 from statistics import median
 
 bert_runner = bentoml.transformers.get("bert-base-uncased:latest").to_runner()
-distilbert_runner = bentoml.transformers.get("distilbert-base-uncased-finetuned-sst-2-english:latest").to_runner()
+distilbert_runner = bentoml.transformers.get("distilbert:latest").to_runner()
 finbert_runner = bentoml.transformers.get("prosusai-finbert:latest").to_runner()
 
 svc = bentoml.Service("inference_graph", runners=[bert_runner, distilbert_runner, finbert_runner])

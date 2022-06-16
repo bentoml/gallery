@@ -4,14 +4,14 @@ metadata:
   name: inference-graph-demo
   namespace: yatai
 spec:
-  bento_tag: inference_graph:yau4ohhnugmvpuqj
+  bento_tag: inference_graph:wpobdpxnuwqkvuqj
   ingress:
     enabled: true
   resources:
-    limits:
-        cpu: 500m
-        memory: "1Gi"
     requests:
+        cpu: 500m
+        memory: "500m"
+    limits:
         cpu: 1000m
         memory: "1Gi"
   autoscaling:
@@ -29,7 +29,7 @@ spec:
     autoscaling:
       max_replicas: 4
       min_replicas: 1
-  - name: distilbert-base-uncased-finetuned-sst-2-english
+  - name: distilbert
     resources:
       limits:
         cpu: 2000m
