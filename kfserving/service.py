@@ -20,7 +20,7 @@ kfserving_input = JSON(
 @svc.api(
     input=kfserving_input,
     output=NumpyNdarray(),
-    route="/v1/models/iris_classifier",
+    route="v1/models/iris_classifier",
 )
 def classify(kf_input: KFServingInputSchema) -> np.ndarray:
     instances = np.array(kf_input.instances)
