@@ -7,25 +7,17 @@ else
   echo "Releasing with current BentoML Version $BENTOML_VERSION"
 fi
 
-
 export DOCKER_BUILDKIT=1
 
-#docker build -t test -f- . <<EOF
+#docker build -t local-test -f- . <<EOF
 docker buildx build --platform=linux/arm64,linux/amd64 -t bentoml/quickstart:$BENTOML_VERSION -t bentoml/quickstart:latest --pull -o type=image,push=True -f- . <<EOF
 FROM jupyter/minimal-notebook:python-3.9.13
 
+# ./start.sh requires root permission to set up notebook user and ensure access to home directory 
+USER root
+
 RUN pip install -U pip --no-cache-dir
 RUN pip install bentoml==${BENTOML_VERSION} --no-cache-dir
-
-ENV NB_USER=bentoml \
-    NB_UID=1101 \
-    NB_GID=1101 \
-    CHOWN_HOME=yes \ 
-    CHOWN_HOME_OPTS="-R" \
-    GRANT_SUDO=yes \
-    DOCKER_STACKS_JUPYTER_CMD=notebook \ 
-    NOTEBOOK_ARGS="./iris_classifier.ipynb --NotebookApp.token='' --no-browser" \
-    BENTOML_HOST=0.0.0.0
 
 WORKDIR /home/bentoml
 
@@ -36,4 +28,14 @@ RUN pip install -r ./requirements.txt --no-cache-dir
 EXPOSE 8888
 # For accessing BentoServer
 EXPOSE 3000 
-EOF
+
+ENV NB_USER=bentoml \
+    NB_UID=1101 \
+    NB_GID=1101 \
+    CHOWN_HOME=yes \ 
+    CHOWN_HOME_OPTS="-R" \
+    GRANT_SUDO=yes \
+    DOCKER_STACKS_JUPYTER_CMD=notebook \ 
+    NOTEBOOK_ARGS="./iris_classifier.ipynb" \
+    BENTOML_HOST=0.0.0.0
+#EOF
