@@ -15,14 +15,13 @@ FROM jupyter/minimal-notebook:python-3.9.13
 
 # ./start.sh requires root permission to set up notebook user and ensure access to home directory 
 USER root
-
-RUN pip install -U pip --no-cache-dir
-RUN pip install bentoml==${BENTOML_VERSION} --no-cache-dir
-
 WORKDIR /home/bentoml
 
+RUN --mount=type=cache,mode=0777,target=/root/.cache/pip pip install -U pip
+RUN --mount=type=cache,mode=0777,target=/root/.cache/pip pip install bentoml==${BENTOML_VERSION}
+
 COPY ./quickstart .
-RUN pip install -r ./requirements.txt --no-cache-dir
+RUN --mount=type=cache,mode=0777,target=/root/.cache/pip pip install -r ./requirements.txt
 
 # For jupyter notebook UI
 EXPOSE 8888
