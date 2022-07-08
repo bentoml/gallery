@@ -21,29 +21,6 @@ pip install bentoml --pre
 ```
 
 
-## Projects List
-
-* Scikit-learn Iris Classifier: https://github.com/bentoml/gallery/tree/main/quickstart
-* PyTorch MNIST: https://github.com/bentoml/gallery/tree/main/pytorch_mnist
-
-
-## Project layout
-
-Each gallery project is under its own folder, typically containing the following files:
-
-| file name | description |
-| --- | --- |
-| README.md | a step-by-step guide running the project Python scripts from CLI |
-| {PROJECT_NAME}.ipynb | a jupyter notebook shows the same workflow but from notebook environment |
-| requirements.txt | required PyPI packages for this project |
-| train.py | a python script for training an ML model and saving it with BentoML |
-| import_model.py | import an existing trained model to BentoML |
-| service.py | python code that defines the bentoml.Service instance for serving |
-| bentofile.yaml | the bento build file for building the service into a Bento |
-| .bentoignore | files to exclude from build directory, when building a Bento |
-| benchmark.py | a python script that tests the baseline performance of the final model server created |
-
-
 ## How to contribute
 
 If you have issues running these projects or have suggestions for improvement, use [Github Issues 🐱](https://github.com/bentoml/gallery/issues/new)
