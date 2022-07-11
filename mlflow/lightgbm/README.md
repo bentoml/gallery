@@ -46,5 +46,3 @@ Generate docker image from Bento:
 ```
 bentoml containerize lgb_iris_service:latest
 ```
-
-
