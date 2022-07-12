@@ -15,15 +15,11 @@ import os
 import bentoml
 import mlflow
 import mlflow.pytorch
-import pickle
-import tempfile
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
-from tensorboardX import SummaryWriter
 
 # Command-line arguments
 parser = argparse.ArgumentParser(description="PyTorch MNIST Example")
@@ -121,24 +117,11 @@ class Net(nn.Module):
         x = self.fc2(x)
         return F.log_softmax(x, dim=0)
 
-    def log_weights(self, step):
-        writer.add_histogram("weights/conv1/weight", model.conv1.weight.data, step)
-        writer.add_histogram("weights/conv1/bias", model.conv1.bias.data, step)
-        writer.add_histogram("weights/conv2/weight", model.conv2.weight.data, step)
-        writer.add_histogram("weights/conv2/bias", model.conv2.bias.data, step)
-        writer.add_histogram("weights/fc1/weight", model.fc1.weight.data, step)
-        writer.add_histogram("weights/fc1/bias", model.fc1.bias.data, step)
-        writer.add_histogram("weights/fc2/weight", model.fc2.weight.data, step)
-        writer.add_histogram("weights/fc2/bias", model.fc2.bias.data, step)
-
-
 model = Net()
 if args.cuda:
     model.cuda()
 
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
-
-writer = None  # Will be used to write TensorBoard events
 
 
 def train(epoch):
@@ -163,7 +146,6 @@ def train(epoch):
             )
             step = epoch * len(train_loader) + batch_idx
             log_scalar("train_loss", loss.data.item(), step)
-            model.log_weights(step)
 
 
 def test(epoch):
@@ -195,58 +177,67 @@ def test(epoch):
 
 def log_scalar(name, value, step):
     """Log a scalar value to both MLflow and TensorBoard"""
-    writer.add_scalar(name, value, step)
     mlflow.log_metric(name, value)
 
 
-with mlflow.start_run():
-    # Log our parameters into mlflow
-    for key, value in vars(args).items():
-        mlflow.log_param(key, value)
+if __name__ == "__main__":
+    with mlflow.start_run():
+        # Log our parameters into mlflow
+        for key, value in vars(args).items():
+            mlflow.log_param(key, value)
 
-    # Create a SummaryWriter to write TensorBoard events locally
-    output_dir = dirpath = tempfile.mkdtemp()
-    writer = SummaryWriter(output_dir)
-    print("Writing TensorBoard events locally to %s\n" % output_dir)
+        # Perform the training
+        for epoch in range(1, args.epochs + 1):
+            train(epoch)
+            test(epoch)
 
-    # Perform the training
-    for epoch in range(1, args.epochs + 1):
-        train(epoch)
-        test(epoch)
+        # Log the model as an artifact of the MLflow run.
+        print("\nLogging the trained model as a run artifact...")
+        mlflow.pytorch.log_model(model, artifact_path="pytorch-model")
+        print(
+            "\nThe model is logged at:\n%s" % os.path.join(mlflow.get_artifact_uri(), "pytorch-model")
+        )
 
-    # Upload the TensorBoard event logs as a run artifact
-    print("Uploading TensorBoard events as a run artifact...")
-    mlflow.log_artifacts(output_dir, artifact_path="events")
-    print(
-        "\nLaunch TensorBoard with:\n\ntensorboard --logdir=%s"
-        % os.path.join(mlflow.get_artifact_uri(), "events")
-    )
+        # Option 1: Save pytorch model directly with BentoML
+        bento_model_1 = bentoml.pytorch.save_model(
+            'pytorch-mnist',
+            model,
+            signatures={"__call__": {"batchable": True}}
+        )
+        print("Pytorch Model saved with BentoML: %s" % bento_model_1)
 
-    # Log the model as an artifact of the MLflow run.
-    print("\nLogging the trained model as a run artifact...")
-    mlflow.pytorch.log_model(model, artifact_path="pytorch-model", pickle_module=pickle)
-    print(
-        "\nThe model is logged at:\n%s" % os.path.join(mlflow.get_artifact_uri(), "pytorch-model")
-    )
+        # make predictions with BentoML runner
+        model_runner_1 = bentoml.pytorch.get("pytorch-mnist:latest").to_runner()
+        model_runner_1.init_local()
 
-    # Import logged mlflow model to BentoML model store for serving:
-    model_uri = mlflow.get_artifact_uri("pytorch-model")
-    bento_model = bentoml.mlflow.import_model(
-        'pytorch-mnist',
-        model_uri,
-        signatures={'predict': {'batchable': True}}
-    )
-    print("Model imported to BentoML: %s" % bento_model)
+        # Extract a few examples from the test dataset to evaluate on
+        eval_data, eval_labels = next(iter(test_loader))
 
-    # make predictions with BentoML runner
-    model_runner = bentoml.mlflow.get("pytorch-mnist:latest").to_runner()
-    model_runner.init_local()
+        predictions = model_runner_1.run(eval_data.numpy())
+        template = 'Sample {} : Ground truth is "{}", model prediction is "{}"'
+        print("\nSample predictions")
+        for index in range(5):
+            print(template.format(index, eval_labels[index], predictions.argmax(1)[index]))
+        
 
-    # Extract a few examples from the test dataset to evaluate on
-    eval_data, eval_labels = next(iter(test_loader))
+        # Option 2: Import logged mlflow model to BentoML for serving:
+        model_uri = mlflow.get_artifact_uri("pytorch-model")
+        bento_model_2 = bentoml.mlflow.import_model(
+            'mlflow-pytorch-mnist',
+            model_uri,
+            signatures={'predict': {'batchable': True}}
+        )
+        print("Model imported to BentoML: %s" % bento_model_2)
 
-    predictions = model_runner.predict.run(eval_data.numpy())
-    template = 'Sample {} : Ground truth is "{}", model prediction is "{}"'
-    print("\nSample predictions")
-    for index in range(5):
-        print(template.format(index, eval_labels[index], predictions[index]))
+        # make predictions with BentoML runner
+        model_runner_2 = bentoml.mlflow.get("mlflow-pytorch-mnist:latest").to_runner()
+        model_runner_2.init_local()
+
+        # Extract a few examples from the test dataset to evaluate on
+        eval_data, eval_labels = next(iter(test_loader))
+
+        predictions = model_runner_2.predict.run(eval_data.numpy())
+        template = 'Sample {} : Ground truth is "{}", model prediction is "{}"'
+        print("\nSample predictions")
+        for index in range(5):
+            print(template.format(index, eval_labels[index], predictions.argmax(1)[index]))

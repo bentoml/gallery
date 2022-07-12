@@ -8,5 +8,5 @@ dependencies:
     - torch==1.8.1
     - torchvision==0.9.1
     - mlflow>=1.0
-    - tensorboardX
     - protobuf<4.0.0
+    - bentoml>=1.0.0rc3
