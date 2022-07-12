@@ -58,21 +58,20 @@ score = model.evaluate(x_test, y_test, batch_size=batch_size, verbose=1)
 print("Test score:", score[0])
 print("Test accuracy:", score[1])
 
-
-# Import directly with trained model
-bento_model_1 = bentoml.keras.save_model('keras_native', model)
-print("\nBentoML: model imported as native keras model: %s" % bento_model_1)
-
 # Find URI to the logged MLFlow model
 run_id = mlflow.last_active_run().info.run_id
 artifact_path = "model"
 model_uri = f"runs:/{run_id}/{artifact_path}"
 
-# Import logged MLFlow model to BentoML
+# Option 1: directly save trained model to BentoML
+bento_model_1 = bentoml.keras.save_model('keras_native', model)
+print("\nBentoML: model imported as native keras model: %s" % bento_model_1)
+
+# Option 2: Import logged MLFlow model to BentoML
 bento_model_2 = bentoml.mlflow.import_model('mlflow_keras', model_uri)
 print("\nBentoML: model imported as MLFlow pyfunc model: %s" % bento_model_2)
 
-# Import native keras model loaded from MLFlow artifact 
+# Option 3: loaded keras model from MLFlow artifact and save with bentoml.keras natively
 loaded_keras_model = mlflow.keras.load_model(model_uri)
 bento_model_3 = bentoml.keras.save_model('keras_native', loaded_keras_model)
 print("\nBentoML: import native keras model loaded from MLflow artifact: %s" % bento_model_3)
