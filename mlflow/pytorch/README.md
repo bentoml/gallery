@@ -29,4 +29,3 @@ bentoml build
 
 bentoml containerize mlflow_pytorch_mnist:latest
 ```
-
