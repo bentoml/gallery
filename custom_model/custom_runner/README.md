@@ -39,6 +39,3 @@ bentoml build
 bentoml containerize sentiment_analyzer:latest
 ```
 
-
-curl -X POST -H "content-type: application/text" --data "BentoML is great" http://127.0.0.1:3000/analysis
-
