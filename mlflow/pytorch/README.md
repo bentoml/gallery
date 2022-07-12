@@ -27,5 +27,5 @@ Build Bento and containerize BentoServier for deployment:
 ```bash
 bentoml build
 
-bentoml containerize mlflow_pytorch_mnist:latest
+bentoml containerize mlflow_pytorch_mnist_demo:latest
 ```

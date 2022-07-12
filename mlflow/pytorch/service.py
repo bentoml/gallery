@@ -3,9 +3,9 @@ import bentoml
 import mlflow
 import torch
 
-mnist_runner = bentoml.mlflow.get('mlflow-pytorch-mnist:latest').to_runner()
+mnist_runner = bentoml.mlflow.get('mlflow_pytorch_mnist:latest').to_runner()
 
-svc = bentoml.Service('mlflow_pytorch_mnist', runners=[ mnist_runner ])
+svc = bentoml.Service('mlflow_pytorch_mnist_demo', runners=[ mnist_runner ])
 
 input_spec = bentoml.io.NumpyNdarray(
     dtype="float32",

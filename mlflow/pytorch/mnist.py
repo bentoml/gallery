@@ -223,7 +223,7 @@ if __name__ == "__main__":
         # Option 2: Import logged mlflow model to BentoML for serving:
         model_uri = mlflow.get_artifact_uri("pytorch-model")
         bento_model_2 = bentoml.mlflow.import_model(
-            'mlflow-pytorch-mnist',
+            'mlflow_pytorch_mnist',
             model_uri,
             signatures={'predict': {'batchable': True}}
         )
