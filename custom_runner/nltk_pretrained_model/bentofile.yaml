@@ -5,4 +5,4 @@ python:
   packages:
     - "nltk"
 docker:
-  setup_script: "./download_nldk_models.py"
+  setup_script: "./download_nltk_models.py"
