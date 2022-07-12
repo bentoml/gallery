@@ -230,7 +230,7 @@ if __name__ == "__main__":
         print("Model imported to BentoML: %s" % bento_model_2)
 
         # make predictions with BentoML runner
-        model_runner_2 = bentoml.mlflow.get("mlflow-pytorch-mnist:latest").to_runner()
+        model_runner_2 = bentoml.mlflow.get("mlflow_pytorch_mnist:latest").to_runner()
         model_runner_2.init_local()
 
         # Extract a few examples from the test dataset to evaluate on

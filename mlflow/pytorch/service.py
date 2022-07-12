@@ -10,7 +10,6 @@ svc = bentoml.Service('mlflow_pytorch_mnist_demo', runners=[ mnist_runner ])
 input_spec = bentoml.io.NumpyNdarray(
     dtype="float32",
     shape=[-1, 1, 28, 28],
-    enforce_shape=True,
     enforce_dtype=True,
 )
 
