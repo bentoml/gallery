@@ -1,28 +1,22 @@
 # pylint: disable=redefined-outer-name
-# type: ignore[no-untyped-def]
 
+import pathlib
 import subprocess
 import typing as t
 
+import bentoml
 import pytest
-from bentoml.testing.server import run_api_server
+from bentoml.testing.server import bentoml_build, host_bento
 
 
 def pytest_configure(config):  # pylint: disable=unused-argument
     import os
     import sys
 
-    cmd = f"{sys.executable} {os.path.join(os.getcwd(), 'train.py')}"
-    subprocess.run(cmd, shell=True, check=True)
+    subprocess.check_call([sys.executable, pathlib.Path("train.py").absolute()])
 
 
 @pytest.fixture(scope="session")
 def host() -> t.Generator[str, None, None]:
-    import bentoml
-
-    subprocess.run("bentoml build", shell=True, check=True)
-
-    with run_api_server(
-        bento="tensorflow_mnist_demo:latest",
-    ) as host:
+    with host_bento(bento="tensorflow_mnist_demo:latest") as host:
         yield host

@@ -6,7 +6,7 @@ In this project, will train a model using Tensorflow2 library and the MNIST data
 an ML service for the model, serve the model behind an HTTP endpoint, and containerize the model
 server as a docker image for production deployment.
 
-This project is also available to run from a notebook: https://github.com/bentoml/gallery/blob/main/tensorflow2/tensorflow2.ipynb
+This project is also available to run from a notebook: https://github.com/bentoml/gallery/blob/main/tensorflow2/tensorflow2_mnist_demo.ipynb
 
 ### Install Dependencies
 
@@ -45,7 +45,7 @@ python train.py
 
 If you look at the last line of train.py, you'll see:
 ````python
-bentoml.tensorflow.save("tensorflow_mnist", model)
+bentoml.tensorflow.save_model("tensorflow_mnist", model)
 ````
 
 

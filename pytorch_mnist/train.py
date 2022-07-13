@@ -29,14 +29,19 @@ torch.cuda.manual_seed_all(seed)
 torch.backends.cudnn.benchmark = False
 torch.backends.cudnn.deterministic = True
 
+
 def _dataloader_init_fn(worker_id):
     np.random.seed(seed)
 
 
 def get_dataset():
     # Prepare MNIST dataset by concatenating Train/Test part; we split later.
-    train_set = MNIST(os.getcwd(), download=True, transform=transforms.ToTensor(), train=True)
-    test_set = MNIST(os.getcwd(), download=True, transform=transforms.ToTensor(), train=False)
+    train_set = MNIST(
+        os.getcwd(), download=True, transform=transforms.ToTensor(), train=True
+    )
+    test_set = MNIST(
+        os.getcwd(), download=True, transform=transforms.ToTensor(), train=False
+    )
     return train_set, test_set
 
 
@@ -51,9 +56,15 @@ def train_epoch(model, optimizer, loss_function, train_loader, epoch, device="cp
         loss.backward()
         optimizer.step()
         if batch_idx % 499 == 0:
-            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                epoch, batch_idx * len(inputs), len(train_loader.dataset),
-                100. * batch_idx / len(train_loader), loss.item()))
+            print(
+                "Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}".format(
+                    epoch,
+                    batch_idx * len(inputs),
+                    len(train_loader.dataset),
+                    100.0 * batch_idx / len(train_loader),
+                    loss.item(),
+                )
+            )
 
 
 def test_model(model, test_loader, device="cpu"):
@@ -68,28 +79,29 @@ def test_model(model, test_loader, device="cpu"):
             correct += (predicted == targets).sum().item()
 
     return correct, total
-    
+
+
 def cross_validate(dataset, epochs=NUM_EPOCHS, k_folds=K_FOLDS):
     results = {}
 
     # Define the K-fold Cross Validator
     kfold = KFold(n_splits=k_folds, shuffle=True)
 
-    print('--------------------------------')
+    print("--------------------------------")
 
     # K-fold Cross Validation model evaluation
     for fold, (train_ids, test_ids) in enumerate(kfold.split(dataset)):
 
-        print(f'FOLD {fold}')
-        print('--------------------------------')
-    
+        print(f"FOLD {fold}")
+        print("--------------------------------")
+
         # Sample elements randomly from a given list of ids, no replacement.
         train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
         test_subsampler = torch.utils.data.SubsetRandomSampler(test_ids)
 
         # Define data loaders for training and testing data in this fold
         train_loader = torch.utils.data.DataLoader(
-            dataset, 
+            dataset,
             batch_size=10,
             sampler=train_subsampler,
             worker_init_fn=_dataloader_init_fn,
@@ -110,19 +122,19 @@ def cross_validate(dataset, epochs=NUM_EPOCHS, k_folds=K_FOLDS):
 
         # Evaluation for this fold
         correct, total = test_model(model, test_loader)
-        print('Accuracy for fold %d: %d %%' % (fold, 100.0 * correct / total))
-        print('--------------------------------')
+        print("Accuracy for fold %d: %d %%" % (fold, 100.0 * correct / total))
+        print("--------------------------------")
         results[fold] = 100.0 * (correct / total)
 
     # Print fold results
-    print(f'K-FOLD CROSS VALIDATION RESULTS FOR {K_FOLDS} FOLDS')
-    print('--------------------------------')
+    print(f"K-FOLD CROSS VALIDATION RESULTS FOR {K_FOLDS} FOLDS")
+    print("--------------------------------")
     sum = 0.0
     for key, value in results.items():
-        print(f'Fold {key}: {value} %')
+        print(f"Fold {key}: {value} %")
         sum += value
 
-    print(f'Average: {sum/len(results.items())} %')
+    print(f"Average: {sum/len(results.items())} %")
 
     return results
 
@@ -131,7 +143,7 @@ def train(dataset, epochs=NUM_EPOCHS, device="cpu"):
 
     train_sampler = torch.utils.data.RandomSampler(dataset)
     train_loader = torch.utils.data.DataLoader(
-        dataset, 
+        dataset,
         batch_size=10,
         sampler=train_sampler,
         worker_init_fn=_dataloader_init_fn,
@@ -143,18 +155,33 @@ def train(dataset, epochs=NUM_EPOCHS, device="cpu"):
         train_epoch(model, optimizer, loss_function, train_loader, epoch, device)
     return model
 
-    
-if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description='BentoML PyTorch MNIST Example')
-    parser.add_argument('--epochs', type=int, default=NUM_EPOCHS, metavar='N',
-                        help=f'number of epochs to train (default: {NUM_EPOCHS})')
-    parser.add_argument('--k-folds', type=int, default=K_FOLDS, metavar='N',
-                        help=f'number of folds for k-fold cross-validation (default: {K_FOLDS}, 1 to disable cv)')
-    parser.add_argument('--cuda', action='store_true', default=False,
-                        help='enable CUDA training')
-    parser.add_argument('--model-name', type=str, default="pytorch_mnist",
-                        help='name for saved the model')
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description="BentoML PyTorch MNIST Example")
+    parser.add_argument(
+        "--epochs",
+        type=int,
+        default=NUM_EPOCHS,
+        metavar="N",
+        help=f"number of epochs to train (default: {NUM_EPOCHS})",
+    )
+    parser.add_argument(
+        "--k-folds",
+        type=int,
+        default=K_FOLDS,
+        metavar="N",
+        help=f"number of folds for k-fold cross-validation (default: {K_FOLDS}, 1 to disable cv)",
+    )
+    parser.add_argument(
+        "--cuda", action="store_true", default=False, help="enable CUDA training"
+    )
+    parser.add_argument(
+        "--model-name",
+        type=str,
+        default="pytorch_mnist",
+        help="name for saved the model",
+    )
 
     args = parser.parse_args()
     use_cuda = args.cuda and torch.cuda.is_available()
@@ -177,9 +204,9 @@ if __name__ == '__main__':
     trained_model = train(train_set, args.epochs, device)
     correct, total = test_model(trained_model, test_loader, device)
 
-    # training related 
+    # training related
     metadata = {
-        "acc": float(correct)/total,
+        "acc": float(correct) / total,
         "cv_stats": cv_results,
     }
 
@@ -189,9 +216,10 @@ if __name__ == '__main__':
         }
     }
 
-    bentoml.pytorch.save_model(
+    saved_model = bentoml.pytorch.save_model(
         args.model_name,
         trained_model,
         signatures=signatures,
         metadata=metadata,
     )
+    print(f"Saved model: {saved_model}")
