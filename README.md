@@ -4,21 +4,11 @@
 
 BentoML is an open platform that simplifies ML model deployment and enables you to serve your models at production scale in minutes
 
-👉 [Pop into our Slack community!](https://join.slack.bentoml.org) We're happy to help with any issue you face or even just to meet you and hear what you're working on :)
-
 This repository is a collection of machine learning projects that utilizes [BentoML](https://github.com/bentoml/BentoML)
 for model serving. The goal is to demonstrate real-world BentoML usage and best practices in
 productionizing a machine learning model for serving.
 
-Note: You are looking at gallery examples for BentoML 1.0 version, which is still under early beta release. 
-For prior stable versions (0.13.x), see the [0.13-LTS branch](https://github.com/bentoml/gallery/tree/0.13-LTS).
-
-
-BentoML 1.0 preview release is required for running gallery projects here:
-
-```bash
-pip install bentoml --pre
-```
+👉 [Pop into our Slack community!](https://join.slack.bentoml.org) We're happy to help with any issue you face or even just to meet you and hear what you're working on :)
 
 
 ## How to contribute
@@ -31,3 +21,5 @@ Before you create a Pull Request, make sure:
 * Follow the basic structures and naming conventions of other existing gallery projects
 * Ensure your project runs with the latest version of BentoML
 
+Note: You are looking at gallery examples for BentoML 1.0 version, which is still under early beta release. 
+For prior stable versions (0.13.x), see the [0.13-LTS branch](https://github.com/bentoml/gallery/tree/0.13-LTS).
