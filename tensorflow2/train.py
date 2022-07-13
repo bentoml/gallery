@@ -97,7 +97,7 @@ if __name__ == "__main__":
             f"Test Accuracy: {test_accuracy.result() * 100}"
         )
 
-    bentoml.tensorflow.save(
+    bentoml.tensorflow.save_model(
         "tensorflow_mnist",
         model,
         signatures={"__call__": {"batchable": True, "batch_dim": 0}},

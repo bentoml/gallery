@@ -45,7 +45,7 @@ python train.py
 
 If you look at the last line of train.py, you'll see:
 ````python
-bentoml.tensorflow.save("tensorflow_mnist", model)
+bentoml.tensorflow.save_model("tensorflow_mnist", model)
 ````
 
 
