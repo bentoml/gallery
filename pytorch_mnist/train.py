@@ -210,9 +210,16 @@ if __name__ == "__main__":
         "cv_stats": cv_results,
     }
 
+    signatures={
+        "predict": {
+            "batchable": True
+        }
+    }
+
     saved_model = bentoml.pytorch.save_model(
         args.model_name,
         trained_model,
+        signatures=signatures,
         metadata=metadata,
     )
     print(f"Saved model: {saved_model}")
