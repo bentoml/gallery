@@ -28,7 +28,8 @@ async def predict_ndarray(
 ) -> "np.ndarray[t.Any, np.dtype[t.Any]]":
     assert inp.shape == (28, 28)
     # We are using greyscale image and our PyTorch model expect one
-    # extra channel dimension
+    # extra channel dimension. Then we will also add one batch
+    # dimension
     inp = np.expand_dims(inp, (0, 1))
     output_tensor = await mnist_runner.async_run(inp)
     return to_numpy(output_tensor)
@@ -41,7 +42,8 @@ async def predict_image(f: PILImage) -> "np.ndarray[t.Any, np.dtype[t.Any]]":
     assert arr.shape == (28, 28)
 
     # We are using greyscale image and our PyTorch model expect one
-    # extra channel dimension
+    # extra channel dimension. Then we will also add one batch
+    # dimension
     arr = np.expand_dims(arr, (0, 1)).astype("float32")
     output_tensor = await mnist_runner.async_run(arr)
     return to_numpy(output_tensor)
