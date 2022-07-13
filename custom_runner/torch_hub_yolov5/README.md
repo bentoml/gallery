@@ -36,8 +36,8 @@ bentoml serve service.py:svc
 Visit http://127.0.0.1:3000 to submit input images via the web UI.
 
 The sample service provides two different endpoints:
-* "/invocation" - which returns predictions in a tabular data format
-* "/render" - which returns the input image with boxes and labels on top
+* `/invocation` - takes an image input and returns predictions in a tabular data format
+* `/render` - takes an image input and returns the input image with boxes and labels rendered on top
 
 
 To test the `/invocation` endpoint:
