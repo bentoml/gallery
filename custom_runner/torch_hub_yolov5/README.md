@@ -68,6 +68,9 @@ curl -X 'POST' \
 
 Sample result:
 
+![output-4](https://user-images.githubusercontent.com/489344/178635310-99dc7fde-5224-4fab-84cf-1a87277a0450.jpeg)
+
+
 
 ## Build Bento
 
