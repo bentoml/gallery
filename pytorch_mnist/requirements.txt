@@ -1,4 +1,4 @@
 scikit-learn
-torch
-torchvision
+torch==1.10.2
+torchvision==0.11.3
 bentoml>=1.0.0a

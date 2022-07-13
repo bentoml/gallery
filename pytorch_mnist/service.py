@@ -6,11 +6,7 @@ import PIL.Image
 from bentoml.io import Image, NumpyNdarray
 from PIL.Image import Image as PILImage
 
-mnist_runner = bentoml.pytorch.load_runner(
-    "pytorch_mnist",
-    name="mnist_runner",
-    predict_fn_name="predict",
-)
+mnist_runner = bentoml.pytorch.get("pytorch_mnist").to_runner()
 
 svc = bentoml.Service(
     name="pytorch_mnist_demo",
@@ -18,6 +14,9 @@ svc = bentoml.Service(
         mnist_runner,
     ],
 )
+
+def to_numpy(tensor):
+    return tensor.detach().cpu().numpy()
 
 
 @svc.api(
@@ -30,9 +29,9 @@ async def predict_ndarray(
     assert inp.shape == (28, 28)
     # We are using greyscale image and our PyTorch model expect one
     # extra channel dimension
-    inp = np.expand_dims(inp, 0)
+    inp = np.expand_dims(inp, (0, 1))
     output_tensor = await mnist_runner.async_run(inp)
-    return output_tensor.numpy()
+    return to_numpy(output_tensor)
 
 
 @svc.api(input=Image(), output=NumpyNdarray(dtype="int64"))
@@ -43,6 +42,6 @@ async def predict_image(f: PILImage) -> "np.ndarray[t.Any, np.dtype[t.Any]]":
 
     # We are using greyscale image and our PyTorch model expect one
     # extra channel dimension
-    arr = np.expand_dims(arr, 0).astype("float32")
+    arr = np.expand_dims(arr, (0, 1)).astype("float32")
     output_tensor = await mnist_runner.async_run(arr)
-    return output_tensor.numpy()
+    return to_numpy(output_tensor)
