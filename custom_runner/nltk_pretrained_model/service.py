@@ -7,7 +7,7 @@ from statistics import mean
 
 class NLTKSentimentAnalysisRunnable(bentoml.Runnable):
     SUPPORTED_RESOURCES = ("cpu",)
-    SUPPORTS_CPU_MULTI_THREADING = True
+    SUPPORTS_CPU_MULTI_THREADING = False
 
     def __init__(self): 
         self.sia = SentimentIntensityAnalyzer()

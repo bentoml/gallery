@@ -1,4 +1,4 @@
 scikit-learn
 torch
 torchvision
-bentoml>=1.0.0a
+bentoml>=1.0.0
