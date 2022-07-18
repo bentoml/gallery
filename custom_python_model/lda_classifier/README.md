@@ -1,4 +1,4 @@
-# Custom ML model via bentoml.picklable_model
+# Custom LDA classifier model via bentoml.picklable_model
 
 This example is based on https://github.com/eriklindernoren/ML-From-Scratch
 
