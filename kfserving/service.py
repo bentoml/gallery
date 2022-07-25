@@ -12,10 +12,7 @@ svc = bentoml.Service("iris_classifier", runners=[iris_clf_runner])
 class KFServingInputSchema(pydantic.BaseModel):
     instances: List[List[float]] 
 
-kfserving_input = JSON(
-    pydantic_model=KFServingInputSchema,
-    validate_json=True,
-)
+kfserving_input = JSON(pydantic_model=KFServingInputSchema)
 
 @svc.api(
     input=kfserving_input,
