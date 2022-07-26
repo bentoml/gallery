@@ -1,4 +1,4 @@
-# BentoML 🤝 FastAPI Demo Project
+# BentoML 🤝 Flask Demo Project
 
 0. Install dependencies:
 
