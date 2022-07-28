@@ -63,7 +63,8 @@ import PIL.Image
 
 import bentoml
 
-runner = bentoml.tensorflow.load_runner("tensorflow_mnist:latest")
+runner = bentoml.tensorflow.get("tensorflow_mnist:latest").to_runner()
+runner.init_local()  # for debug only. please do not call this in the service
 
 img = PIL.Image.open("samples/0.png")
 arr = np.array(img) / 255.0
@@ -123,7 +124,7 @@ async def predict_image(f: PILImage) -> "np.ndarray[t.Any, np.dtype[t.Any]]":
     assert arr.shape == (28, 28)
 
     # extra channel dimension
-    arr = np.expand_dims(arr, 2).astype("float32")
+    arr = np.expand_dims(arr, (0, 3)).astype("float32")
     output_tensor = await mnist_runner.async_run(arr)
     return output_tensor.numpy()
 ```
