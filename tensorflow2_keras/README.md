@@ -91,11 +91,7 @@ from bentoml.io import Image
 from bentoml.io import NumpyNdarray
 
 
-mnist_runner = bentoml.tensorflow.load_runner(
-    "tensorflow_mnist",
-    name="mnist_runner",
-    predict_fn_name="predict",
-)
+mnist_runner = bentoml.tensorflow.get("tensorflow_mnist").to_runner()
 
 svc = bentoml.Service(
     name="tensorflow_mnist_demo",
