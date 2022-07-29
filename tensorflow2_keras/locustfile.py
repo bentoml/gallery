@@ -6,7 +6,7 @@ with open("samples/0.png", "rb") as f:
 
 class TensorFlow2MNISTLoadTestUser(HttpUser):
 
-    wait_time = between(0.01, 2)
+    wait_time = between(0.9, 1.1)
 
     @task
     def predict_image(self):
