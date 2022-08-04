@@ -16,9 +16,11 @@ def img_bytes():
     with open(img_path, "rb") as f:
         return f.read()
 
+
 def check_output(out: bytes) -> bool:
     obj = json.loads(out)
-    return any(d['obj'] == "bus" for d in obj[0])
+    return any(d["obj"] == "bus" for d in obj[0])
+
 
 @pytest.mark.asyncio
 async def test_image(host, img_bytes):

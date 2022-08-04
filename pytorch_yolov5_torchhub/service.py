@@ -1,8 +1,3 @@
-
-import sys
-import os
-import typing as t
-
 import numpy as np
 import PIL.Image
 
@@ -11,15 +6,13 @@ from bentoml.io import Image
 from bentoml.io import JSON
 
 
-yolo_runner = bentoml.pytorch.get("pytorch_yolov5").to_runner()
+yolo_runner = bentoml.pytorch.get("yolo").to_runner()
 
 svc = bentoml.Service(
     name="pytorch_yolo_demo",
     runners=[yolo_runner],
 )
 
-
-sys.path.append('yolov5')
 
 @svc.api(input=Image(), output=JSON())
 async def predict_image(img: PIL.Image.Image) -> list:
